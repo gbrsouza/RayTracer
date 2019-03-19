@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Reference: https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
+# Visual Studio
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
