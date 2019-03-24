@@ -6,6 +6,7 @@
 
 #include "color.h"
 #include "common.h"
+#include "vec3.h"
 
 typedef unsigned int uint;
 
@@ -54,11 +55,13 @@ public:
 	/**
 	 * @brief      add a color in a pixel
 	 *
-	 * @param[in]  x_axis  The x axis of a pixel
-	 * @param[in]  y_axis  The y axis of a pixel
+	 * @param[in]  x  The x axis of a pixel
+	 * @param[in]  y  The y axis of a pixel
 	 * @param      color   The pixel color 
 	 */
-	void color_pixel (int x_axis, int y_axis, Color &color);
+	void color_pixel (int x, int y, Color &color);
+
+	void color_pixel (int x, int y, Vec3 &color);
 
 	/**
 	 * @brief      Gets the image.

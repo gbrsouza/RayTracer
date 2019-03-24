@@ -24,9 +24,9 @@ Canvas& Canvas::operator= (const Canvas & rhs)
  * Main functions
  */
 
-void Canvas::color_pixel (int x_axis, int y_axis, Color &color)
+void Canvas::color_pixel (int x, int y, Color &color)
 {
-	int init_pixel = this->get_position_pixel(x_axis, y_axis);
+	int init_pixel = this->get_position_pixel(x, y);
 	// Get a pixel color
 	color_t * color_index = color.get_color_value();
 
@@ -34,12 +34,17 @@ void Canvas::color_pixel (int x_axis, int y_axis, Color &color)
 		this->image[init_pixel+i] = color_index[i];
 }
 
-int Canvas::get_position_pixel(int x_axis, int y_axis)
+void Canvas::color_pixel (int x, int y, Vec3 &color){
+	Color c = Color(color.r(), color.g(), color.b());
+	this->color_pixel(x,y, c);
+}
+
+int Canvas::get_position_pixel(int x, int y)
 {
-	if ( (unsigned int) x_axis > this->m_width || 
-		 (unsigned int) y_axis > this->m_heigth ||
-		 (unsigned int) x_axis < 1 ||
-		 (unsigned int) y_axis < 1)
+	if ( (unsigned int) x > this->m_width || 
+		 (unsigned int) y > this->m_heigth ||
+		 (unsigned int) x < 1 ||
+		 (unsigned int) y < 1)
 		return 0;
 
 	/**
@@ -60,7 +65,7 @@ int Canvas::get_position_pixel(int x_axis, int y_axis)
 	 * do valor de x_axis recebido. A expressão abaixo encontra o 
 	 * início da linha onde o pixel está.
 	 */
-	int init_line_of_pixel = (x_axis - 1) * line_size;
+	int init_line_of_pixel = (x - 1) * line_size;
 
 
 	/**
@@ -68,7 +73,7 @@ int Canvas::get_position_pixel(int x_axis, int y_axis)
 	 * é necessário encontrar a posição onde começa o pixel. A 
 	 * expressão abaixo realiza este cálculo.
 	 */
-	int init_pixel = init_line_of_pixel + (y_axis-1) * VALUES_PER_PIXEL ;
+	int init_pixel = init_line_of_pixel + (y-1) * VALUES_PER_PIXEL ;
 
 	return init_pixel;
 }
