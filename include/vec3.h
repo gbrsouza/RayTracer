@@ -167,6 +167,11 @@ public:
      * @brief make a unit vector
      */
     inline void make_unit_vector();
+
+    inline Vec3 unit_vector(Vec3 v);
+    inline Vec3 cross(const Vec3 &v1, const Vec3 &v2);
+    inline float dot(const Vec3 &v1, const Vec3 &v2);
+
 };
 
 #endif
