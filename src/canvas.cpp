@@ -4,7 +4,7 @@ Canvas::Canvas (uint m_width, uint m_heigth)
 {
 	this->m_width = m_width;
 	this->m_heigth = m_heigth;
-	this->image = new color_t[ this->get_size_canvas() ]; 
+	this->image = new uint[ this->get_size_canvas() ]; 
 }
 
 Canvas::~Canvas ()
@@ -27,16 +27,8 @@ Canvas& Canvas::operator= (const Canvas & rhs)
 void Canvas::color_pixel (int x, int y, Color &color)
 {
 	int init_pixel = this->get_position_pixel(x, y);
-	// Get a pixel color
-	color_t * color_index = color.get_color_value();
-
 	for (int i=0; i < VALUES_PER_PIXEL; i++)
-		this->image[init_pixel+i] = color_index[i];
-}
-
-void Canvas::color_pixel (int x, int y, Vec3 &color){
-	Color c = Color(color.r(), color.g(), color.b());
-	this->color_pixel(x,y, c);
+		this->image[init_pixel+i] = abs(color[i]);
 }
 
 int Canvas::get_position_pixel(int x, int y)
@@ -82,7 +74,7 @@ int Canvas::get_position_pixel(int x, int y)
  * Getters and Setters 
  */
 
-color_t * Canvas::get_image ()
+uint * Canvas::get_image ()
 { return this->image; }
 
 uint Canvas::get_width ()

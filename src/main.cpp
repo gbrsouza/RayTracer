@@ -3,38 +3,30 @@
 #include <fstream>
 
 #include "background.h"
+#include "canvas.h"
 #include "common.h"
 
 int main (){
+    
+    Buffer color_buffer (200, 100);
 
-    Ray ray = Ray(1,1,1);
-    Background bg = Background(Color(5,5,10), 
-                               Color(5,255,10),
-                               Color(255,5,10),
-                               Color(255,255,10));
+    Color bl = Color(0, 0, 51); //<!-- bottom left -->
+    Color tl = Color(0, 255, 51); //<!-- top left -->
+    Color tr = Color(255, 255, 51); //<!-- top right -->
+    Color br = Color(255, 0, 51); //<!-- bottom right -->
 
-    std::ofstream myfile;
-    std::string filename = "out";
- 	
- 	myfile.open (filename + OUTPUT_EXTENSION);
-  	myfile << OUTPUT_INDEX << "\n";
-  	myfile << 200 << " " 
-  		   << 100 << "\n";
-  	myfile << MAX_COLOR_VALUE << "\n";
+    Background bg = Background(bl, tl, tr, br);
+    auto w = color_buffer.get_width();
+    auto h = color_buffer.get_heigth();
 
-    Color c = Vec3(1,1,1);
 
-    for (int i=0; i < 100; i++){
-        for (int j=0; j <200; j++){
-            ray = Ray(i, j, 10);
-            c = bg.get_color(ray);
-            
-            myfile << int(abs(c.r())) << " " << int(abs(c.g())) << " " << int(abs(c.b())) << " ";
+    for (int j = h-1; j >= 0; j--){
+        for (int i = 0; i < w; i++){
+            auto color = bg.sample(float(i)/float(2), float(j)/float(h));
+            color_buffer.color_pixel(i, j, color);
         }
-        myfile << "\n";
     }
 
-	myfile.close();
 
     return 0;
 }

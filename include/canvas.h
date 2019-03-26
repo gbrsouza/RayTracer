@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#include "color.h"
 #include "common.h"
 #include "vec3.h"
 
@@ -20,7 +19,7 @@ private:
 	
 	uint m_width;       //<! width of image
 	uint m_heigth;      //<! height of image
-	color_t * image;    //<! image representation (a array of unsigned int)
+	uint * image;    //<! image representation (a array of unsigned int)
 
 public:
 
@@ -30,7 +29,7 @@ public:
 	 * @param[in]  m_width   The width
 	 * @param[in]  m_heigth  The heigth
 	 */
-	Canvas (unsigned int m_width = 800, unsigned int m_heigth = 600);
+	Canvas (uint m_width = 800, uint m_heigth = 600);
 
 	/**
 	 * @brief      Destroys the object.
@@ -61,14 +60,12 @@ public:
 	 */
 	void color_pixel (int x, int y, Color &color);
 
-	void color_pixel (int x, int y, Vec3 &color);
-
 	/**
 	 * @brief      Gets the image.
 	 *
 	 * @return     The image.
 	 */
-	color_t * get_image ();
+	uint * get_image ();
 
 	/**
 	 * @brief      Gets the width.
@@ -101,5 +98,7 @@ public:
 	int get_position_pixel(int x, int y);
 
 };
+
+typedef Canvas Buffer;
 
 #endif

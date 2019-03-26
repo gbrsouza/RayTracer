@@ -53,7 +53,7 @@ public:
     { colors[0] = c1; colors[1] = c2; colors[2] = c3; 
       colors[3] = c4; numberColors=4;}
  
-    Color get_color (Ray &ray);
+    Color sample (float i, float j);
 
 };
 
