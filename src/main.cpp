@@ -5,6 +5,7 @@
 #include "background.h"
 #include "canvas.h"
 #include "common.h"
+#include "raster.h"
 
 int main (){
     
@@ -16,9 +17,8 @@ int main (){
     Color br = Color(255, 0, 51); //<!-- bottom right -->
 
     Background bg = Background(bl, tl, tr, br);
-    auto w = color_buffer.get_width();
-    auto h = color_buffer.get_heigth();
-
+    int w = color_buffer.get_width();
+    int h = color_buffer.get_heigth();
 
     for (int j = h-1; j >= 0; j--){
         for (int i = 0; i < w; i++){
@@ -27,6 +27,8 @@ int main (){
         }
     }
 
+    Raster raster = Raster(&color_buffer);
+    raster.draw();
 
     return 0;
 }

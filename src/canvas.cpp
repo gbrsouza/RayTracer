@@ -24,9 +24,11 @@ Canvas& Canvas::operator= (const Canvas & rhs)
  * Main functions
  */
 
+#include <iostream>
 void Canvas::color_pixel (int x, int y, Color &color)
 {
 	int init_pixel = this->get_position_pixel(x, y);
+	std::cout << init_pixel << " " << get_size_canvas() << "\n";
 	for (int i=0; i < VALUES_PER_PIXEL; i++)
 		this->image[init_pixel+i] = abs(color[i]);
 }
@@ -65,7 +67,7 @@ int Canvas::get_position_pixel(int x, int y)
 	 * é necessário encontrar a posição onde começa o pixel. A 
 	 * expressão abaixo realiza este cálculo.
 	 */
-	int init_pixel = init_line_of_pixel + (y-1) * VALUES_PER_PIXEL ;
+	int init_pixel = init_line_of_pixel + (m_heigth-y) * VALUES_PER_PIXEL ;
 
 	return init_pixel;
 }
