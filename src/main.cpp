@@ -22,7 +22,7 @@ int main (){
 
     for (int j = h-1; j >= 0; j--){
         for (int i = 0; i < w; i++){
-            auto color = bg.sample(float(i)/float(2), float(j)/float(h));
+            auto color = bg.sample(float(i)/float(w), float(j)/float(h));
             color_buffer.color_pixel(i, j, color);
         }
     }
