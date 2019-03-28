@@ -13,9 +13,6 @@ private:
     //<! The background colors
     Color colors[4]; 
 
-    //<! The number of colors in background
-    int numberColors;
-
 public:
 
     /**
@@ -25,7 +22,8 @@ public:
      * @param c1  The background color
      */
     Background(const Color& c1) 
-    { colors[0] = c1; numberColors=1; }
+    { colors[0] = c1; colors[1] = c1;
+      colors[2] = c1; colors[3] = c1;}
 
     /**
      * @brief Construct a new Background object.
@@ -36,7 +34,8 @@ public:
      * @param c2  The second color
      */
     Background(const Color& c1, const Color& c2)
-    { colors[0] = c1; colors[1] = c2; numberColors=2;}
+    { colors[0] = c1; colors[1] = c1;
+      colors[2] = c2; colors[3] = c2;}
 
     /**
      * @brief Construct a new Background object.
@@ -50,8 +49,8 @@ public:
      */
     Background(const Color& c1, const Color& c2, 
                const Color& c3, const Color& c4)
-    { colors[0] = c1; colors[1] = c2; colors[2] = c3; 
-      colors[3] = c4; numberColors=4;}
+    { colors[0] = c1; colors[1] = c2; 
+      colors[2] = c3; colors[3] = c4; }
  
     Color sample (float i, float j);
 

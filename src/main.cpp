@@ -16,7 +16,7 @@ int main (){
     Color tr = Color(255, 255, 51); //<!-- top right -->
     Color br = Color(255, 0, 51); //<!-- bottom right -->
 
-    Background bg = Background(bl, tl, tr, br);
+    Background bg = Background(tr, br, br, tr);
     int w = color_buffer.get_width();
     int h = color_buffer.get_heigth();
 
