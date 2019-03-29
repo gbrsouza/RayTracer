@@ -45,7 +45,7 @@ Initially, it is necessary introduce a ray tracer through of tag `<raytracer></r
 
 ### Background
 
-## Camera
+### Camera
 
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
