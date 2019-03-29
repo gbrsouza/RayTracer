@@ -31,7 +31,7 @@ private:
      * @param element   the iterator of file
      * @return std::string  The name of output image
      */
-    void read_settings(XMLNode *pRoot);
+    void read_settings(XMLNode &pRoot);
 
     /**
      * @brief Read a background in xml file
@@ -39,7 +39,7 @@ private:
      * @param element  the iterator of file
      * @return Background&   The object background defined
      */
-    void read_background(XMLElement &element);
+    void read_background(XMLNode &pRoot);
 
     /**
      * @brief Read a set of colors in xml file
@@ -56,7 +56,7 @@ private:
      * @param element  the iterator of file
      * @return Buffer& the buffer 
      */
-    void read_camera(XMLElement &element); 
+    void read_camera(XMLNode &pRoot); 
 
 
 public:

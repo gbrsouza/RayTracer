@@ -21,21 +21,21 @@ int main (int argc, char *argv[])
     ParserXML parser = ParserXML(name);
   
     try { parser.run();  }
-    catch(const std::exception& e)
-    { std::cerr << e.what() << '\n'; }
+    catch(std::string e)
+    { std::cerr << e << '\n'; }
     
-    // int w = parser.buffer->get_width();
-    // int h = parser.buffer->get_heigth();
+    int w = parser.buffer->get_width();
+    int h = parser.buffer->get_heigth();
 
-    // for (int j = h-1; j >= 0; j--){
-    //     for (int i = 0; i < w; i++){
-    //         auto color = parser.background->sample(float(i)/float(w), float(j)/float(h));
-    //         parser.buffer->color_pixel(i, j, color);
-    //     }
-    // }
+    for (int j = h-1; j >= 0; j--){
+        for (int i = 0; i < w; i++){
+            auto color = parser.background->sample(float(i)/float(w), float(j)/float(h));
+            parser.buffer->color_pixel(i, j, color);
+        }
+    }
 
-    // Raster raster = Raster(parser.buffer, name);
-    // raster.draw();
+    Raster raster = Raster(parser.buffer, parser.output);
+    raster.draw();
 
 	return 0;
 	
