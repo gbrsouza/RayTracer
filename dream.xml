@@ -1,0 +1,20 @@
+<?xml version=\"1.0\"?>
+<!DOCTYPE PLAY SYSTEM play.dtd>
+
+<raytracer>
+
+  <settings>
+      <output_file type="PNG" name="saida.png"></output_file>
+  </settings>
+  <background type="interpolation">
+      <color r="0"   g="0"   b="51" /> <!-- bottom left  -->
+      <color r="0"   g="255" b="51" /> <!-- top left     -->
+      <color r="255" g="255" b="51" /> <!-- top right    -->
+      <color r="255" g="0"   b="51" /> <!-- bottom right -->
+  </background>
+  <camera type="orthographic">
+    <width value="200"/><width>
+    <height value="100"/><height>
+  </camera>
+
+</raytracer>

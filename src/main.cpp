@@ -2,33 +2,41 @@
 #include <string>
 #include <fstream>
 
-#include "background.h"
-#include "canvas.h"
 #include "common.h"
 #include "raster.h"
+#include "xml-parser.h"
 
-int main (){
+int main (int argc, char *argv[])
+{
+
+	std::string name;
+	if (argc == 2)
+		name = argv[1];
+	else {
+		std::cout << "Please, specify the xml file with the scene specification.\n";
+		std::cout << "./exe.out <xml_file>\n";
+		return 0;	
+	}
+ 
+    ParserXML parser = ParserXML(name);
+  
+    try { parser.run();  }
+    catch(const std::exception& e)
+    { std::cerr << e.what() << '\n'; }
     
-    Buffer color_buffer (200, 100);
+    // int w = parser.buffer->get_width();
+    // int h = parser.buffer->get_heigth();
 
-    Color bl = Color(0, 0, 51); //<!-- bottom left -->
-    Color tl = Color(0, 255, 51); //<!-- top left -->
-    Color tr = Color(255, 255, 51); //<!-- top right -->
-    Color br = Color(255, 0, 51); //<!-- bottom right -->
+    // for (int j = h-1; j >= 0; j--){
+    //     for (int i = 0; i < w; i++){
+    //         auto color = parser.background->sample(float(i)/float(w), float(j)/float(h));
+    //         parser.buffer->color_pixel(i, j, color);
+    //     }
+    // }
 
-    Background bg = Background(tr, br, br, tr);
-    int w = color_buffer.get_width();
-    int h = color_buffer.get_heigth();
+    // Raster raster = Raster(parser.buffer, name);
+    // raster.draw();
 
-    for (int j = h-1; j >= 0; j--){
-        for (int i = 0; i < w; i++){
-            auto color = bg.sample(float(i)/float(w), float(j)/float(h));
-            color_buffer.color_pixel(i, j, color);
-        }
-    }
-
-    Raster raster = Raster(&color_buffer);
-    raster.draw();
-
-    return 0;
+	return 0;
+	
 }

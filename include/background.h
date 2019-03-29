@@ -15,6 +15,12 @@ private:
 
 public:
 
+    Background()
+    { Color c = Color(0,0,0);
+      colors[0] = c; colors[1] = c;
+      colors[2] = c; colors[3] = c;
+    }
+
     /**
      * @brief Construct a new Background object.
      *        Use to define a solid color in background
@@ -52,6 +58,12 @@ public:
     { colors[0] = c1; colors[1] = c2; 
       colors[2] = c3; colors[3] = c4; }
  
+    void operator= (const Background & rhs)
+    { 
+      for (uint i; i < 4; i++)
+        this->colors[i] = rhs.colors[i];    
+    }
+
     Color sample (float i, float j);
 
 };
