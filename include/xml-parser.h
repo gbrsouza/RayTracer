@@ -63,8 +63,8 @@ public:
 
     std::string filename;   //<! The xml file with the description raytracer
     std::string output;     //<! The name of output image
-    Background *background;  //<! The background
-    Buffer *buffer;          //<! The buffer
+    Background *background; //<! The background
+    Buffer *buffer;         //<! The buffer
 
     /**
      * @brief Construct a new ParserXML object
