@@ -75,6 +75,8 @@ The colors difened in background are assign in the corners of the image. The ass
 </background>
 ~~~~
 
+![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida.png) 
+
 ~~~~
 <background type="gradient">
  	<color r="255" g="255" b="51"/>
@@ -82,11 +84,16 @@ The colors difened in background are assign in the corners of the image. The ass
 </background>
 ~~~~
 
+![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida1.png) 
+
 ~~~~
 <background type="solid">
 	<color r="255" g="0"   b="51"/> 
 </background>
 ~~~~
+
+
+![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida2.png) 
 
 ~~~~
 <background type="interpolation">
@@ -96,6 +103,8 @@ The colors difened in background are assign in the corners of the image. The ass
 	<color r="255" g="255" b="51"/>
 </background>
 ~~~~
+
+![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida3.png) 
 
 ### Color
 
