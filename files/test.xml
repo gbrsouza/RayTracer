@@ -5,10 +5,10 @@
   	</settings>
 
 	<background type="interpolation">
-      		<color r="0"   g="0"   b="51"/>  <!-- bottom left  -->
-      		<color r="0"   g="255" b="51"/>  <!-- top left     -->
-      		<color r="255" g="255" b="51"/>  <!-- top right    -->
+       		<color r="255" g="255" b="51"/>  <!-- top right    -->
       		<color r="255" g="0"   b="51"/>  <!-- bottom right -->
+			<color r="255" g="0"   b="51"/>
+			<color r="255" g="255" b="51"/>
   	</background>
 
 	<camera>
