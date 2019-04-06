@@ -193,9 +193,7 @@ public:
      * @return float   the product position by position between v1 and v2
      */
     inline float dot(const Vec3 &v1, const Vec3 &v2);
-
 };
 
-typedef Vec3 Color; //<! alias to color
 
 #endif
