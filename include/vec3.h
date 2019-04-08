@@ -193,7 +193,16 @@ public:
      * @return float   the product position by position between v1 and v2
      */
     inline float dot(const Vec3 &v1, const Vec3 &v2);
-};
 
+    friend std::istream& operator>> (std::istream &is, Vec3 &t){
+        is >> t.element[x_axis] >> t.element[y_axis] >> t.element[z_axis];
+        return is;
+    }
+
+    friend std::ostream& operator<< (std::ostream &os, const Vec3 &t){
+        os << "("<< t.element[x_axis] << ", " << t.element[y_axis] << ", " << t.element[z_axis] << ")";
+        return os;
+    }
+};
 
 #endif

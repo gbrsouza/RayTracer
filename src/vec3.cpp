@@ -1,16 +1,5 @@
 #include "vec3.h"
 
-
-inline std::istream& operator>> (std::istream &is, Vec3 &t){
-    is >> t.element[x_axis] >> t.element[y_axis] >> t.element[z_axis];
-    return is;
-}
-
-inline std::ostream& operator<< (std::ostream &os, const Vec3 &t){
-    os << t.element[x_axis] << t.element[y_axis] << t.element[z_axis];
-    return os;
-}
-
 /**
  * @brief make a unit vector
  */
@@ -142,12 +131,9 @@ inline float Vec3::dot(const Vec3 &v1, const Vec3 &v2){
  * @return Vec3 the result of product
  */
 inline Vec3 Vec3::cross(const Vec3 &v1, const Vec3 &v2){
-    return Vec3( (v1.element[z_axis]*v2.element[y_axis] 
-                - v1.element[z_axis]*v2.element[y_axis]),
-                -(v1.element[x_axis]*v2.element[z_axis]
-                - v1.element[z_axis]*v2.element[x_axis]),
-                 (v1.element[x_axis]*v2.element[y_axis]
-                - v1.element[y_axis]*v2.element[x_axis]));
+    return Vec3( (v1.y()*v2.z() - v1.z()*v2.y()),
+                 (-(v1.x()*v2.z() - v1.z()*v2.x())),
+                 (v1.x()*v2.y() - v1.y()*v2.x()));
 }
 
 inline Vec3& Vec3::operator+= (const Vec3 &v){

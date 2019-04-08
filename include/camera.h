@@ -34,13 +34,14 @@ public:
      * @param y   the y value
      * @return Ray  The ray in x,y pixel. 
      */
-    virtual Ray generate_ray(int x, int y);
+    virtual Ray generate_ray(int x, int y)
+    { return Ray(point3(x,y,1), Vec3(x,y,1)); }
 
     /**
      * @brief Get the width object
      * @return int  the width value
      */
-    int get_width () {return width;}
+    int get_width (){return width;}
 
     /**
      * @brief Get the height object

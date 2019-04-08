@@ -3,12 +3,18 @@
 
 #include "camera.h"
 
+/**
+ * @brief A class for a orthographic camera,
+ * this is a child of Camera class
+ * 
+ */
 class OrthographicCamera : public Camera {
 
 private:
+
     point3 position;  //<! located at the origin
     point3 target;    //<! looking down the -Z axis
-    Vec3 upVector;    //<! the camera's up vector
+    Vec3 vUp;        //<! the camera's up vector
 
     //<! View plane dimensions 
     //<! [left, right, bottom and up]
@@ -29,16 +35,31 @@ public:
      * @param b         the bottom view plane dimension
      * @param t         the top view plane dimension
      */
-    OrthographicCamera( int w, int h, point3 &position,
-        point3 &target, Vec3 &upVector, float l, float r,
-        float b, float t) 
-        
-        : Camera(w,h), position{position}, target{target},
-          upVector{upVector}, l{l}, r{r}, b{b}, t{t}
-    {/*empty*/}
+    OrthographicCamera( int w, int h, 
+    point3 &position, point3 &target, Vec3 &vUp,
+    float l, float r, float b, float t) 
+    : Camera (w,h)
+    {
+        this->position = position;
+        this->target = target;
+        this->vUp = vUp;
+        this->l = l; this->r = r;
+        this->b = b; this->t = t;
+    }
 
+    /**
+     * @brief Destroy the Orthographic Camera object
+     */
     ~OrthographicCamera(){/*empty*/}
 
+    /**
+     * @brief Generate a ray in the orthographic camera 
+     * for the params x and y.
+     * 
+     * @param x  the pixel's x axis
+     * @param y  the pixel's y axis
+     * @return Ray  the ray in the pixel
+     */
     Ray generate_ray(int x, int y);
 
 };

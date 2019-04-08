@@ -28,6 +28,14 @@ public:
      * @return Vec3  o + t*d
      */
     Vec3 operator() (float t);
+
+    point3 get_origin (){return this-> o;}
+    Vec3 get_direction (){return this-> d;}
+
+    friend std::ostream& operator<< (std::ostream &os, const Ray &t){
+        os << "[o=" << t.o << ", d=" << t.d << "]";
+        return os;
+    }
 };
 
 #endif

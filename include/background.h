@@ -3,7 +3,6 @@
 
 #include "vec3.h"
 
-typedef Vec3 Ray;
 typedef Vec3 Color;
 
 class Background {

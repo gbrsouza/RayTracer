@@ -11,5 +11,6 @@
 
 typedef Vec3 Color;  //<! alias to color
 typedef Vec3 point3; //<! alias to point 3D
+typedef Vec3 vector;
 
 #endif
