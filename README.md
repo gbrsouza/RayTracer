@@ -21,7 +21,7 @@ $ ./exe.out <xml_file>
 ## How to describe a scene
 Initially, it is necessary introduce a ray tracer through of tag `<raytracer></raytracer>` . In your xml file, You must define three basic sections: settings, background and camera, for this, use the tags `<settings></settings>` , `<background></background>` and `<camera><camera>` respectively. In settings, you define the image format and image name. For background, you define the background type renderization and all colors. For camera, you define the width and height size of image. A basic document is shown below.
 
-~~~~
+```xml
 <raytracer>
 	<settings>
     	<output_file type="PNG" name="saida"></output_file>
@@ -39,7 +39,7 @@ Initially, it is necessary introduce a ray tracer through of tag `<raytracer></r
 		<height value="100"></height>
 	</camera>
 </raytracer>
-~~~~
+```
 
 ### Settings
 
@@ -50,11 +50,11 @@ In this tag you add a another tag named `output_file`. For this new tag you add 
 	- `type`  : The image extension (default: PPM)
 	
 #### Example
-~~~~
+```xml
 <settings>
     	<output_file type="PNG" name="saida"></output_file>
 </settings>
-~~~~
+```
 
 ### Background
 
@@ -66,43 +66,43 @@ Define a background of image
 The colors difened in background are assign in the corners of the image. The assignment order is bottom left, top left, top right, bottom right. If you define two colors, the first color will be assign in the bottom left and top left, the second color will be assign in the top right and bottom right. 
 
 #### Examples
-~~~~
+```xml
 <background type="interpolation">
       	<color r="0"   g="0"   b="51"/>  <!-- bottom left  -->
       	<color r="0"   g="255" b="51"/>  <!-- top left     -->
       	<color r="255" g="255" b="51"/>  <!-- top right    -->
  	<color r="255" g="0"   b="51"/>  <!-- bottom right -->
 </background>
-~~~~
+```
 
 ![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida.png) 
 
-~~~~
+```xml
 <background type="gradient">
  	<color r="255" g="255" b="51"/>
       	<color r="255" g="0"   b="51"/>
 </background>
-~~~~
+```
 
 ![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida2.png) 
 
-~~~~
+```xml
 <background type="solid">
 	<color r="255" g="0"   b="51"/> 
 </background>
-~~~~
+```
 
 
 ![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida3.png) 
 
-~~~~
+```xml
 <background type="interpolation">
 	<color r="255" g="255" b="51"/>  
       	<color r="255" g="0"   b="51"/>  
 	<color r="255" g="0"   b="51"/>
 	<color r="255" g="255" b="51"/>
 </background>
-~~~~
+```
 
 ![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/saida4.png) 
 
@@ -114,12 +114,12 @@ The colors difened in background are assign in the corners of the image. The ass
 	- `b` - The blue value of RGB color
 
 #### Examples
-~~~~
+```xml
 <color r="0"   g="0"   b="51"/> 
 <color r="0"   g="255" b="51"/> 
 <color r="255" g="255" b="51"/> 
 <color r="255" g="0"   b="51"/>  
-~~~~
+```
 
 ### Camera
 
@@ -127,11 +127,11 @@ In the camera, you need to set the width and height of image> For this, use the 
 The required attributes in tags are `value`.
 
 #### Example
-~~~~
+```xml
 <camera>
 	<width value="200"></width>
 	<height value="100"></height>
 </camera>
-~~~~
+```
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
