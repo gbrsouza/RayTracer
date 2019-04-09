@@ -101,40 +101,80 @@ void ParserXML::read_camera(XMLNode &pRoot){
     eResult = height->QueryIntAttribute("value", &h);
     if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
 
+    // get position os camera
+    XMLElement *position = pElement->FirstChildElement("position");
+    if (position == nullptr) throw INVALID_ORT_CAMERA;
+    point3 *pos = read_vector_or_point(*position);
+    
+    // get target of camera
+    XMLElement *target = pElement->FirstChildElement("target");
+    if (target == nullptr) throw INVALID_ORT_CAMERA;
+    point3 *tgt = read_vector_or_point(*target);
+
+    // get up vector
+    XMLElement *up = pElement->FirstChildElement("up");
+    if ( up == nullptr) throw INVALID_ORT_CAMERA;
+    vector *vUp = read_vector_or_point(*up);
+
+    //Get type of camera
+    const char * typeOfCamera = nullptr;
+    typeOfCamera = pElement->Attribute("type");
+    if (typeOfCamera == nullptr) throw INVALID_CAMERA;
+    std::string type = typeOfCamera;
+
+    // Generate Camera
+    if (type.compare("orthographic")==0){
+        this->camera = read_orthographic_camera(*pElement, w, h, *pos, *tgt, *vUp );
+    }else if (type.compare("perspective")==0){
+        this->camera = read_pespective_camera(*pElement, w, h, *pos, *tgt, *vUp );
+    }else throw INVALID_CAMERA;
+
     this->buffer = new Buffer(w,h);
 } 
 
-OrthographicCamera 
+OrthographicCamera* 
 ParserXML::read_orthographic_camera(
-    XMLElement &element, int width, int height)
+    XMLElement &element, int width, int height, 
+    point3 &pos, point3 &target, vector &vUp)
 {
-    int x, y, z;
     float l, r, b, t;
-    XMLError eResult;
 
-    XMLElement *position = element.FirstChildElement("position");
-    if (position = nullptr) throw INVALID_ORT_CAMERA;
-    point3 pos = read_vector_or_point(*position);
-    
-    XMLElement *target = element.FirstChildElement("target");
-    if (target = nullptr) throw INVALID_ORT_CAMERA;
-    point3 tgt = read_vector_or_point(*target);
-
-    XMLElement *up = element.FirstChildElement("up");
-    if ( up = nullptr) throw INVALID_ORT_CAMERA;
-    point3 vUp = read_vector_or_point(*up);
-  
     XMLElement *vpdim = element.FirstChildElement("vpdim");
-    if ( vpdim = nullptr) throw INVALID_ORT_CAMERA;
+    if ( vpdim == nullptr) throw INVALID_ORT_CAMERA;
     l = read_float(*vpdim, "l");
     r = read_float(*vpdim, "r");
     b = read_float(*vpdim, "b");
     t = read_float(*vpdim, "t");
 
-    OrthographicCamera ortCam = OrthographicCamera(width,height, pos, tgt, vUp, l,r,b,t);
+    OrthographicCamera *ortCam = new OrthographicCamera(width,height, 
+        pos, target, vUp, l,r,b,t);
+    return ortCam;
 }
 
-Vec3 ParserXML::read_vector_or_point(XMLElement &element)
+PespectiveCamera* 
+ParserXML::read_pespective_camera (
+    XMLElement &element, int width, int height, 
+    point3 &pos, point3 &target, vector &vUp)
+{
+    float fovy, aspect, fdistance;
+    XMLElement *fv = element.FirstChildElement("fovy");
+    if ( fv == nullptr) throw INVALID_PESPC_CAMERA;
+    fovy = read_float(*fv, "value");
+
+    XMLElement *asp = element.FirstChildElement("aspect");
+    if ( asp == nullptr) throw INVALID_PESPC_CAMERA;
+    aspect = read_float(*asp, "value");
+
+    XMLElement *fd = element.FirstChildElement("fdistance");
+    if ( fd == nullptr) throw INVALID_PESPC_CAMERA;
+    fdistance = read_float(*fd, "value");
+
+    PespectiveCamera *pespcCam = new PespectiveCamera(width, height, 
+        pos, target, vUp, fovy, aspect, fdistance);
+    return pespcCam;
+}
+
+Vec3* ParserXML::read_vector_or_point(XMLElement &element)
 {
     int x, y, z;
     XMLError eResult;
@@ -145,12 +185,12 @@ Vec3 ParserXML::read_vector_or_point(XMLElement &element)
     if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
     eResult = element.QueryIntAttribute("z", &z);
     if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
-    Vec3 pos = Vec3(x,y,z);
+    Vec3 *pos = new Vec3(x,y,z);
 
     return pos;
 }
 
-float read_float(XMLElement &element, std::string value)
+float ParserXML::read_float(XMLElement &element, std::string value)
  {
     float x;
     XMLError eResult;

@@ -13,6 +13,7 @@
 #include "vec3.h"
 #include "canvas.h"
 #include "orthographic_camera.h"
+#include "pespective_camera.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
@@ -20,6 +21,7 @@
 #define INVALID_COLOR               "Invalid color specification"
 #define INVALID_CAMERA              "Invalid Camera specification"
 #define INVALID_ORT_CAMERA          "Invalid Orthographic Camera specification"
+#define INVALID_PESPC_CAMERA          "Invalid Pespective Camera specification"
 #define INVALID_ATT_VECTOR_OR_POINT "Invalid attribute defined for vector or point"
 
 
@@ -67,9 +69,29 @@ private:
      * @param element the iterator of file
      * @param width   the width of camera
      * @param height  the height of camera
+     * @param pos     the position of camera
+     * @param target  the target of camera
+     * @param vUp     the uo vector
      * @return OrthographicCamera* the orthographic camera
      */
-    OrthographicCamera read_orthographic_camera(XMLElement &element,int width, int height);
+    OrthographicCamera* read_orthographic_camera(
+        XMLElement &element,int width, int height,
+        point3 &pos, point3 &target, vector &vUp);
+
+    /**
+     * @brief read the atributes of a pespective camera
+     * 
+     * @param element the iterator of file
+     * @param width   the width of camera
+     * @param height  the height of camera
+     * @param pos     the position of camera
+     * @param target  the target of camera
+     * @param vUp     the uo vector
+     * @return PespectiveCamera* the pespective camera
+     */    
+    PespectiveCamera* read_pespective_camera (
+       XMLElement &element,int width, int height,
+       point3 &pos, point3 &target, vector &vUp);
 
     /**
      * @brief read a vector or point3 
@@ -77,7 +99,7 @@ private:
      * @param element the iterator of file
      * @return Vec3*  the vector or point3
      */
-    Vec3 read_vector_or_point(XMLElement &element);
+    Vec3* read_vector_or_point(XMLElement &element);
 
     /**
      * @brief Read float value in the document
@@ -95,7 +117,7 @@ public:
     std::string output;     //<! The name of output image
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
-
+    Camera *camera;         //<! The Camera
     /**
      * @brief Construct a new ParserXML object
      * @param filename the name of xml file

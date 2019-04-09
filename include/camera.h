@@ -5,10 +5,13 @@
 
 class Camera {
 
-private:
+protected:
 
-    int width;  //<! Width of camera 
-    int height; //<! height of camera
+    int width;       //<! Width of camera 
+    int height;      //<! height of camera
+    point3 position; //<! located at the origin
+    point3 target;   //<! looking down the -Z axis
+    Vec3 vUp;        //<! the camera's up vector
 
 public:
 

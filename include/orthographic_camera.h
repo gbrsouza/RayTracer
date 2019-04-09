@@ -12,10 +12,6 @@ class OrthographicCamera : public Camera {
 
 private:
 
-    point3 position;  //<! located at the origin
-    point3 target;    //<! looking down the -Z axis
-    Vec3 vUp;        //<! the camera's up vector
-
     //<! View plane dimensions 
     //<! [left, right, bottom and up]
     float l, r, b, t;   

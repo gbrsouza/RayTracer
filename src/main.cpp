@@ -6,6 +6,7 @@
 #include "raster.h"
 #include "xml-parser.h"
 #include "orthographic_camera.h"
+#include "pespective_camera.h"
 
 int main (int argc, char *argv[])
 {
@@ -25,12 +26,10 @@ int main (int argc, char *argv[])
     catch(std::string e)
     { std::cerr << e << '\n'; }
     
-    int w = 40;
-    int h = 30;
-    point3 pos = point3(0,0,0);
-    point3 target = point3(0,0,-10);
-    Vec3 vUp = Vec3(0,1,1);
-    Camera *cam = new OrthographicCamera(w,h,pos, target, vUp, -3.0, 3.0, -2.25, 2.25);
+    int w = parser.buffer->get_width();
+    int h = parser.buffer->get_heigth();
+
+    Camera *cam = parser.camera;
 
     for (int j = h-1; j >= 0; j--){
         for (int i = 0; i < w; i++){
