@@ -123,8 +123,8 @@ The colors difened in background are assign in the corners of the image. The ass
 
 ### Camera
 
-In the camera, you need to set the width and height of image> For this, use the tags `<width></width>` and `<height></height>`.
-The required attributes in tags are `value`.
+In the camera, you need to set the width and height of image. For this, use the tags `<width></width>` and `<height></height>`.
+The required attributes in tags are `value`. 
 
 #### Example
 ```xml
@@ -133,5 +133,9 @@ The required attributes in tags are `value`.
 	<height value="100"></height>
 </camera>
 ```
+There exists two types of cameras: the orthographic camera and pespective camera. The perspective camera shooting rays from a single point to every pixel area into the scene, whereas the orthographic shoots rays from each pixel to a direction (usually) perpendicular to the image plane into the scene. The Figure below shows the two types of projective cameras describes so far (original source: P. Shirley and S. Marschner., "Fundamentals of Computer Graphics", 3rd ed., 2009, A K Peters.).
+
+![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/cameras.png) 
+
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
