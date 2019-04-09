@@ -124,18 +124,67 @@ The colors difened in background are assign in the corners of the image. The ass
 ### Camera
 
 In the camera, you need to set the width and height of image. For this, use the tags `<width></width>` and `<height></height>`.
-The required attributes in tags are `value`. 
+The required attributes in tags are `value`. For a generic camera, three values are necessary: `<position></position>` to represent the camera position, `<target></target>` to looking down the -Z axis and `<up></up>` that is the camera's up vector.
 
 #### Example
 ```xml
-<camera>
+<camera type="...">
+	<!--- The camera frame -->
+    	<position x="0" y="0" z="0"/> <!--- located at the origin -->
+    	<target x="0" y="0" z="-10"/> <!--- looking down the -Z axis -->
+    	<up x="0" y="1" z="1"/>       <!--- the camera's up vector -->
 	<width value="200"></width>
 	<height value="100"></height>
 </camera>
 ```
-There exists two types of cameras: the orthographic camera and pespective camera. The perspective camera shooting rays from a single point to every pixel area into the scene, whereas the orthographic shoots rays from each pixel to a direction (usually) perpendicular to the image plane into the scene. The Figure below shows the two types of projective cameras describes so far (original source: P. Shirley and S. Marschner., "Fundamentals of Computer Graphics", 3rd ed., 2009, A K Peters.).
+For specify a camera one must say its type. There exists two types of cameras: the orthographic camera and pespective camera. The perspective camera shooting rays from a single point to every pixel area into the scene, whereas the orthographic shoots rays from each pixel to a direction (usually) perpendicular to the image plane into the scene. The Figure below shows the two types of projective cameras describes so far (original source: P. Shirley and S. Marschner., "Fundamentals of Computer Graphics", 3rd ed., 2009, A K Peters.).
 
 ![alt text](https://github.com/GabrielArSouza/RayTracer/blob/master/imgs/cameras.png) 
+
+### Orthographic Camera
+* Required attibutes 
+	- `vpdim` - View plane dimensions with values l, r, b and t (left, right, bottom, top).
+
+#### example
+```xml
+<camera type="orthographic">
+    	<!--- The camera frame -->
+    	<position x="0" y="0" z="0"/> <!--- located at the origin -->
+    	<target x="0" y="0" z="-10"/> <!--- looking down the -Z axis -->
+    	<up x="0" y="1" z="1"/>       <!--- the camera's up vector -->
+    	
+	<!--- Specific parameters for orthographic projection -->
+    	<vpdim l="-3" r="3" b="-2.25" t="2.25" /> <!--- View plane dimensions [left right bottom top] -->
+    	
+	<!--- Retina/image dimensions -->
+    	<width value="40"/>
+    	<height value="30"/>
+</camera>
+```
+### Pespective Camera
+* Required attibutes 
+	- `fovy` - The vertical field of view
+	- `aspect` - Optional parameter, aspect ration W/H
+	- `fdistance` - The focal distance
+	
+#### example
+```xml
+<camera type="perspective">
+    	<!--- The camera frame -->
+    	<position x="0" y="0" z="0"/> <!--- located at the origin -->
+    	<target x="0" y="0" z="-10"/> <!--- looking down the -Z axis -->
+    	<up x="0" y="1" z="1"/>       <!--- the camera's up vector -->
+
+	<!--- Specific parameters for perspective projection -->
+    	<fovy value="45.0" />         <!--- The vertical field of view -->
+    	<aspect value="1.33"/>        <!--- Optional parameter, aspect ration W/H -->
+    	<fdistance value="1" />       <!--- The focal distance -->
+    	
+	<!--- Retina/image dimensions -->
+    	<width value="40"/>
+    	<height value="30"/>
+  </camera>
+```		
 
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
