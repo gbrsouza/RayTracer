@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
             Ray r = cam->generate_ray(i,j);
             std::cout << "pixel (" << i << ", " << j << ") ";
             std::cout << r << std::endl;
-
+    
             auto color = parser.background->sample(float(i)/float(w), float(j)/float(h));
             parser.buffer->color_pixel(i, j, color);
         }

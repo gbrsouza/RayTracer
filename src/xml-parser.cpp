@@ -104,6 +104,62 @@ void ParserXML::read_camera(XMLNode &pRoot){
     this->buffer = new Buffer(w,h);
 } 
 
+OrthographicCamera 
+ParserXML::read_orthographic_camera(
+    XMLElement &element, int width, int height)
+{
+    int x, y, z;
+    float l, r, b, t;
+    XMLError eResult;
+
+    XMLElement *position = element.FirstChildElement("position");
+    if (position = nullptr) throw INVALID_ORT_CAMERA;
+    point3 pos = read_vector_or_point(*position);
+    
+    XMLElement *target = element.FirstChildElement("target");
+    if (target = nullptr) throw INVALID_ORT_CAMERA;
+    point3 tgt = read_vector_or_point(*target);
+
+    XMLElement *up = element.FirstChildElement("up");
+    if ( up = nullptr) throw INVALID_ORT_CAMERA;
+    point3 vUp = read_vector_or_point(*up);
+  
+    XMLElement *vpdim = element.FirstChildElement("vpdim");
+    if ( vpdim = nullptr) throw INVALID_ORT_CAMERA;
+    l = read_float(*vpdim, "l");
+    r = read_float(*vpdim, "r");
+    b = read_float(*vpdim, "b");
+    t = read_float(*vpdim, "t");
+
+    OrthographicCamera ortCam = OrthographicCamera(width,height, pos, tgt, vUp, l,r,b,t);
+}
+
+Vec3 ParserXML::read_vector_or_point(XMLElement &element)
+{
+    int x, y, z;
+    XMLError eResult;
+
+    eResult = element.QueryIntAttribute("x", &x);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryIntAttribute("y", &y);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryIntAttribute("z", &z);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    Vec3 pos = Vec3(x,y,z);
+
+    return pos;
+}
+
+float read_float(XMLElement &element, std::string value)
+ {
+    float x;
+    XMLError eResult;
+
+    eResult = element.QueryFloatAttribute(value.c_str(), &x);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    return x;
+ }
+
 #include <iostream>
 void ParserXML::run(){
     
