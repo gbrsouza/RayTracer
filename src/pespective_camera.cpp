@@ -4,7 +4,7 @@
  Ray PespectiveCamera::generate_ray(int x, int y)
  {
     // Find the half-height and half-width
-    auto hh = tan(fovy/2.0)*fdistance;
+    auto hh = tan( (fovy*RADIANS) /2.0)*fdistance;
     auto hw = aspect * hh;
     
     float l,r,t,b;
