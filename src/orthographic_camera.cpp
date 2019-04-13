@@ -13,13 +13,13 @@ Ray OrthographicCamera::generate_ray(int x, int y)
     vector w = -gaze;
     w.make_unit_vector();
     
-    vector uVec = vUp.cross(vUp, w);
+    vector uVec = cross(vUp, w);
     // std::cout << "vUp:" << vUp;
     // std::cout << " w:" << w;
     // std::cout << "uVec" << uVec;
     uVec.make_unit_vector();
 
-    vector vVec = w.cross(w, uVec);
+    vector vVec = cross(w, uVec);
     vVec.make_unit_vector();
 
     point3 e = this->position;

@@ -117,7 +117,7 @@ inline Vec3 operator* (const Vec3 &v, float t){
  * @param v2 the second vector
  * @return float the product between v1 and v2
  */
-inline float Vec3::dot(const Vec3 &v1, const Vec3 &v2){
+inline float dot(const Vec3 &v1, const Vec3 &v2){
     return v1.element[x_axis] * v2.element[y_axis] +
            v1.element[y_axis] * v2.element[y_axis] +
            v1.element[z_axis] * v2.element[z_axis];
@@ -130,7 +130,7 @@ inline float Vec3::dot(const Vec3 &v1, const Vec3 &v2){
  * @param v2 the second vector
  * @return Vec3 the result of product
  */
-inline Vec3 Vec3::cross(const Vec3 &v1, const Vec3 &v2){
+inline Vec3 cross(const Vec3 &v1, const Vec3 &v2){
     return Vec3( (v1.y()*v2.z() - v1.z()*v2.y()),
                  (-(v1.x()*v2.z() - v1.z()*v2.x())),
                  (v1.x()*v2.y() - v1.y()*v2.x()));
