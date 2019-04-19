@@ -200,6 +200,67 @@ float ParserXML::read_float(XMLElement &element, std::string value)
     return x;
  }
 
+void ParserXML::read_scene(XMLNode &pRoot)
+{
+    XMLElement * pElement = pRoot.FirstChildElement("scene");
+    if (pElement == nullptr) throw INVALID_SCENE;
+
+    pElement = pElement->NextSiblingElement( "object" );
+
+    // read all objects in scene
+    while (pElement != nullptr){
+
+        //Get type of object
+        const char * typeOfObject = nullptr;
+        typeOfObject = pElement->Attribute("type");
+        if (typeOfObject == nullptr) throw INVALID_CAMERA;
+        std::string type = typeOfObject;
+    
+        std::shared_ptr<Primitive> object;
+        if (type.compare("sphere") == 0)
+            object = read_sphere(*pElement);
+        // add here new primitives
+
+        this->scene.push_back(object);
+    }
+
+}
+
+std::shared_ptr<Primitive> 
+ParserXML::read_sphere(XMLElement &element)
+{
+    XMLElement * p = element.FirstChildElement("radius");
+    if (p == nullptr) throw INVALID_SPHERE;
+
+    float radius;
+    XMLError eResult;
+    
+    // Get value of radius
+    eResult = element.QueryFloatAttribute("value", &radius);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    // Get center of sphere
+    float x, y, z;
+    p = element.FirstChildElement("center");
+    
+    // Get x axis
+    eResult = element.QueryFloatAttribute("x", &x);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    // Get y axis
+    eResult = element.QueryFloatAttribute("y", &y);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    // Get z axis
+    eResult = element.QueryFloatAttribute("z", &z);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    // make a sphere
+    point3 *center = new point3(x,y,z);
+    Primitive *sphere = new Sphere(*center, radius);
+    std::shared_ptr<Primitive> ptr(sphere);
+
+    return ptr;
+}
+
 #include <iostream>
 void ParserXML::run(){
     
@@ -214,4 +275,6 @@ void ParserXML::run(){
     read_settings(*pRoot);
     read_background(*pRoot);
     read_camera(*pRoot);
+    read_scene(*pRoot);
+
 }   

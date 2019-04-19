@@ -19,7 +19,9 @@ public:
      * @param radius   the radius of sphere
      */
     Sphere (point3 &center, float radius)
-    : center{center}, radius{radius}{};
+    : center{center}, radius{radius} {};
+
+    ~Sphere(){};
 
     // Override
     bool intersect_p(Ray& r)

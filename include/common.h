@@ -2,6 +2,7 @@
 #define _COMMON_H_
 
 #include "vec3.h"
+#include <memory>
 
 #define MAX_COLOR_VALUE 255      //<! The max value RGB
 #define MIN_COLOR_VALUE 0        //<! The min value RGB

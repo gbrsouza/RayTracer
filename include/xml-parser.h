@@ -14,6 +14,8 @@
 #include "canvas.h"
 #include "orthographic_camera.h"
 #include "pespective_camera.h"
+#include "primitives/primitive.h"
+#include "primitives/sphere.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
@@ -21,9 +23,10 @@
 #define INVALID_COLOR               "Invalid color specification"
 #define INVALID_CAMERA              "Invalid Camera specification"
 #define INVALID_ORT_CAMERA          "Invalid Orthographic Camera specification"
-#define INVALID_PESPC_CAMERA          "Invalid Pespective Camera specification"
+#define INVALID_PESPC_CAMERA        "Invalid Pespective Camera specification"
 #define INVALID_ATT_VECTOR_OR_POINT "Invalid attribute defined for vector or point"
-
+#define INVALID_SCENE               "Invalid scene specification"
+#define INVALID_SPHERE              "Invalid sphere specification"
 
 using namespace tinyxml2;
 
@@ -110,6 +113,20 @@ private:
      */
     float read_float(XMLElement &element, std::string value);
 
+    /**
+     * @brief Read a scene
+     *  
+     * @param pRoot The iterator of file
+     */
+    void read_scene(XMLNode &pRoot);
+
+    /**
+     * @brief read and construct a sphere 
+     * 
+     * @param element  the iterator
+     * @return Sphere* the new sphere
+     */
+    std::shared_ptr<Primitive> read_sphere(XMLElement &element);
 
 public:
 
@@ -118,6 +135,9 @@ public:
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera
+
+    //<! list of objects in the scene. Not yet implemented.
+    std::vector<std::shared_ptr<Primitive>> scene;
     /**
      * @brief Construct a new ParserXML object
      * @param filename the name of xml file

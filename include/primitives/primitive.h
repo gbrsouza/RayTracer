@@ -13,7 +13,7 @@
 class Primitive {
 
 public:
-    virtual ~Primitive();
+    ~Primitive(){};
     //virtual bool intersect (const Ray& r, SurfaceInteraction *) const = 0;
     /**
      * @brief  check if a ray intersect a primitive
@@ -22,11 +22,15 @@ public:
      * @return true    if the ray intersect the sphere 
      * @return false   if the ray not intersect the sphere
      */
-    virtual bool intersect_p(Ray& r) const = 0;
+    virtual bool intersect_p(Ray& r) = 0;
     //virtual const Material * get_material(void) const = { return material; }
+    void set_id (int id){ this->id = id;}
 
 private: 
    // std::shared_ptr<Material> material;
+
+protected:
+    int id;
 };
 
 #endif
