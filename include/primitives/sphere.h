@@ -24,6 +24,7 @@ public:
     ~Sphere(){};
 
     // Override
+    #include <iostream>
     bool intersect_p(Ray& r)
     {
         vector oc = r.get_origin() - this->center;
@@ -31,6 +32,7 @@ public:
         float b = 2.0 * dot(oc, r.get_direction());
         float c = dot(oc,oc) - radius*radius;
         float discriminant = b*b - 4*a*c;
+    
         return (discriminant > 0);
     }
 

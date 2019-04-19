@@ -205,23 +205,28 @@ void ParserXML::read_scene(XMLNode &pRoot)
     XMLElement * pElement = pRoot.FirstChildElement("scene");
     if (pElement == nullptr) throw INVALID_SCENE;
 
-    pElement = pElement->NextSiblingElement( "object" );
-
+    XMLElement * pListElement = pElement->FirstChildElement("object");
+    int count = 0;
     // read all objects in scene
-    while (pElement != nullptr){
+    while (pListElement != nullptr){
 
+        count++;
+       
         //Get type of object
         const char * typeOfObject = nullptr;
-        typeOfObject = pElement->Attribute("type");
+        typeOfObject = pListElement->Attribute("type");
         if (typeOfObject == nullptr) throw INVALID_CAMERA;
         std::string type = typeOfObject;
     
         std::shared_ptr<Primitive> object;
         if (type.compare("sphere") == 0)
-            object = read_sphere(*pElement);
+            object = read_sphere(*pListElement);
         // add here new primitives
 
+        object->set_id(count);
         this->scene.push_back(object);
+
+        pListElement = pListElement->NextSiblingElement("object");
     }
 
 }
@@ -236,7 +241,7 @@ ParserXML::read_sphere(XMLElement &element)
     XMLError eResult;
     
     // Get value of radius
-    eResult = element.QueryFloatAttribute("value", &radius);
+    eResult = p->QueryFloatAttribute("value", &radius);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     // Get center of sphere
@@ -244,13 +249,13 @@ ParserXML::read_sphere(XMLElement &element)
     p = element.FirstChildElement("center");
     
     // Get x axis
-    eResult = element.QueryFloatAttribute("x", &x);
+    eResult = p->QueryFloatAttribute("x", &x);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
     // Get y axis
-    eResult = element.QueryFloatAttribute("y", &y);
+    eResult = p->QueryFloatAttribute("y", &y);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
     // Get z axis
-    eResult = element.QueryFloatAttribute("z", &z);
+    eResult = p->QueryFloatAttribute("z", &z);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     // make a sphere
