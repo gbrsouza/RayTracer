@@ -19,12 +19,12 @@ $ ./exe.out <xml_file>
 ~~~~
 
 ## How to describe a scene
-Initially, it is necessary introduce a ray tracer through of tag `<raytracer></raytracer>` . In your xml file, You must define three basic sections: settings, background and camera, for this, use the tags `<settings></settings>` , `<background></background>` and `<camera><camera>` respectively. In settings, you define the image format and image name. For background, you define the background type renderization and all colors. For camera, you define the width and height size of image. A basic document is shown below.
+Initially, it is necessary introduce a ray tracer through of tag `<raytracer></raytracer>` . In your xml file, You must define four basic sections: settings, background ,camera and scene, for this, use the tags `<settings></settings>` , `<background></background>`, `<camera><camera>` and `<scene></scene>` respectively. In settings, you define the image format and image name. For background, you define the background type renderization and all colors. For camera, you define the width and height size of image and for scene, you define all objects of image. A basic document is shown below.
 
 ```xml
 <raytracer>
 	<settings>
-    	<output_file type="PNG" name="saida"></output_file>
+    		<output_file type="PNG" name="saida"></output_file>
  	</settings>
 
 	<background type="interpolation">
@@ -38,6 +38,11 @@ Initially, it is necessary introduce a ray tracer through of tag `<raytracer></r
 		<width value="200"></width>
 		<height value="100"></height>
 	</camera>
+	
+	<scene>
+		...
+	</scene>
+
 </raytracer>
 ```
 
@@ -185,10 +190,9 @@ For specify a camera one must say its type. There exists two types of cameras: t
     	<height value="30"/>
   </camera>
 ```		
+## Objects
+For specify an object in scene, the tag `<object></object>` must used. It is necessary to inform the type of object. The allowed types are informed below.
 
-## How to describe a Scene
-
-### Objects
 #### Sphere
 
 
