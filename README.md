@@ -195,5 +195,27 @@ For specify an object in scene, the tag `<object></object>` must used. It is nec
 
 #### Sphere
 
+* Required attibutes 
+	- `radius` - The radius size of sphere (use the tag `<radius>`)
+	- `center` - The 3D point for sphere center (use the tag `<center>`) 
+		
+##### example
+```xml
+<scene>
+	<object type="sphere" name="sphere1">
+            <radius value="0.4"/>
+            <center x="-1.0" y="0.5" z="-5"/>
+        </object>
+        <object type="sphere" name="sphere2">
+            <radius value="0.4"/>
+            <center x="1.0" y="-0.5" z="-8"/>
+        </object>
+        <object type="sphere" name="sphere3">
+            <radius value="0.4"/>
+            <center x="-1.0" y="-1.5" z="-3.5"/>
+        </object>
+</scene>	
+```
+
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
