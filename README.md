@@ -186,5 +186,10 @@ For specify a camera one must say its type. There exists two types of cameras: t
   </camera>
 ```		
 
+## How to describe a Scene
+
+### Objects
+#### Sphere
+
 
 ###### © 2019 Souza, Gabriel A. Powered by [TinyXML-2](https://github.com/leethomason/tinyxml2)
