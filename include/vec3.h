@@ -168,13 +168,6 @@ public:
      */
     inline void make_unit_vector();
 
-    /**
-     * @brief unit vector
-     * 
-     * @param v  The vector
-     * @return Vec3  the unit vector generate by v
-     */
-    inline Vec3 unit_vector(Vec3 v);
 
     friend std::istream& operator>> (std::istream &is, Vec3 &t){
         is >> t.element[x_axis] >> t.element[y_axis] >> t.element[z_axis];

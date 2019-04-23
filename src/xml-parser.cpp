@@ -259,7 +259,7 @@ ParserXML::read_sphere(XMLElement &element)
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     // make a sphere
-    point3 *center = new point3(x,y,z);
+    const point3 *center = new point3(x,y,z);
     Primitive *sphere = new Sphere(*center, radius);
     std::shared_ptr<Primitive> ptr(sphere);
 

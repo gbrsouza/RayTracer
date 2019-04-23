@@ -118,7 +118,7 @@ inline Vec3 operator* (const Vec3 &v, float t){
  * @return float the product between v1 and v2
  */
 inline float dot(const Vec3 &v1, const Vec3 &v2){
-    return v1.element[x_axis] * v2.element[y_axis] +
+    return v1.element[x_axis] * v2.element[x_axis] +
            v1.element[y_axis] * v2.element[y_axis] +
            v1.element[z_axis] * v2.element[z_axis];
 }
@@ -131,9 +131,9 @@ inline float dot(const Vec3 &v1, const Vec3 &v2){
  * @return Vec3 the result of product
  */
 inline Vec3 cross(const Vec3 &v1, const Vec3 &v2){
-    return Vec3( (v1.y()*v2.z() - v1.z()*v2.y()),
-                 (-(v1.x()*v2.z() - v1.z()*v2.x())),
-                 (v1.x()*v2.y() - v1.y()*v2.x()));
+    return Vec3(  v1.y() * v2.z() - v1.z() * v2.y(),
+                -(v1.x() * v2.z() - v1.z() * v2.x()),
+                  v1.x() * v2.y() - v1.y() * v2.x());
 }
 
 inline Vec3& Vec3::operator+= (const Vec3 &v){
@@ -188,6 +188,13 @@ inline Vec3& Vec3::operator/= (const float t){
     return *this;
 }
 
-inline Vec3 Vec3::unit_vector(Vec3 v){
+
+/**
+ * @brief unit vector
+ * 
+ * @param v  The vector
+ * @return Vec3  the unit vector generate by v
+ */
+inline Vec3 unit_vector(Vec3 v){
     return v / v.length();
 }

@@ -28,14 +28,16 @@ public:
      */
     SurfaceInteraction (const point3&p, const vector&n, const vector&wo,
         float time, const point2f uv, const Primitive *pri)
-    : p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri}{};
+    : p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri} {};
+
+    SurfaceInteraction (){}
 
     point3 p;    //<! contact point
     vector n;    //<! the surface normal
     vector wo;   //<! outgoing direction of light, which is -ray
     float time;  //<! time of contact
     point2f uv;  //<! parametric coordinate (u,v) of the hit surface
-    const Primitive *primitive=nullptr; //<! pointer to the primitive
+    const Primitive *primitive = nullptr; //<! pointer to the primitive
 };
 
 #endif

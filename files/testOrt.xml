@@ -22,4 +22,6 @@
     	<width value="40"/>
     	<height value="30"/>
 	</camera>
+	<scene>
+	</scene>
 </raytracer>

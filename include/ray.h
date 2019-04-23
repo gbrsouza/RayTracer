@@ -27,10 +27,10 @@ public:
      * @param t  a parameter for the ray
      * @return Vec3  o + t*d
      */
-    Vec3 operator() (float t);
+    Vec3 operator()(float t) const;
 
-    point3 get_origin () {return this->o;}
-    Vec3 get_direction (){return this->d;}
+    point3 get_origin () const {return o;}
+    Vec3 get_direction () const {return d;}
 
     friend std::ostream& operator<< (std::ostream &os, const Ray &t){
         os << "[o=" << t.o << ", d=" << t.d << "]";

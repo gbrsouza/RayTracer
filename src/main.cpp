@@ -8,6 +8,7 @@
 #include "orthographic_camera.h"
 #include "pespective_camera.h"
 #include "primitives/primitive.h"
+#include "surfaceInteraction.h"
 
 int main (int argc, char *argv[])
 {
@@ -35,19 +36,22 @@ int main (int argc, char *argv[])
 
     std::cout << "size:" << scene.size() << std::endl;
 
-    for (int j = h-1; j >= 0; j--){
-        for (int i = 0; i < w; i++){
-            Ray r = cam->generate_ray(i,j);
+    for (int i = h-1; i >= 0; i--){
+        for (int j = 0; j < w; j++){
+            Ray r = cam->generate_ray(j,i);
+
             // std::cout << "pixel (" << i << ", " << j << ") ";
             // std::cout << r << std::endl;
-            auto color = parser.background->sample(float(i)/float(w), float(j)/float(h));
+            
+            auto color = parser.background->sample(float(j)/float(w), float(i)/float(h));
            
             for ( auto p : scene ) { // Traverse each object.
-                if ( p->intersect_p( r ) ) // Does the ray hit any sphere in the scene?
-                    color = Color (255,0,0);  // Just paint it red.
+                SurfaceInteraction surface;
+                bool hit = p->intersect(r, &surface);
+                if (hit) color = Color (255,0,0); 
             }
            
-            parser.buffer->color_pixel(i, j, color);
+            parser.buffer->color_pixel(j, i, color);
         }
     }
 
