@@ -197,9 +197,9 @@ For specify an object in scene, the tag `<object></object>` must used. It is nec
 
 * Required attibutes 
 	- `radius` - The radius size of sphere (use the tag `<radius>`)
-	- `center` - The 3D point for sphere center (use the tag `<center>`) 
+	- `center` - The 3D point for sphere center (use the tag `<center>` ) 
 		
-##### example
+##### Example
 ```xml
 <scene>
 	<object type="sphere" name="sphere1">
