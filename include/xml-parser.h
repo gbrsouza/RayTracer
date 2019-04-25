@@ -12,8 +12,8 @@
 #include "tinyxml2.h"
 #include "vec3.h"
 #include "canvas.h"
-#include "orthographic_camera.h"
-#include "pespective_camera.h"
+#include "cameras/orthographic_camera.h"
+#include "cameras/pespective_camera.h"
 #include "primitives/primitive.h"
 #include "primitives/sphere.h"
 

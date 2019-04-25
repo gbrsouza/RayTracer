@@ -5,8 +5,8 @@
 #include "common.h"
 #include "raster.h"
 #include "xml-parser.h"
-#include "orthographic_camera.h"
-#include "pespective_camera.h"
+#include "cameras/orthographic_camera.h"
+#include "cameras/pespective_camera.h"
 #include "primitives/primitive.h"
 #include "surfaceInteraction.h"
 

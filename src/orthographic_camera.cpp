@@ -1,6 +1,7 @@
-#include "orthographic_camera.h"
+#include "cameras/orthographic_camera.h"
 #include "vec3.cpp"
 #include <iostream>
+
 Ray OrthographicCamera::generate_ray(int x, int y)
 {
     // mapping pixels to screen space

@@ -1,4 +1,4 @@
-#include "pespective_camera.h"
+#include "cameras/pespective_camera.h"
 #include "vec3.cpp"
 
  Ray PespectiveCamera::generate_ray(int x, int y)
