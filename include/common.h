@@ -12,11 +12,11 @@
 #define PI 3.141592              //<! Pi value
 #define RADIANS 0.01745329252    //<! value of a degree in radians
 
-typedef Vec3 Color;  //<! alias to color
-typedef Vec3 point3; //<! alias to point 3D
-typedef Vec3 vector; //<! alias to vector
+typedef Vec3 Color;   //<! alias to color
+typedef Vec3 point3;  //<! alias to point 3D
+typedef Vec3 vector;  //<! alias to vector
 typedef Vec3 point2f; //<! alias to parametric coordinate
-
+typedef Vec3 Color24; //<! alias to Color24
 
 
 #endif
