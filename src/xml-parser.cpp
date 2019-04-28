@@ -278,8 +278,15 @@ void ParserXML::run(){
     if (pRoot == nullptr) throw XML_ERROR_FILE_READ_ERROR;
 
     read_settings(*pRoot);
+    std::cout << "\n>>> settings done! \n"; 
+
     read_background(*pRoot);
+    std::cout << ">>> background done! \n"; 
+
     read_camera(*pRoot);
+    std::cout << ">>> camera done! \n";
+ 
     read_scene(*pRoot);
+    std::cout << ">>> scene done! \n"; 
 
 }   
