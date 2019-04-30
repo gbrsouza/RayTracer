@@ -15,7 +15,7 @@
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
 #include "primitives/primitive.h"
-#include "primitives/sphere.h"
+#include "shapes/sphere.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"

@@ -3,6 +3,8 @@
 
 #include "../common.h"
 
+class SurfaceInteraction;
+
 class Material{
 
 public:
