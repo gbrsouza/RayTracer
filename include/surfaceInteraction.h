@@ -26,9 +26,11 @@ public:
      * @param uv    parametric coordinate (u,v) of the hit surface
      * @param pri   pointer to the primitive
      */
-    SurfaceInteraction (const point3&p, const vector&n, const vector&wo,
-        float time, const point2f uv, const Primitive *pri)
-    : p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri} {};
+    SurfaceInteraction( const point3&p, const vector&n, const vector&wo,
+                        float time, const point2f uv, const Primitive *pri)
+                    :   p{p}, n{n}, wo{wo}, time{time}, uv{uv}, 
+                        primitive{pri} 
+                    { /* empty */ };
 
     SurfaceInteraction (){}
 

@@ -29,7 +29,9 @@ public:
      * @return true    if the ray intersect the sphere
      * @return false   if the ray not intersect the sphere
      */
-    virtual bool intersect (const Ray& r, SurfaceInteraction * surface) const = 0;
+    virtual bool intersect ( const Ray& r,
+                             SurfaceInteraction * surface)
+                             const = 0;
    
     /**
      * @brief  check if a ray intersect a primitive
@@ -38,14 +40,16 @@ public:
      * @return true    if the ray intersect the sphere 
      * @return false   if the ray not intersect the sphere
      */
-    virtual bool intersect_p(const Ray& r) const = 0;
+    virtual bool intersect_p( const Ray& r ) const = 0;
 
     /**
      * @brief Get the material object
      * 
      * @return const std::shared_ptr<Material> the smart point for material 
      */
-    virtual const std::shared_ptr<Material> get_material(void) const { return material; } 
+    virtual const std::shared_ptr<Material> 
+    get_material( void ) const
+    { return material; } 
     
     /**
      * @brief Set the id object

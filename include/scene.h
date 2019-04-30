@@ -33,9 +33,9 @@ public:
      * @param ag the scene graph of object
      * @param ls the list of lights
      */
-    Scene(std::shared_ptr<Primitive> ag, 
-          const std::vector<std::shared_ptr<Light>>& ls)
-        : lights{ls}, aggregate{ag}
+    Scene( std::shared_ptr<Primitive> ag, 
+           const std::vector<std::shared_ptr<Light>>& ls)
+        :  lights{ls}, aggregate{ag}
         {/* empty */}
 
     /**
