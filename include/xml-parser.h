@@ -14,8 +14,9 @@
 #include "canvas.h"
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
-#include "primitives/primitive.h"
+#include "primitives/geometricPrimitive.h"
 #include "shapes/sphere.h"
+#include "materials/flatMaterial.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
@@ -33,14 +34,6 @@ using namespace tinyxml2;
 class ParserXML {
 
 private:  
-
-    /**
-     * @brief Read a tag settings in xml file
-     * 
-     * @param element   the iterator of file
-     * @return std::string  The name of output image
-     */
-    void read_settings(XMLNode &pRoot);
 
     /**
      * @brief Read a background in xml file
@@ -120,24 +113,23 @@ private:
      */
     void read_scene(XMLNode &pRoot);
 
-    /**
-     * @brief read and construct a sphere 
-     * 
-     * @param element  the iterator
-     * @return Sphere* the new sphere
-     */
-    std::shared_ptr<Primitive> read_sphere(XMLElement &element);
 
 public:
 
     std::string filename;   //<! The xml file with the description raytracer
     std::string output;     //<! The name of output image
+    std::string extension;  //<! The image extension
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera
+    
 
     //<! list of objects in the scene. Not yet implemented.
-    std::vector<std::shared_ptr<Primitive>> scene;
+    std::vector<std::shared_ptr<Primitive>> primitives;
+
+    //<! list of materials in the scene.
+    std::vector<std::shared_ptr<Material>> materials;
+    
     /**
      * @brief Construct a new ParserXML object
      * @param filename the name of xml file
@@ -154,6 +146,25 @@ public:
      * @brief run the algorithm
      */
     void run();
+
+    /**
+     * @brief Get the material object
+     * 
+     * @param nameOfMaterial  The name of material
+     * @return std::shared_ptr<Material>  the material
+     * that was found
+     */
+    std::shared_ptr<Material> 
+    get_material( 
+        std::string nameOfMaterial )
+    {
+        for ( const auto m : materials ){
+            if (m->get_name().compare(nameOfMaterial) == 0)
+                return m;
+        }
+
+        return nullptr;
+    }
 };
 
 #endif

@@ -3,11 +3,22 @@
 
 #include "../common.h"
 
-class SurfaceInteraction;
-
 class Material{
 
 public:
+
+    /**
+     * @brief Construct a new Material object
+     * 
+     * @param name The material's name
+     */
+    Material ( std::string name )
+    : name{name} {}
+
+    /**
+     * @brief Construct a new Material object
+     */
+    Material () {}
 
     /**
      * @brief Destroy the Material object
@@ -15,25 +26,15 @@ public:
     virtual ~Material();
 
     /**
-     * @brief   check if a ray intersect a primitive
-     * 
-     * @param r        the ray
-     * @param surface  the surface of primitive
-     * @return true    if the ray intersect the sphere
-     * @return false   if the ray not intersect the sphere
+     * @brief Get the name object
+     * @return std::string  the material's name
      */
-    virtual bool intersect ( const Ray& r,
-                             SurfaceInteraction * surface)
-                             const = 0;
-   
-    /**
-     * @brief  check if a ray intersect a primitive
-     * 
-     * @param r        the ray 
-     * @return true    if the ray intersect the sphere 
-     * @return false   if the ray not intersect the sphere
-     */
-    virtual bool intersect_p( const Ray& r ) const = 0;
+    std::string get_name ()
+    { return name; }
+
+private:
+
+    std::string name; //<! The material's name
 
 };
 

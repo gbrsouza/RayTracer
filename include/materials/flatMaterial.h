@@ -17,10 +17,19 @@ public:
      * 
      * @param diffuse  The material Color
      */
-    FlatMaterial ( Color diffuse )
-    : diffuse{diffuse} {}
+    FlatMaterial ( Color diffuse, std::string name )
+    : Material{name}, diffuse{diffuse} {}
 
-    
+    /**
+     * @brief Destroy the Flat Material object
+     */
+    ~FlatMaterial (){}
+
+    /**
+     * @brief Get the color object
+     * @return Color the color of material
+     */
+    Color get_color(){ return diffuse; }
 
 };
 

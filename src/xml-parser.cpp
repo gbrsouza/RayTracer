@@ -1,17 +1,5 @@
 #include "xml-parser.h"
 
-void ParserXML::read_settings(XMLNode &pRoot){
-
-    // Get output defination
-    XMLElement * pElement = pRoot.FirstChildElement("settings")->FirstChildElement("output_file");
-    if (pElement == nullptr) throw XML_ERROR_PARSING_ELEMENT;
-
-    // Get name of output
-    if (pElement->Attribute("name") != nullptr)
-        this->output = pElement->Attribute("name");
-    else this->output = "output";
-}
-
 void ParserXML::read_background(XMLNode &pRoot){
     
     // Get backgroung tag
@@ -89,6 +77,18 @@ void ParserXML::read_camera(XMLNode &pRoot){
     XMLElement * pElement = pRoot.FirstChildElement("camera");
     if (pElement == nullptr) throw INVALID_CAMERA;
 
+    //Get type of camera
+    const char * typeOfCamera = nullptr;
+    typeOfCamera = pElement->Attribute("type");
+    if (typeOfCamera == nullptr) throw INVALID_CAMERA;
+    std::string type = typeOfCamera;
+
+    /*
+        +==================================+
+        | Read the retina/image dimensions |
+        +==================================+
+    */
+
     // Get width of camera
     XMLElement * width = pElement->FirstChildElement("width");
     if (width == nullptr) throw INVALID_CAMERA;
@@ -100,6 +100,27 @@ void ParserXML::read_camera(XMLNode &pRoot){
     if (height == nullptr) throw INVALID_CAMERA;
     eResult = height->QueryIntAttribute("value", &h);
     if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
+
+    //Get settings of camera
+    XMLElement * settings = pElement->FirstChildElement("img_file");
+    if (settings == nullptr) throw INVALID_CAMERA;
+    
+    // Get name of output
+    if (settings->Attribute("name") != nullptr)
+        this->output = pElement->Attribute("name");
+    else this->output = "output";
+
+    // Get image extension
+    if (settings->Attribute("type") != nullptr)
+        this->extension = pElement->Attribute("type");
+    else this->extension = "PPM";
+
+
+    /*
+        +=======================+
+        | Read the camera frame |
+        +=======================+
+    */
 
     // get position os camera
     XMLElement *position = pElement->FirstChildElement("position");
@@ -116,11 +137,11 @@ void ParserXML::read_camera(XMLNode &pRoot){
     if ( up == nullptr) throw INVALID_ORT_CAMERA;
     vector *vUp = read_vector_or_point(*up);
 
-    //Get type of camera
-    const char * typeOfCamera = nullptr;
-    typeOfCamera = pElement->Attribute("type");
-    if (typeOfCamera == nullptr) throw INVALID_CAMERA;
-    std::string type = typeOfCamera;
+    /*
+        +==============================+
+        | Read the specific parameters |
+        +==============================+
+    */
 
     // Generate Camera
     if (type.compare("orthographic")==0){
@@ -191,50 +212,33 @@ Vec3* ParserXML::read_vector_or_point(XMLElement &element)
 }
 
 float ParserXML::read_float(XMLElement &element, std::string value)
- {
+{
     float x;
     XMLError eResult;
 
     eResult = element.QueryFloatAttribute(value.c_str(), &x);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
     return x;
- }
-
-void ParserXML::read_scene(XMLNode &pRoot)
-{
-    XMLElement * pElement = pRoot.FirstChildElement("scene");
-    if (pElement == nullptr) throw INVALID_SCENE;
-
-    XMLElement * pListElement = pElement->FirstChildElement("object");
-    int count = 0;
-    // read all objects in scene
-    while (pListElement != nullptr){
-
-        count++;
-       
-        //Get type of object
-        const char * typeOfObject = nullptr;
-        typeOfObject = pListElement->Attribute("type");
-        if (typeOfObject == nullptr) throw INVALID_CAMERA;
-        std::string type = typeOfObject;
-    
-        std::shared_ptr<Primitive> object;
-        if (type.compare("sphere") == 0)
-            object = read_sphere(*pListElement);
-        // add here new primitives
-
-        object->set_id(count);
-        this->scene.push_back(object);
-
-        pListElement = pListElement->NextSiblingElement("object");
-    }
-
 }
 
-std::shared_ptr<Primitive> 
-ParserXML::read_sphere(XMLElement &element)
+/*
+    +=====================================+
+    |  Readers of specifics shapes type   |
+    +=====================================+
+*/
+
+/**
+ * @brief read a sphere
+ * 
+ * @param element   the pointer to file 
+ * @return std::shared_ptr<Shape>  The pointer
+ * to Sphere
+ */
+std::shared_ptr<Shape> 
+read_sphere(
+    XMLElement &e)
 {
-    XMLElement * p = element.FirstChildElement("radius");
+    XMLElement * p = e.FirstChildElement("radius");
     if (p == nullptr) throw INVALID_SPHERE;
 
     float radius;
@@ -246,7 +250,7 @@ ParserXML::read_sphere(XMLElement &element)
 
     // Get center of sphere
     float x, y, z;
-    p = element.FirstChildElement("center");
+    p = e.FirstChildElement("center");
     
     // Get x axis
     eResult = p->QueryFloatAttribute("x", &x);
@@ -260,15 +264,129 @@ ParserXML::read_sphere(XMLElement &element)
 
     // make a sphere
     const point3 *center = new point3(x,y,z);
-    Primitive *sphere = new Sphere(*center, radius);
-    std::shared_ptr<Primitive> ptr(sphere);
+    Shape *sphere = new Sphere(*center, radius);
+    std::shared_ptr<Shape> ptr(sphere);
 
     return ptr;
 }
 
-#include <iostream>
-void ParserXML::run(){
+/*
+    +=====================================+
+    | Readers of specifics materials type |
+    +=====================================+
+*/
+
+/**
+ * @brief read a flat material
+ * 
+ * @param e    the pointer to file
+ * @param name the name of material
+ * @return std::shared_ptr<FlatMaterial> the pointer
+ * to flat material.  
+ */
+std::shared_ptr<FlatMaterial> 
+read_flat_material ( 
+    XMLElement &e,
+    std::string name )
+{
+    return nullptr;
+}
+
+/*
+    +=====================================+
+    |         Readers like tools          |
+    +=====================================+
+*/
+
+/**
+ * @brief  read a string like a attribute of object
+ * in the file
+ * 
+ * @param e           the pointer to file
+ * @param identifier  the identifier of attribute
+ * @return std::string  the string in the identifier
+ */
+std::string 
+read_a_string (
+    XMLElement &e,
+    std::string identifier )
+{
+    const char * string = nullptr;
+    string = e.Attribute(identifier.c_str());
+    if (string == nullptr) throw XML_ERROR_PARSING_ATTRIBUTE;
+    std::string result = string;
+
+    return result;
+} 
+
+
+void ParserXML::read_scene(XMLNode &pRoot)
+{
+    XMLElement * pElement = pRoot.FirstChildElement("scene");
+    if (pElement == nullptr) throw INVALID_SCENE;
+
+    // Read the background   
+    XMLElement * background = pElement->FirstChildElement("background");
+    if (background == nullptr) throw INVALID_SCENE;
+    this->read_background(*background);
+
+    // Read all materials
+    XMLElement * pListMaterials = pElement->FirstChildElement("material");
+    while ( pListMaterials != nullptr )
+    {
+
+        //Get type of material
+        std::string type = read_a_string(*pListMaterials, "type");
+
+        //Get name of material
+        std::string name = read_a_string(*pListMaterials, "name");
+
+        //Get specific parameters
+        std::shared_ptr<Material> m;
+        if (type.compare("flat") == 0)
+            m = read_flat_material(*pListMaterials, name);
+
+        this->materials.push_back(m);
+
+    }
+
+    // read all objects
+    XMLElement * pListElement = pElement->FirstChildElement("object");
+    int count = 0;
+    while (pListElement != nullptr){
+
+        // increments id
+        count++;
+       
+        //Get type of object
+        std::string type = read_a_string(*pListElement, "type");
     
+        //Get material's name of object
+        std::string materialName = read_a_string(*pListElement, "material");
+
+        //Get the shape
+        std::shared_ptr<Shape> shape;
+        if (type.compare("sphere") == 0)
+            shape = read_sphere(*pListElement);
+        // add here new shapes
+
+        //Set shape's id
+        shape->set_id( count );
+
+        //Create a new primitive
+        Primitive *p = new GeometricPrimitive( shape, get_material(materialName) );
+        std::shared_ptr<Primitive> primitive(p);
+        this->primitives.push_back(primitive);
+
+        //Next element
+        pListElement = pListElement->NextSiblingElement("object");
+    }
+}
+
+#include <iostream>
+
+void ParserXML::run()
+{
     XMLDocument doc;
 
     XMLError eResult = doc.LoadFile( filename.c_str() );
@@ -276,12 +394,6 @@ void ParserXML::run(){
 
     XMLNode *pRoot = doc.FirstChild();
     if (pRoot == nullptr) throw XML_ERROR_FILE_READ_ERROR;
-
-    read_settings(*pRoot);
-    std::cout << "\n>>> settings done! \n"; 
-
-    read_background(*pRoot);
-    std::cout << ">>> background done! \n"; 
 
     read_camera(*pRoot);
     std::cout << ">>> camera done! \n";

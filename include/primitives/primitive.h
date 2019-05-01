@@ -18,7 +18,12 @@ class Primitive {
 
 
 public:
-    ~Primitive(){};
+
+    Primitive () {}
+    /**
+     * @brief Destroy the Primitive object
+     */
+    virtual ~Primitive(){};
    
     /**
      * @brief   check if a ray intersect a primitive
@@ -40,16 +45,7 @@ public:
      * @return false   if the ray not intersect the sphere
      */
     virtual bool intersect_p( const Ray& r ) const = 0;
-    
-    /**
-     * @brief Set the id object
-     * 
-     * @param id the id object
-     */
-    void set_id (int id){ this->id = id;}
 
-protected:
-    int id;
 };
 
 #endif
