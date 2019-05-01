@@ -60,53 +60,6 @@ private:
     void read_camera(XMLNode &pRoot); 
 
     /**
-     * @brief read the atributes of a orthographic camera
-     * 
-     * @param element the iterator of file
-     * @param width   the width of camera
-     * @param height  the height of camera
-     * @param pos     the position of camera
-     * @param target  the target of camera
-     * @param vUp     the uo vector
-     * @return OrthographicCamera* the orthographic camera
-     */
-    OrthographicCamera* read_orthographic_camera(
-        XMLElement &element,int width, int height,
-        point3 &pos, point3 &target, vector &vUp);
-
-    /**
-     * @brief read the atributes of a pespective camera
-     * 
-     * @param element the iterator of file
-     * @param width   the width of camera
-     * @param height  the height of camera
-     * @param pos     the position of camera
-     * @param target  the target of camera
-     * @param vUp     the uo vector
-     * @return PespectiveCamera* the pespective camera
-     */    
-    PespectiveCamera* read_pespective_camera (
-       XMLElement &element,int width, int height,
-       point3 &pos, point3 &target, vector &vUp);
-
-    /**
-     * @brief read a vector or point3 
-     * 
-     * @param element the iterator of file
-     * @return Vec3*  the vector or point3
-     */
-    Vec3* read_vector_or_point(XMLElement &element);
-
-    /**
-     * @brief Read float value in the document
-     * 
-     * @param element   the iterator of file
-     * @param value     the string value of float element
-     * @return float    the float value
-     */
-    float read_float(XMLElement &element, std::string value);
-
-    /**
      * @brief Read a scene
      *  
      * @param pRoot The iterator of file

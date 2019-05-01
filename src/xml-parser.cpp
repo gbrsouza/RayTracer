@@ -1,201 +1,61 @@
 #include "xml-parser.h"
 
-void ParserXML::read_background(XMLNode &pRoot){
-    
-    // Get backgroung tag
-    XMLElement * pElement = pRoot.FirstChildElement("background");
-    if (pElement == nullptr) throw XML_ERROR_PARSING_ELEMENT;
-    
-    // Get type of background
-    const char * attribute_text = nullptr;
-    attribute_text = pElement->Attribute("type");
-    if (attribute_text == nullptr) throw XML_ERROR_PARSING_ATTRIBUTE;
-    std::string background_type = attribute_text;
+/*
+ +=====================================+
+ |         Readers like tools          |
+ +=====================================+
+*/
 
-    // Get colors and construct background
-    if (background_type.compare("interpolation")==0){
-   
-        // read four colors
-        Color *colors = read_color(4, *pElement);
-        this->background = new Background(colors[0], colors[1], colors[2], colors[3]);
-   
-    } else if (background_type.compare("solid")==0){
-        
-        // read one color
-        Color *colors = read_color(1, *pElement);
-        this->background = new Background(colors[0]);
-   
-    }else if (background_type.compare("gradient")==0){
-        
-        // read two colors
-        Color *colors = read_color(2, *pElement);
-        this->background = new Background(colors[0], colors[1]);
-    
-    }else throw INVALID_BACKGROUND;
-}
-Color* ParserXML::read_color(int number_colors, XMLElement &element){
-    
-    // Definations
-    int count = 0, red=0, green=0, blue=0;
-    Color *colors = new Color[number_colors];
-    XMLError eResult;
- 
-    // Get first element of color list
-    XMLElement * pListElement = element.FirstChildElement("color");
-    
-    // Get all defined colors
-    while ( pListElement != nullptr ){
+/**
+ * @brief  read a string like a attribute of object
+ * in the file
+ * 
+ * @param e           the pointer to file
+ * @param identifier  the identifier of attribute
+ * @return std::string  the string in the identifier
+ */
+std::string 
+read_a_string (
+    XMLElement &e,
+    std::string identifier )
+{
+    const char * string = nullptr;
+    string = e.Attribute(identifier.c_str());
+    if (string == nullptr) throw XML_ERROR_PARSING_ATTRIBUTE;
+    std::string result = string;
 
-        // Get value of red
-        eResult = pListElement->QueryIntAttribute("r", &red);
-        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
-
-        // Get value of green
-        eResult = pListElement->QueryIntAttribute("g", &green);
-        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
-
-        // Get value of blue
-        eResult = pListElement->QueryIntAttribute("b", &blue);
-        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
-          
-        colors[count] = Color(red, green, blue);        
-       
-        count++;
-        pListElement = pListElement->NextSiblingElement("color");
-    }
-
-    // check if number of read colors is equals to the informed
-    if (count != number_colors) throw INVALID_BACKGROUND;
-    else return colors;
-}
-
-void ParserXML::read_camera(XMLNode &pRoot){
-
-    int w, h;
-    XMLError eResult;
-
-    XMLElement * pElement = pRoot.FirstChildElement("camera");
-    if (pElement == nullptr) throw INVALID_CAMERA;
-
-    //Get type of camera
-    const char * typeOfCamera = nullptr;
-    typeOfCamera = pElement->Attribute("type");
-    if (typeOfCamera == nullptr) throw INVALID_CAMERA;
-    std::string type = typeOfCamera;
-
-    /*
-        +==================================+
-        | Read the retina/image dimensions |
-        +==================================+
-    */
-
-    // Get width of camera
-    XMLElement * width = pElement->FirstChildElement("width");
-    if (width == nullptr) throw INVALID_CAMERA;
-    eResult = width->QueryIntAttribute("value", &w);
-    if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
-   
-    //Get height of camera
-    XMLElement * height = pElement->FirstChildElement("height");
-    if (height == nullptr) throw INVALID_CAMERA;
-    eResult = height->QueryIntAttribute("value", &h);
-    if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
-
-    //Get settings of camera
-    XMLElement * settings = pElement->FirstChildElement("img_file");
-    if (settings == nullptr) throw INVALID_CAMERA;
-    
-    // Get name of output
-    if (settings->Attribute("name") != nullptr)
-        this->output = pElement->Attribute("name");
-    else this->output = "output";
-
-    // Get image extension
-    if (settings->Attribute("type") != nullptr)
-        this->extension = pElement->Attribute("type");
-    else this->extension = "PPM";
-
-
-    /*
-        +=======================+
-        | Read the camera frame |
-        +=======================+
-    */
-
-    // get position os camera
-    XMLElement *position = pElement->FirstChildElement("position");
-    if (position == nullptr) throw INVALID_ORT_CAMERA;
-    point3 *pos = read_vector_or_point(*position);
-    
-    // get target of camera
-    XMLElement *target = pElement->FirstChildElement("target");
-    if (target == nullptr) throw INVALID_ORT_CAMERA;
-    point3 *tgt = read_vector_or_point(*target);
-
-    // get up vector
-    XMLElement *up = pElement->FirstChildElement("up");
-    if ( up == nullptr) throw INVALID_ORT_CAMERA;
-    vector *vUp = read_vector_or_point(*up);
-
-    /*
-        +==============================+
-        | Read the specific parameters |
-        +==============================+
-    */
-
-    // Generate Camera
-    if (type.compare("orthographic")==0){
-        this->camera = read_orthographic_camera(*pElement, w, h, *pos, *tgt, *vUp );
-    }else if (type.compare("perspective")==0){
-        this->camera = read_pespective_camera(*pElement, w, h, *pos, *tgt, *vUp );
-    }else throw INVALID_CAMERA;
-
-    this->buffer = new Buffer(w,h);
+    return result;
 } 
 
-OrthographicCamera* 
-ParserXML::read_orthographic_camera(
-    XMLElement &element, int width, int height, 
-    point3 &pos, point3 &target, vector &vUp)
+/**
+ * @brief Read float value in the document
+ * 
+ * @param element   the pointer to file
+ * @param value     the string value of float element
+ * @return float    the float value
+ */
+float
+read_float(
+    XMLElement &element,
+    std::string value)
 {
-    float l, r, b, t;
+    float x;
+    XMLError eResult;
 
-    XMLElement *vpdim = element.FirstChildElement("vpdim");
-    if ( vpdim == nullptr) throw INVALID_ORT_CAMERA;
-    l = read_float(*vpdim, "l");
-    r = read_float(*vpdim, "r");
-    b = read_float(*vpdim, "b");
-    t = read_float(*vpdim, "t");
-
-    OrthographicCamera *ortCam = new OrthographicCamera(width,height, 
-        pos, target, vUp, l,r,b,t);
-    return ortCam;
+    eResult = element.QueryFloatAttribute(value.c_str(), &x);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    return x;
 }
 
-PespectiveCamera* 
-ParserXML::read_pespective_camera (
-    XMLElement &element, int width, int height, 
-    point3 &pos, point3 &target, vector &vUp)
-{
-    float fovy, aspect, fdistance;
-    XMLElement *fv = element.FirstChildElement("fovy");
-    if ( fv == nullptr) throw INVALID_PESPC_CAMERA;
-    fovy = read_float(*fv, "value");
-
-    XMLElement *asp = element.FirstChildElement("aspect");
-    if ( asp == nullptr) throw INVALID_PESPC_CAMERA;
-    aspect = read_float(*asp, "value");
-
-    XMLElement *fd = element.FirstChildElement("fdistance");
-    if ( fd == nullptr) throw INVALID_PESPC_CAMERA;
-    fdistance = read_float(*fd, "value");
-
-    PespectiveCamera *pespcCam = new PespectiveCamera(width, height, 
-        pos, target, vUp, fovy, aspect, fdistance);
-    return pespcCam;
-}
-
-Vec3* ParserXML::read_vector_or_point(XMLElement &element)
+/**
+ * @brief read a vector or point3 
+ * 
+ * @param element the iterator of file
+ * @return Vec3*  the vector or point3
+ */
+Vec3* 
+read_vector_or_point(
+    XMLElement &element)
 {
     int x, y, z;
     XMLError eResult;
@@ -211,21 +71,12 @@ Vec3* ParserXML::read_vector_or_point(XMLElement &element)
     return pos;
 }
 
-float ParserXML::read_float(XMLElement &element, std::string value)
-{
-    float x;
-    XMLError eResult;
-
-    eResult = element.QueryFloatAttribute(value.c_str(), &x);
-    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
-    return x;
-}
 
 /*
-    +=====================================+
-    |  Readers of specifics shapes type   |
-    +=====================================+
-*/
+ +=====================================+
+ |  Readers of specifics shapes type   |
+ +=====================================+
+ */
 
 /**
  * @brief read a sphere
@@ -270,11 +121,12 @@ read_sphere(
     return ptr;
 }
 
+
 /*
-    +=====================================+
-    | Readers of specifics materials type |
-    +=====================================+
-*/
+ +=====================================+
+ | Readers of specifics materials type |
+ +=====================================+
+ */
 
 /**
  * @brief read a flat material
@@ -293,34 +145,251 @@ read_flat_material (
 }
 
 /*
-    +=====================================+
-    |         Readers like tools          |
-    +=====================================+
-*/
+ +=====================================+
+ |  Readers of specifics camera type   |
+ +=====================================+
+ */
 
 /**
- * @brief  read a string like a attribute of object
- * in the file
+ * @brief read the atributes of a orthographic camera
  * 
- * @param e           the pointer to file
- * @param identifier  the identifier of attribute
- * @return std::string  the string in the identifier
+ * @param element the iterator of file
+ * @param width   the width of camera
+ * @param height  the height of camera
+ * @param pos     the position of camera
+ * @param target  the target of camera
+ * @param vUp     the uo vector
+ * @return OrthographicCamera* the orthographic camera
  */
-std::string 
-read_a_string (
-    XMLElement &e,
-    std::string identifier )
+OrthographicCamera* 
+read_orthographic_camera(
+    XMLElement &element,
+    int width,
+    int height, 
+    point3 &pos,
+    point3 &target,
+    vector &vUp)
 {
-    const char * string = nullptr;
-    string = e.Attribute(identifier.c_str());
-    if (string == nullptr) throw XML_ERROR_PARSING_ATTRIBUTE;
-    std::string result = string;
+    float l, r, b, t;
 
-    return result;
+    XMLElement *vpdim = element.FirstChildElement("vpdim");
+    if ( vpdim == nullptr) throw INVALID_ORT_CAMERA;
+    l = read_float(*vpdim, "l");
+    r = read_float(*vpdim, "r");
+    b = read_float(*vpdim, "b");
+    t = read_float(*vpdim, "t");
+
+    OrthographicCamera *ortCam = new OrthographicCamera(width,height, 
+        pos, target, vUp, l,r,b,t);
+    return ortCam;
+}
+
+ /**
+  * @brief read the atributes of a pespective camera
+  * 
+  * @param element the iterator of file
+  * @param width   the width of camera
+  * @param height  the height of camera
+  * @param pos     the position of camera
+  * @param target  the target of camera
+  * @param vUp     the uo vector
+  * @return PespectiveCamera* the pespective camera
+  */   
+PespectiveCamera* 
+read_pespective_camera (
+    XMLElement &element, 
+    int width, 
+    int height, 
+    point3 &pos,
+    point3 &target, 
+    vector &vUp)
+{
+    float fovy, aspect, fdistance;
+    XMLElement *fv = element.FirstChildElement("fovy");
+    if ( fv == nullptr) throw INVALID_PESPC_CAMERA;
+    fovy = read_float(*fv, "value");
+
+    XMLElement *asp = element.FirstChildElement("aspect");
+    if ( asp == nullptr) throw INVALID_PESPC_CAMERA;
+    aspect = read_float(*asp, "value");
+
+    XMLElement *fd = element.FirstChildElement("fdistance");
+    if ( fd == nullptr) throw INVALID_PESPC_CAMERA;
+    fdistance = read_float(*fd, "value");
+
+    PespectiveCamera *pespcCam = new PespectiveCamera(width, height, 
+        pos, target, vUp, fovy, aspect, fdistance);
+    return pespcCam;
+}
+
+
+/*
+ +=====================================+
+ |   implements readers of interface   |
+ +=====================================+
+ */
+
+void 
+ParserXML::read_background(
+    XMLNode &pRoot)
+{
+    
+    // Get backgroung tag
+    XMLElement * pElement = pRoot.FirstChildElement("background");
+    if (pElement == nullptr) throw XML_ERROR_PARSING_ELEMENT;
+    
+    // Get type of background
+    std::string background_type = read_a_string(*pElement, "type");
+
+    // Get colors and construct background
+    if (background_type.compare("interpolation")==0){
+   
+        // read four colors
+        Color *colors = read_color(4, *pElement);
+        this->background = new Background(colors[0], colors[1], colors[2], colors[3]);
+   
+    } else if (background_type.compare("solid")==0){
+        
+        // read one color
+        Color *colors = read_color(1, *pElement);
+        this->background = new Background(colors[0]);
+   
+    }else if (background_type.compare("gradient")==0){
+        
+        // read two colors
+        Color *colors = read_color(2, *pElement);
+        this->background = new Background(colors[0], colors[1]);
+    
+    }else throw INVALID_BACKGROUND;
+}
+
+Color* 
+ParserXML::read_color(
+    int number_colors,
+    XMLElement &element)
+{
+    
+    // Definations
+    int count = 0, red=0, green=0, blue=0;
+    Color *colors = new Color[number_colors];
+    XMLError eResult;
+ 
+    // Get first element of color list
+    XMLElement * pListElement = element.FirstChildElement("color");
+    
+    // Get all defined colors
+    while ( pListElement != nullptr ){
+
+        // Get value of red
+        eResult = pListElement->QueryIntAttribute("r", &red);
+        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+
+        // Get value of green
+        eResult = pListElement->QueryIntAttribute("g", &green);
+        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+
+        // Get value of blue
+        eResult = pListElement->QueryIntAttribute("b", &blue);
+        if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+          
+        colors[count] = Color(red, green, blue);        
+       
+        count++;
+        pListElement = pListElement->NextSiblingElement("color");
+    }
+
+    // check if number of read colors is equals to the informed
+    if (count != number_colors) throw INVALID_BACKGROUND;
+    else return colors;
+}
+
+void 
+ParserXML::read_camera(
+    XMLNode &pRoot)
+{
+
+    int w, h;
+    XMLError eResult;
+
+    XMLElement * pElement = pRoot.FirstChildElement("camera");
+    if (pElement == nullptr) throw INVALID_CAMERA;
+
+    //Get type of camera
+    std::string type = read_a_string(*pElement, "type");
+
+    /*
+     +==================================+
+     | Read the retina/image dimensions |
+     +==================================+
+    */
+
+    // Get width of camera
+    XMLElement * width = pElement->FirstChildElement("width");
+    if (width == nullptr) throw INVALID_CAMERA;
+    eResult = width->QueryIntAttribute("value", &w);
+    if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
+   
+    //Get height of camera
+    XMLElement * height = pElement->FirstChildElement("height");
+    if (height == nullptr) throw INVALID_CAMERA;
+    eResult = height->QueryIntAttribute("value", &h);
+    if (eResult != XML_SUCCESS) throw INVALID_CAMERA;
+
+    //Get settings of camera
+    XMLElement * settings = pElement->FirstChildElement("img_file");
+    if (settings == nullptr) throw INVALID_CAMERA;
+    
+    // Get name of output
+    if (settings->Attribute("name") != nullptr)
+        this->output = pElement->Attribute("name");
+    else this->output = "output";
+
+    // Get image extension
+    if (settings->Attribute("type") != nullptr)
+        this->extension = pElement->Attribute("type");
+    else this->extension = "PPM";
+
+
+    /*
+     +=======================+
+     | Read the camera frame |
+     +=======================+
+     */
+
+    // get position os camera
+    XMLElement *position = pElement->FirstChildElement("position");
+    if (position == nullptr) throw INVALID_ORT_CAMERA;
+    point3 *pos = read_vector_or_point(*position);
+    
+    // get target of camera
+    XMLElement *target = pElement->FirstChildElement("target");
+    if (target == nullptr) throw INVALID_ORT_CAMERA;
+    point3 *tgt = read_vector_or_point(*target);
+
+    // get up vector
+    XMLElement *up = pElement->FirstChildElement("up");
+    if ( up == nullptr) throw INVALID_ORT_CAMERA;
+    vector *vUp = read_vector_or_point(*up);
+
+    /*
+     +==============================+
+     | Read the specific parameters |
+     +==============================+
+    */
+
+    // Generate Camera
+    if (type.compare("orthographic")==0){
+        this->camera = read_orthographic_camera(*pElement, w, h, *pos, *tgt, *vUp );
+    }else if (type.compare("perspective")==0){
+        this->camera = read_pespective_camera(*pElement, w, h, *pos, *tgt, *vUp );
+    }else throw INVALID_CAMERA;
+
+    this->buffer = new Buffer(w,h);
 } 
 
-
-void ParserXML::read_scene(XMLNode &pRoot)
+void 
+ParserXML::read_scene(
+    XMLNode &pRoot)
 {
     XMLElement * pElement = pRoot.FirstChildElement("scene");
     if (pElement == nullptr) throw INVALID_SCENE;
@@ -385,7 +454,8 @@ void ParserXML::read_scene(XMLNode &pRoot)
 
 #include <iostream>
 
-void ParserXML::run()
+void 
+ParserXML::run()
 {
     XMLDocument doc;
 
