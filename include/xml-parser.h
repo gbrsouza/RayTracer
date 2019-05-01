@@ -14,8 +14,9 @@
 #include "canvas.h"
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
-#include "primitives/primitive.h"
-#include "primitives/sphere.h"
+#include "primitives/geometricPrimitive.h"
+#include "shapes/sphere.h"
+#include "materials/flatMaterial.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
@@ -27,20 +28,13 @@
 #define INVALID_ATT_VECTOR_OR_POINT "Invalid attribute defined for vector or point"
 #define INVALID_SCENE               "Invalid scene specification"
 #define INVALID_SPHERE              "Invalid sphere specification"
+#define INVALID_MATERIAL            "Invalid Material specification"
 
 using namespace tinyxml2;
 
 class ParserXML {
 
 private:  
-
-    /**
-     * @brief Read a tag settings in xml file
-     * 
-     * @param element   the iterator of file
-     * @return std::string  The name of output image
-     */
-    void read_settings(XMLNode &pRoot);
 
     /**
      * @brief Read a background in xml file
@@ -67,77 +61,29 @@ private:
     void read_camera(XMLNode &pRoot); 
 
     /**
-     * @brief read the atributes of a orthographic camera
-     * 
-     * @param element the iterator of file
-     * @param width   the width of camera
-     * @param height  the height of camera
-     * @param pos     the position of camera
-     * @param target  the target of camera
-     * @param vUp     the uo vector
-     * @return OrthographicCamera* the orthographic camera
-     */
-    OrthographicCamera* read_orthographic_camera(
-        XMLElement &element,int width, int height,
-        point3 &pos, point3 &target, vector &vUp);
-
-    /**
-     * @brief read the atributes of a pespective camera
-     * 
-     * @param element the iterator of file
-     * @param width   the width of camera
-     * @param height  the height of camera
-     * @param pos     the position of camera
-     * @param target  the target of camera
-     * @param vUp     the uo vector
-     * @return PespectiveCamera* the pespective camera
-     */    
-    PespectiveCamera* read_pespective_camera (
-       XMLElement &element,int width, int height,
-       point3 &pos, point3 &target, vector &vUp);
-
-    /**
-     * @brief read a vector or point3 
-     * 
-     * @param element the iterator of file
-     * @return Vec3*  the vector or point3
-     */
-    Vec3* read_vector_or_point(XMLElement &element);
-
-    /**
-     * @brief Read float value in the document
-     * 
-     * @param element   the iterator of file
-     * @param value     the string value of float element
-     * @return float    the float value
-     */
-    float read_float(XMLElement &element, std::string value);
-
-    /**
      * @brief Read a scene
      *  
      * @param pRoot The iterator of file
      */
     void read_scene(XMLNode &pRoot);
 
-    /**
-     * @brief read and construct a sphere 
-     * 
-     * @param element  the iterator
-     * @return Sphere* the new sphere
-     */
-    std::shared_ptr<Primitive> read_sphere(XMLElement &element);
 
 public:
 
     std::string filename;   //<! The xml file with the description raytracer
     std::string output;     //<! The name of output image
+    std::string extension;  //<! The image extension
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera
+    
 
     //<! list of objects in the scene. Not yet implemented.
-    std::vector<std::shared_ptr<Primitive>> scene;
+    std::vector<std::shared_ptr<Primitive>> primitives;
+
+    //<! list of materials in the scene.
+    std::vector<std::shared_ptr<Material>> materials;
+    
     /**
      * @brief Construct a new ParserXML object
      * @param filename the name of xml file
@@ -154,6 +100,25 @@ public:
      * @brief run the algorithm
      */
     void run();
+
+    /**
+     * @brief Get the material object
+     * 
+     * @param nameOfMaterial  The name of material
+     * @return std::shared_ptr<Material>  the material
+     * that was found
+     */
+    std::shared_ptr<Material> 
+    get_material( 
+        std::string nameOfMaterial )
+    {
+        for ( const auto m : materials ){
+            if (m->get_name().compare(nameOfMaterial) == 0)
+                return m;
+        }
+
+        return nullptr;
+    }
 };
 
 #endif

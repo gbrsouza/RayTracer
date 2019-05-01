@@ -8,30 +8,33 @@ class Material{
 public:
 
     /**
-     * @brief Destroy the Material object
+     * @brief Construct a new Material object
+     * 
+     * @param name The material's name
      */
-    virtual ~Material();
+    Material ( std::string name )
+    : name{name} {}
 
     /**
-     * @brief   check if a ray intersect a primitive
-     * 
-     * @param r        the ray
-     * @param surface  the surface of primitive
-     * @return true    if the ray intersect the sphere
-     * @return false   if the ray not intersect the sphere
+     * @brief Construct a new Material object
      */
-    virtual bool intersect ( const Ray& r,
-                             SurfaceInteraction * surface)
-                             const = 0;
-   
+    Material () {}
+
     /**
-     * @brief  check if a ray intersect a primitive
-     * 
-     * @param r        the ray 
-     * @return true    if the ray intersect the sphere 
-     * @return false   if the ray not intersect the sphere
+     * @brief Destroy the Material object
      */
-    virtual bool intersect_p( const Ray& r ) const = 0;
+    ~Material(){ /*empty*/ }
+
+    /**
+     * @brief Get the name object
+     * @return std::string  the material's name
+     */
+    std::string get_name ()
+    { return name; }
+
+private:
+
+    std::string name; //<! The material's name
 
 };
 

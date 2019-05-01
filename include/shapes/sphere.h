@@ -18,6 +18,10 @@
 
 #include <cmath>
 
+/**
+ * @brief The only geometric shape defines so far.
+ * This class derives from Shape
+ */
 class Sphere : public Shape {
 
 private:

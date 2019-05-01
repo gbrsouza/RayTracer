@@ -1,9 +1,20 @@
 #ifndef _SURFACE_INTERACTION_H_
 #define _SURFACE_INTERACTION_H_
 
+/**
+ * @file surfaceInteraction.h
+ * @author Gabriel Araújo de Souza (gabriel_feg@hotmail.com)
+ * @brief  that stores information regarding intersection
+ *         between ray and primitive, for instance.
+ * @version 0.1
+ * @date 2019-05-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "common.h"
 #include "primitives/primitive.h"
-
 
 /**
  * @brief The class SurfaceInteraction represents the geometry of particular point

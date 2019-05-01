@@ -45,7 +45,7 @@ int main (int argc, char *argv[])
     int h = parser.buffer->get_heigth();
 
     Camera *cam = parser.camera;
-    auto scene  = parser.scene;
+    auto scene  = parser.primitives;
 
     std::cout << "[2] Starting ray tracing progress.\n";
     std::cout << "    Image dimensions in pixels (W x H): " << w << " x " << h << std::endl;
