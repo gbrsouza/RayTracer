@@ -136,12 +136,34 @@ read_sphere(
  * @return std::shared_ptr<FlatMaterial> the pointer
  * to flat material.  
  */
-std::shared_ptr<FlatMaterial> 
+std::shared_ptr<Material> 
 read_flat_material ( 
     XMLElement &e,
     std::string name )
 {
-    return nullptr;
+    XMLElement * diffuse = e.FirstChildElement("diffuse");
+    if (diffuse == nullptr) throw INVALID_MATERIAL;
+
+    XMLError eResult;
+    int r, g, b;
+
+    // Get value of red
+    eResult = diffuse->QueryIntAttribute("r", &r);
+    if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+
+    // Get value of green
+    eResult = diffuse->QueryIntAttribute("g", &g);
+    if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+
+    // Get value of blue
+    eResult = diffuse->QueryIntAttribute("b", &b);
+    if (eResult != XML_SUCCESS) throw INVALID_COLOR;
+
+    Color * c = new Color( r, g, b );
+    Material * m = new FlatMaterial( *c, name );
+    std::shared_ptr<Material> fm(m);
+
+    return fm;
 }
 
 /*
