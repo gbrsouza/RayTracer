@@ -1,3 +1,14 @@
+/**
+ * @file xml-parser.cpp
+ * @author Gabriel Araújo de Souza (gabriel_feg@hotmail.com)
+ * @brief  The parser to xml files
+ * @version 0.1
+ * @date 2019-05-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "xml-parser.h"
 
 /*
@@ -473,8 +484,6 @@ ParserXML::read_scene(
         pListElement = pListElement->NextSiblingElement("object");
     }
 }
-
-#include <iostream>
 
 void 
 ParserXML::run()
