@@ -1,6 +1,17 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+/**
+ * @file common.h
+ * @author Gabriel Araújo de Souza (gabriel_feg@hotmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-05-02
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "vec3.h"
 #include <memory>
 
@@ -17,6 +28,8 @@ typedef Vec3 point3;  //<! alias to point 3D
 typedef Vec3 vector;  //<! alias to vector
 typedef Vec3 point2f; //<! alias to parametric coordinate
 typedef Vec3 Color24; //<! alias to Color24
+typedef Vec3 Point2i; //<! alias to represent a 2D point
 
+typedef unsigned int uint; //<! alias to unsigned int
 
 #endif

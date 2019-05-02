@@ -1,6 +1,17 @@
 #ifndef _SAMPLER_INTEGRATOR_H_
 #define _SAMPLER_INTEGRATOR_H_
 
+/**
+ * @file samplerIntegrator.h
+ * @author Gabriel Araújo de Souza (gabriel_feg@hotmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-05-02
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "integrator.h"
 #include "../common.h"
 #include "../sampler.h"
@@ -27,8 +38,8 @@ public:
      * @param cam      the camera 
      * @param sampler  the sampler
      */
-    SamplerIntegrator(std::shared_ptr<const Camera> cam,
-                     std::shared_ptr<Sampler> sampler)
+    SamplerIntegrator( std::shared_ptr<const Camera> cam,
+                       std::shared_ptr<Sampler> sampler)
             : camera{cam}, sampler{sampler}{};
 
     

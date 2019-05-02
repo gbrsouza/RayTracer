@@ -1,6 +1,17 @@
 #ifndef _FLAT_INTEGRATOR_H_
 #define _FLAT_INTEGRATOR_H_
 
+/**
+ * @file flatIntegrator.h
+ * @author Gabriel Araújo de Souza (gabriel_feg@hotmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-05-02
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "samplerIntegrator.h"
 
 /**
@@ -10,6 +21,33 @@
  * entire object.
  */
 class FlatIntegrator : public SamplerIntegrator{
+
+public:
+
+    /**
+     * @brief Construct a new Flat Integrator object
+     * 
+     * @param cam      The camera
+     * @param sampler  The sampler
+     */
+    FlatIntegrator( std::shared_ptr<const Camera> cam,
+                    std::shared_ptr<Sampler> sampler)
+        : SamplerIntegrator{cam, sampler} {}
+
+    /**
+     * @brief Destroy the Flat Integrator object
+     */
+    ~FlatIntegrator(){/*empty*/}
+
+    // @Override
+    Color24 
+    Li( const Ray& ray,
+        const Scene& scene,
+        Sampler& sampler )
+    {
+        // @TODO implements the method
+    } 
+
 
 };
 
