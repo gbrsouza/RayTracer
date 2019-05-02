@@ -2,16 +2,19 @@
 #define _CAMERA_H_
 
 #include "ray.h"
+#include "../film.h"
+#include "../common.h"
 
 class Camera {
 
 protected:
 
-    int width;       //<! Width of camera 
-    int height;      //<! height of camera
-    point3 position; //<! located at the origin
-    point3 target;   //<! looking down the -Z axis
-    Vec3 vUp;        //<! the camera's up vector
+    int width;                  //<! Width of camera 
+    int height;                 //<! height of camera
+    point3 position;            //<! located at the origin
+    point3 target;              //<! looking down the -Z axis
+    Vec3 vUp;                   //<! the camera's up vector
+    std::shared_ptr<Film> film; //<! The camera's film 
 
 public:
 
