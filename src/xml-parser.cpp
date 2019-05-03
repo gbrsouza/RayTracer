@@ -197,8 +197,7 @@ read_flat_material (
 OrthographicCamera* 
 read_orthographic_camera(
     XMLElement &element,
-    int width,
-    int height, 
+    std::shared_ptr<Film> film, 
     point3 &pos,
     point3 &target,
     vector &vUp)
@@ -212,7 +211,7 @@ read_orthographic_camera(
     b = read_float(*vpdim, "b");
     t = read_float(*vpdim, "t");
 
-    OrthographicCamera *ortCam = new OrthographicCamera(width,height, 
+    OrthographicCamera *ortCam = new OrthographicCamera(film, 
         pos, target, vUp, l,r,b,t);
     return ortCam;
 }
@@ -231,8 +230,7 @@ read_orthographic_camera(
 PespectiveCamera* 
 read_pespective_camera (
     XMLElement &element, 
-    int width, 
-    int height, 
+    std::shared_ptr<Film> film, 
     point3 &pos,
     point3 &target, 
     vector &vUp)
@@ -250,7 +248,7 @@ read_pespective_camera (
     if ( fd == nullptr) throw INVALID_PESPC_CAMERA;
     fdistance = read_float(*fd, "value");
 
-    PespectiveCamera *pespcCam = new PespectiveCamera(width, height, 
+    PespectiveCamera *pespcCam = new PespectiveCamera(film, 
         pos, target, vUp, fovy, aspect, fdistance);
     return pespcCam;
 }
@@ -270,7 +268,7 @@ ParserXML::read_background(
     // Get backgroung tag
     XMLElement * pElement = pRoot.FirstChildElement("background");
     if (pElement == nullptr) throw XML_ERROR_PARSING_ELEMENT;
-    
+
     // Get type of background
     std::string background_type = read_a_string(*pElement, "type");
 
@@ -382,6 +380,7 @@ ParserXML::read_camera(
         this->extension = pElement->Attribute("type");
     else this->extension = "PPM";
 
+    std::shared_ptr<Film> film( new Film(w, h, output, extension) );
 
     /*
      +=======================+
@@ -412,9 +411,9 @@ ParserXML::read_camera(
 
     // Generate Camera
     if (type.compare("orthographic")==0){
-        this->camera = read_orthographic_camera(*pElement, w, h, *pos, *tgt, *vUp );
+        this->camera = read_orthographic_camera(*pElement, film, *pos, *tgt, *vUp );
     }else if (type.compare("perspective")==0){
-        this->camera = read_pespective_camera(*pElement, w, h, *pos, *tgt, *vUp );
+        this->camera = read_pespective_camera(*pElement, film, *pos, *tgt, *vUp );
     }else throw INVALID_CAMERA;
 
     this->buffer = new Buffer(w,h);
@@ -428,14 +427,14 @@ ParserXML::read_scene(
     if (pElement == nullptr) throw INVALID_SCENE;
 
     // Read the background   
-    XMLElement * background = pElement->FirstChildElement("background");
-    if (background == nullptr) throw INVALID_SCENE;
-    this->read_background(*background);
+    this->read_background(*pElement); 
 
     // Read all materials
     XMLElement * pListMaterials = pElement->FirstChildElement("material");
+    int count = 0;
     while ( pListMaterials != nullptr )
     {
+        count++;
 
         //Get type of material
         std::string type = read_a_string(*pListMaterials, "type");
@@ -450,11 +449,14 @@ ParserXML::read_scene(
 
         this->materials.push_back(m);
 
+        pListMaterials = pListMaterials->NextSiblingElement("material");
+
     }
+    std::cout << "      >>> " << count << " materials found\n";
 
     // read all objects
     XMLElement * pListElement = pElement->FirstChildElement("object");
-    int count = 0;
+    count = 0;
     while (pListElement != nullptr){
 
         // increments id
@@ -477,12 +479,15 @@ ParserXML::read_scene(
 
         //Create a new primitive
         Primitive *p = new GeometricPrimitive( shape, get_material(materialName) );
+        
         std::shared_ptr<Primitive> primitive(p);
         this->primitives.push_back(primitive);
 
         //Next element
         pListElement = pListElement->NextSiblingElement("object");
+
     }
+    std::cout << "      >>> " << count << " objects found\n";
 }
 
 void 
@@ -496,9 +501,11 @@ ParserXML::run()
     XMLNode *pRoot = doc.FirstChild();
     if (pRoot == nullptr) throw XML_ERROR_FILE_READ_ERROR;
 
+    std::cout << "\n>>> reading camera... \n";
     read_camera(*pRoot);
     std::cout << ">>> camera done! \n";
  
+    std::cout << "\n>>> reading scene... \n";
     read_scene(*pRoot);
     std::cout << ">>> scene done! \n"; 
 

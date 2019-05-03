@@ -25,18 +25,14 @@ public:
      * @param aspect    Optional parameter, aspect ration W/H
      * @param fdistance The focal distance
      */
-    PespectiveCamera( int w, int h, 
-    point3 &position, point3 &target, Vec3 &vUp,
-    float fovy, float aspect, float fdistance)
-    : Camera(w,h)
-    {
-        this->position = position;
-        this->target = target;
-        this->vUp = vUp;
-        this->fovy = fovy;
-        this->aspect = aspect;
-        this->fdistance = fdistance;
-    } 
+    PespectiveCamera( std::shared_ptr<Film> film, 
+                      point3 &position, point3 &target,
+                      Vec3 &vUp, float fovy, 
+                      float aspect, float fdistance)
+
+            : Camera{position, target, vUp, film},
+              fovy{fovy}, aspect{aspect}, 
+              fdistance{fdistance} {}
 
     /**
      * @brief Destroy the Pespective Camera object

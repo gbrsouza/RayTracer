@@ -21,8 +21,7 @@ public:
     /**
      * @brief Construct a new Orthographic Camera object
      * 
-     * @param w         the width of camera
-     * @param h         the height of camera
+     * @param film      the camera's film
      * @param position  the camera's position
      * @param target    the camera's target (-Z axis)
      * @param upVector  the camera's up vector
@@ -31,17 +30,13 @@ public:
      * @param b         the bottom view plane dimension
      * @param t         the top view plane dimension
      */
-    OrthographicCamera( int w, int h, 
-    point3 &position, point3 &target, Vec3 &vUp,
-    float l, float r, float b, float t) 
-    : Camera (w,h)
-    {
-        this->position = position;
-        this->target = target;
-        this->vUp = vUp;
-        this->l = l; this->r = r;
-        this->b = b; this->t = t;
-    }
+    OrthographicCamera( std::shared_ptr<Film> film, 
+                        point3 &position, point3 &target,
+                        Vec3 &vUp, float l, float r,
+                        float b, float t) 
+
+            : Camera {position, target, vUp, film},
+              l{l}, r{r}, b{b}, t{t} {}
 
     /**
      * @brief Destroy the Orthographic Camera object

@@ -21,11 +21,18 @@ public:
     /**
      * @brief Construct a new Camera object
      * 
-     * @param width   the width of camera
-     * @param height  the height of camera
+     * @param position  the camera's position
+     * @param target    the camera's target (-Z axis)
+     * @param vUp       the camera's up vector
+     * @param film      the camera's film
      */
-    Camera (int width, int height) 
-    : width{width}, height{height} {/*empty*/} 
+    Camera ( point3 position, 
+             point3 target,
+             Vec3 vUp,
+             std::shared_ptr<Film> film)
+        
+        :   position{position}, target{target},
+            vUp{vUp}, film{film} {}
 
     /**
      * @brief Destroy the Camera object
