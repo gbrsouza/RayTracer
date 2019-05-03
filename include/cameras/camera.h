@@ -9,8 +9,6 @@ class Camera {
 
 protected:
 
-    int width;                  //<! Width of camera 
-    int height;                 //<! height of camera
     point3 position;            //<! located at the origin
     point3 target;              //<! looking down the -Z axis
     Vec3 vUp;                   //<! the camera's up vector
@@ -51,16 +49,22 @@ public:
     { return Ray(point3(x,y,1), Vec3(x,y,1)); }
 
     /**
-     * @brief Get the width object
-     * @return int  the width value
+     * @brief generate a ray based in a coordenates x and y.
+     * Each camera implements the own method
+     * 
+     * @param point the point
+     * @return Ray  the ray in point
      */
-    int get_width (){return width;}
+    Ray generate_ray( Point2i point )
+    { return generate_ray(point.x(), point.y()); }
 
     /**
-     * @brief Get the height object
-     * @return int The height value
+     * @brief Get the film object
+     * 
+     * @return std::shared_ptr<Film> the camera's film
      */
-    int get_height (){return height;}
+    std::shared_ptr<Film> get_film ()
+    { return this->film; }
 };
 
 #endif

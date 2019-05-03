@@ -55,6 +55,14 @@ public:
     bool intersect_p( const Ray& r ) const 
     { return shape->intersect_p(r); }
 
+    /**
+     * @brief Get the material object
+     * @return std::shared_ptr<Material> the material 
+     */
+    std::shared_ptr<Material>
+    get_material()
+    { return this->material; }
+
 };
 
 
