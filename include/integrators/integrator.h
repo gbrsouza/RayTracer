@@ -15,7 +15,7 @@ public:
     /**
      * @brief Destroy the Integrator object
      */
-    virtual ~Integrator();
+    ~Integrator() { /*empty*/ }
    
     /**
      * @brief renderize a scene

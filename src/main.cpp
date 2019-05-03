@@ -4,6 +4,7 @@
 #include <chrono>
 #include <ctime>
 #include <cstring>
+#include <memory>
 
 #include "common.h"
 #include "raster.h"
@@ -82,8 +83,8 @@ void init_engine( const char* filename )
     {   std::cout << e << '\n'; 
         std::cerr << e << '\n'; }
 
-    g_camera = std::make_unique<Camera>(parser.camera);
-    std::unique_ptr<Sampler> sampler(new Sampler());
+    g_camera = std::make_unique<Camera>( parser.camera );
+    std::shared_ptr<Sampler> sampler(new Sampler());
     g_integrator = std::make_unique<FlatIntegrator>(parser.camera, sampler);
 
     // create a aggregate primitive
@@ -113,7 +114,7 @@ void run()
 void SamplerIntegrator::render( const Scene& scene ) {
     // Always call the preprocess() before doing any rendering.
     // This might be just an empty method, or not, depending on the integrator's needs.
-    preprocess();
+    //preprocess();
 
     // This might just be a tile (part) of an image, rendered in parallel.
     Point2i img_dim = g_camera->get_film()->get_dimension();

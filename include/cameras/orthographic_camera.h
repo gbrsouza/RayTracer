@@ -39,6 +39,15 @@ public:
               l{l}, r{r}, b{b}, t{t} {}
 
     /**
+     * @brief Construct a new Orthographic Camera object
+     * from other Camera
+     * 
+     * @param c the camera
+     */
+    OrthographicCamera ( OrthographicCamera *& c)
+        : Camera{*c}, l{c->l}, r{c->r}, b{c->b}, t{c->t}{}
+    
+    /**
      * @brief Destroy the Orthographic Camera object
      */
     ~OrthographicCamera(){/*empty*/}

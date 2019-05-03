@@ -2,6 +2,7 @@
 #define _BACKGROUND_H_
 
 #include "vec3.h"
+#include "common.h"
 
 typedef Vec3 Color;
 

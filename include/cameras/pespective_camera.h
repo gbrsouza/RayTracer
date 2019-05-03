@@ -35,6 +35,15 @@ public:
               fdistance{fdistance} {}
 
     /**
+     * @brief Construct a new Pespective Camera object
+     * from other camera
+     * @param c the camera
+     */
+    PespectiveCamera( PespectiveCamera *& c )
+        : Camera{*c}, fovy{c->fovy}, aspect{c->aspect},
+          fdistance{c->fdistance} {}
+
+    /**
      * @brief Destroy the Pespective Camera object
      */
     ~PespectiveCamera(){/*empty*/}
