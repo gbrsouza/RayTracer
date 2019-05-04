@@ -51,13 +51,13 @@ public:
                      const
     {
         for ( const auto p : primitives )
-            p->intersect(r, surface);
+            p->intersect( r, surface );
     }
 
     // @Override
     bool intersect_p( const Ray& r ) const { 
         for ( const auto p : primitives )
-            p->intersect_p(r);
+            p->intersect_p( r );
     }
 
 };

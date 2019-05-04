@@ -21,7 +21,7 @@ public:
      * @brief renderize a scene
      * @param scene the scene for renderize 
      */
-    virtual void render( const Scene& scene) = 0;
+    virtual void render( const Scene& scene ) = 0;
 
 };
 

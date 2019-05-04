@@ -83,6 +83,7 @@ void init_engine( const char* filename )
     {   std::cout << e << '\n'; 
         std::cerr << e << '\n'; }
 
+    // create a integrator
     g_camera = std::make_unique<Camera>( parser.camera );
     std::shared_ptr<Sampler> sampler(new Sampler());
     g_integrator = std::make_unique<FlatIntegrator>(parser.camera, sampler);
@@ -95,7 +96,10 @@ void init_engine( const char* filename )
     std::shared_ptr<Light>l(new Light()); 
     std::vector<std::shared_ptr<Light>> lights = {l};
 
-    Scene scene = Scene(agg, lights);
+    //create a background
+    std::shared_ptr<Background> bg(parser.background);
+
+    Scene scene = Scene(agg, bg, lights);
 
     g_scene = std::make_unique<Scene> (scene);
     
@@ -112,9 +116,10 @@ void run()
 // Notice that the FlatIntegrator does not need to override this method.
 // It relies on the version provided by the base class (SampleIntegrator).
 void SamplerIntegrator::render( const Scene& scene ) {
+    
     // Always call the preprocess() before doing any rendering.
     // This might be just an empty method, or not, depending on the integrator's needs.
-    //preprocess();
+    // preprocess(scene);
 
     // This might just be a tile (part) of an image, rendered in parallel.
     Point2i img_dim = g_camera->get_film()->get_dimension();
@@ -122,9 +127,14 @@ void SamplerIntegrator::render( const Scene& scene ) {
     for ( int y = 0 ; y < img_dim.y() ; y++ ) {
         for( int x = 0 ; x < img_dim.x() ; x++ ) {
             
-            Point2i screen_coord{ float(x)/float(img_dim.x()), float(y)/float(img_dim.y()), 0 };
-            Ray ray = g_camera->generate_ray( screen_coord ); // Generate the ray from (x,y)
-           
+            Ray ray = g_camera->generate_ray( x, y ); // Generate the ray from (x,y)
+        
+            //Assume the original pixel color is the background
+            Color24 L = ( scene.intersect_p(ray) ) ? 
+                        Li( ray, scene, *sampler ) :
+                        scene.background->sample( float(x)/float(img_dim.x()),
+                                                  float(y)/float(img_dim.y()) );
+
             // auto color = parser.background->sample(float(j)/float(w), float(i)/float(h));
            
             // for ( auto p : scene ) { // Traverse each object.
@@ -133,7 +143,6 @@ void SamplerIntegrator::render( const Scene& scene ) {
             //     if (hit) color = Color (255,0,0); 
             // }
 
-            Color24 L = Li( ray, scene, *sampler ); // Determine the color for the ray.
             g_camera->get_film()->add_sampler( Point2i( x, y, 0 ), L ); // Set color of pixel (x,y) to L.
         }
     }

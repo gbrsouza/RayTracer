@@ -43,6 +43,12 @@ public:
             : camera{cam}, sampler{sampler}{};
 
     
+    /**
+     * @brief Construct a new Sampler Integrator object
+     * 
+     * @param cam      the camera
+     * @param sampler  the sampler
+     */
     SamplerIntegrator( Camera *& cam, 
                        std::shared_ptr<Sampler> sampler)
             : camera{cam}, sampler{sampler} {} 
@@ -80,7 +86,7 @@ public:
      * 
      * @param scene 
      */
-    virtual void preprocess( const Scene& scene );
+    virtual void preprocess( const Scene& scene ){}
 
 protected:
 
