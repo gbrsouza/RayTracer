@@ -131,7 +131,7 @@ void SamplerIntegrator::render( const Scene& scene ) {
         
             //Assume the original pixel color is the background
             Color24 L = ( scene.intersect_p(ray) ) ? 
-                        Li( ray, scene, *sampler ) :
+                        Li ( ray, scene, *sampler ) :
                         scene.background->sample( float(x)/float(img_dim.x()),
                                                   float(y)/float(img_dim.y()) );
 

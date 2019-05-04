@@ -23,9 +23,17 @@ class Shape {
 public:
 
     /**
+     * @brief Construct a new Shape object
+     * 
+     * @param material the shape's material
+     */
+    Shape( Material * material )
+    : material{material} {}
+
+    /**
      * @brief Destroy the Shape object
      */
-    ~Shape(){}
+    virtual ~Shape(){ }
 
     /**
      * @brief   check if a ray intersect a primitive
@@ -57,8 +65,7 @@ public:
 protected:
 
     int id; //<! The shape id
-
- 
+    Material * material;
 
 };
 

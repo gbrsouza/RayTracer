@@ -14,6 +14,7 @@
 
 #include "samplerIntegrator.h"
 #include "surfaceInteraction.h"
+#include "../materials/flatMaterial.h"
 
 /**
  * @brief Each time a ray hits an object, regardless 
@@ -48,7 +49,7 @@ public:
     Color24 
     Li( const Ray& ray,
         const Scene& scene,
-        Sampler& sampler );
+        Sampler& sampler ) const;
 
 };
 

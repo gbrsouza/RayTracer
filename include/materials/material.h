@@ -23,7 +23,7 @@ public:
     /**
      * @brief Destroy the Material object
      */
-    ~Material(){ /*empty*/ }
+    virtual ~Material(){ /*empty*/ }
 
     /**
      * @brief Get the name object

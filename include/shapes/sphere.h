@@ -36,13 +36,15 @@ public:
      * @param center   the center of sphere
      * @param radius   the radius of sphere
      */
-    Sphere (const point3 &center, float radius)
-    : center{center}, radius{radius} {};
+    Sphere ( const point3 &center, 
+             float radius, 
+             Material * material)
+    : Shape{material}, center{center}, radius{radius}{};
 
     /**
      * @brief Destroy the Sphere object
      */
-    ~Sphere(){};
+    // ~Sphere(){};
 
     // @Override
     bool intersect ( const Ray& r, 
@@ -67,6 +69,7 @@ public:
         float r2 = (-b - sqrt(delta)) / (2 * a);
 
         surface->p = r(fmin(r1,r2));
+        surface->m = material;
 
         return true;
     }

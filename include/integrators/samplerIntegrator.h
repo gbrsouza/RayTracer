@@ -30,7 +30,7 @@ public:
     /**
      * @brief Destroy the Sample Integrator object
      */
-    ~SamplerIntegrator(){/*empty*/};
+    virtual ~SamplerIntegrator(){ /*empty*/ };
 
     /**
      * @brief Construct a new Sample Integrator object
@@ -68,8 +68,7 @@ public:
     virtual Color24 Li( const Ray& ray,
                         const Scene& scene,
                         Sampler& sampler ) 
-                        const
-            { return Color24(200,200,200); }
+                        const = 0;
     
     /**
      * @brief  runs the main application loop that 
@@ -86,7 +85,9 @@ public:
      * 
      * @param scene 
      */
-    virtual void preprocess( const Scene& scene ){}
+    // virtual void preprocess( const Scene& scene );
+
+    virtual void preprocess (){}
 
 protected:
 

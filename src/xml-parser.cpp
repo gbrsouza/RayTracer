@@ -98,7 +98,8 @@ read_vector_or_point(
  */
 std::shared_ptr<Shape> 
 read_sphere(
-    XMLElement &e)
+    XMLElement &e,
+    Material * m)
 {
     XMLElement * p = e.FirstChildElement("radius");
     if (p == nullptr) throw INVALID_SPHERE;
@@ -126,7 +127,7 @@ read_sphere(
 
     // make a sphere
     const point3 *center = new point3(x,y,z);
-    Shape *sphere = new Sphere(*center, radius);
+    Shape *sphere = new Sphere(*center, radius, m);
     std::shared_ptr<Shape> ptr(sphere);
 
     return ptr;
@@ -467,11 +468,11 @@ ParserXML::read_scene(
     
         //Get material's name of object
         std::string materialName = read_a_string(*pListElement, "material");
-
+        Material * m = get_material(materialName).get();
         //Get the shape
         std::shared_ptr<Shape> shape;
         if (type.compare("sphere") == 0)
-            shape = read_sphere(*pListElement);
+            shape = read_sphere(*pListElement, m);
         // add here new shapes
 
         //Set shape's id

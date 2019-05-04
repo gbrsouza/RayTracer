@@ -14,7 +14,8 @@
  */
 
 #include "common.h"
-#include "primitives/primitive.h"
+#include "primitives/geometricPrimitive.h"
+#include "materials/material.h"
 
 /**
  * @brief The class SurfaceInteraction represents the geometry of particular point
@@ -38,7 +39,7 @@ public:
      * @param pri   pointer to the primitive
      */
     SurfaceInteraction( const point3&p, const vector&n, const vector&wo,
-                        float time, const point2f uv, const Primitive *pri)
+                        float time, const point2f uv, const GeometricPrimitive *pri)
                     :   p{p}, n{n}, wo{wo}, time{time}, uv{uv}, 
                         primitive{pri} 
                     { /* empty */ };
@@ -50,7 +51,9 @@ public:
     vector wo;   //<! outgoing direction of light, which is -ray
     float time;  //<! time of contact
     point2f uv;  //<! parametric coordinate (u,v) of the hit surface
-    const Primitive *primitive = nullptr; //<! pointer to the primitive
+    Material * m;  //<! the material of surface
+    const GeometricPrimitive *primitive = nullptr; //<! pointer to the primitive
+
 };
 
 #endif
