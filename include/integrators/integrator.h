@@ -15,13 +15,13 @@ public:
     /**
      * @brief Destroy the Integrator object
      */
-    virtual ~Integrator();
+    ~Integrator() { /*empty*/ }
    
     /**
      * @brief renderize a scene
      * @param scene the scene for renderize 
      */
-    virtual void render( const Scene& scene) = 0;
+    virtual void render( const Scene& scene ) = 0;
 
 };
 

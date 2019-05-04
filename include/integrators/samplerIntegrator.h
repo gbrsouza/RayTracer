@@ -30,7 +30,7 @@ public:
     /**
      * @brief Destroy the Sample Integrator object
      */
-    virtual ~SamplerIntegrator();
+    virtual ~SamplerIntegrator(){ /*empty*/ };
 
     /**
      * @brief Construct a new Sample Integrator object
@@ -43,6 +43,16 @@ public:
             : camera{cam}, sampler{sampler}{};
 
     
+    /**
+     * @brief Construct a new Sampler Integrator object
+     * 
+     * @param cam      the camera
+     * @param sampler  the sampler
+     */
+    SamplerIntegrator( Camera *& cam, 
+                       std::shared_ptr<Sampler> sampler)
+            : camera{cam}, sampler{sampler} {} 
+
     /**
      * @brief  in turn,  is a pure virtual method that
      * returns the incident radiance at the origin of
@@ -75,7 +85,9 @@ public:
      * 
      * @param scene 
      */
-    virtual void preprocess( const Scene& scene );
+    // virtual void preprocess( const Scene& scene );
+
+    virtual void preprocess (){}
 
 protected:
 

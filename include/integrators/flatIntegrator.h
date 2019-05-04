@@ -13,6 +13,8 @@
  */
 
 #include "samplerIntegrator.h"
+#include "surfaceInteraction.h"
+#include "../materials/flatMaterial.h"
 
 /**
  * @brief Each time a ray hits an object, regardless 
@@ -34,6 +36,10 @@ public:
                     std::shared_ptr<Sampler> sampler)
         : SamplerIntegrator{cam, sampler} {}
 
+    FlatIntegrator( Camera *& cam, 
+                    std::shared_ptr<Sampler> sampler)
+        : SamplerIntegrator{cam, sampler}{}
+
     /**
      * @brief Destroy the Flat Integrator object
      */
@@ -43,11 +49,7 @@ public:
     Color24 
     Li( const Ray& ray,
         const Scene& scene,
-        Sampler& sampler )
-    {
-        // @TODO implements the method
-    } 
-
+        Sampler& sampler ) const;
 
 };
 

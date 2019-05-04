@@ -9,8 +9,6 @@ class Camera {
 
 protected:
 
-    int width;                  //<! Width of camera 
-    int height;                 //<! height of camera
     point3 position;            //<! located at the origin
     point3 target;              //<! looking down the -Z axis
     Vec3 vUp;                   //<! the camera's up vector
@@ -35,9 +33,20 @@ public:
             vUp{vUp}, film{film} {}
 
     /**
+     * @brief Construct a new Camera object from other 
+     * Camera
+     * @param c a Camera
+     */
+    // Camera ( Camera *&c )
+    //     : position{c->position},
+    //       target{c->target},
+    //       vUp{c->vUp},
+    //       film{c->film}{}
+    
+    /**
      * @brief Destroy the Camera object
      */
-    ~Camera(){/*empty*/}
+    virtual ~Camera(){/*empty*/}
 
     /**
      * @brief generate a ray based in a coordenates x and y.
@@ -51,16 +60,28 @@ public:
     { return Ray(point3(x,y,1), Vec3(x,y,1)); }
 
     /**
-     * @brief Get the width object
-     * @return int  the width value
+     * @brief Get the film object
+     * 
+     * @return std::shared_ptr<Film> the camera's film
      */
-    int get_width (){return width;}
+    std::shared_ptr<Film> get_film ()
+    { return this->film; }
 
     /**
-     * @brief Get the height object
-     * @return int The height value
+     * @brief Get the width object
+     * @return int the value of width
      */
-    int get_height (){return height;}
+    int get_width ()
+    { return this->film->get_dimension().x(); }
+
+    /**
+     * @brief Get the heigth object
+     * @return int the value of height
+     */
+    int get_height ()
+    { return this->film->get_dimension().y(); }
+
+
 };
 
 #endif

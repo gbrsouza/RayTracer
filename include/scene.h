@@ -31,11 +31,13 @@ public:
      * @brief Construct a new Scene object
      * 
      * @param ag the scene graph of object
+     * @param bg the background of scene
      * @param ls the list of lights
      */
     Scene( std::shared_ptr<Primitive> ag, 
+           std::shared_ptr<Background> bg,
            const std::vector<std::shared_ptr<Light>>& ls)
-        :  lights{ls}, aggregate{ag}
+        :  lights{ls}, background{bg}, aggregate{ag}
         {/* empty */}
 
     /**
@@ -48,7 +50,8 @@ public:
      */
     bool intersect( const Ray& r, 
                     SurfaceInteraction *surface ) 
-                    const;
+                    const
+        { return aggregate->intersect(r, surface); }
     
     /**
      * @brief  A faster version that only determines whether 
@@ -59,7 +62,8 @@ public:
      * @return true   if there is an intersection.
      * @return false  otherwise
      */
-    bool intersect_p( const Ray& r ) const;
+    bool intersect_p( const Ray& r ) const
+    { return aggregate->intersect_p( r ); }
 
 
 };

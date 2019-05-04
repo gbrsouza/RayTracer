@@ -2,6 +2,7 @@
 #define _BACKGROUND_H_
 
 #include "vec3.h"
+#include "common.h"
 
 typedef Vec3 Color;
 
@@ -57,13 +58,34 @@ public:
     { colors[0] = c1; colors[1] = c2; 
       colors[2] = c3; colors[3] = c4; }
  
+    /**
+     * @brief overload operator =
+     * 
+     * @param rhs the rigth object
+     */
     void operator= (const Background & rhs)
     { 
       for (uint i; i < 4; i++)
         this->colors[i] = rhs.colors[i];    
     }
 
+    /**
+     * @brief return a color of pixel in background
+     * 
+     * @param i  the x axis
+     * @param j  the y axis
+     * @return Color  the color of pixel
+     */
     Color sample (float i, float j);
+
+    /**
+     * @brief  adapt to sample
+     * 
+     * @param p   a point 2D
+     * @return Color   the color of point
+     */
+    Color sample ( Point2i p )
+    { return sample(p.x(), p.y()); }
 
 };
 

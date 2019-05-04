@@ -94,7 +94,8 @@ public:
     /**
      * @brief Destroy the ParserXML object
      */
-    ~ParserXML(){}
+    ~ParserXML()
+    { }
 
     /**
      * @brief run the algorithm

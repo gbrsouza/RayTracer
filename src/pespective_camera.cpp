@@ -22,9 +22,6 @@
     w.make_unit_vector();
     
     vector uVec = cross(vUp, w);
-    // std::cout << "vUp:" << vUp;
-    // std::cout << " w:" << w;
-    // std::cout << "uVec" << uVec;
     uVec.make_unit_vector();
 
     vector vVec = cross(w, uVec);

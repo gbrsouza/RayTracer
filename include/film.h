@@ -83,6 +83,13 @@ public:
     { return dimensions.x() * dimensions.y() * VALUES_PER_PIXEL; }
 
     /**
+     * @brief Get the dimension object
+     * @return Point2i the dimensions of image
+     */
+    Point2i get_dimension()
+    { return this->dimensions; }
+
+    /**
      * @brief Get the position pixel object
      * 
      * @param x  the x axis of a pixel
@@ -90,6 +97,13 @@ public:
      * @return int  The pixel position of a image array
      */
     int get_position_pixel(int x, int y);
+
+    /**
+     * @brief Get the filename object
+     * @return std::string  the filename
+     */
+    std::string get_filename()
+    { return this->filename; }
 };
 
 #endif

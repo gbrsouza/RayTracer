@@ -36,13 +36,15 @@ public:
      * @param center   the center of sphere
      * @param radius   the radius of sphere
      */
-    Sphere (const point3 &center, float radius)
-    : center{center}, radius{radius} {};
+    Sphere ( const point3 &center, 
+             float radius, 
+             Material * material)
+    : Shape{material}, center{center}, radius{radius}{};
 
     /**
      * @brief Destroy the Sphere object
      */
-    ~Sphere(){};
+    // ~Sphere(){};
 
     // @Override
     bool intersect ( const Ray& r, 
@@ -67,6 +69,7 @@ public:
         float r2 = (-b - sqrt(delta)) / (2 * a);
 
         surface->p = r(fmin(r1,r2));
+        surface->m = material;
 
         return true;
     }
@@ -74,6 +77,7 @@ public:
     // @Override
     bool intersect_p(const Ray& r) const
     {
+        // std::cout << r << std::endl;
         auto origin = r.get_origin();
         auto direction = r.get_direction();
         
@@ -82,7 +86,8 @@ public:
         float b = 2.0 * dot(oc, direction);
         float c = dot(oc,oc) - (this->radius * this->radius);
         
-        float delta = b * b - 4.0 * a * c;         
+        float delta = (b * b) - (4.0 * a * c); 
+       
         return (delta >= 0.0);
     }
 

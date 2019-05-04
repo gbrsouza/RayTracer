@@ -50,14 +50,22 @@ public:
                      SurfaceInteraction * surface)
                      const
     {
-        for ( const auto p : primitives )
-            p->intersect(r, surface);
+        bool v;
+        for ( const auto p : primitives ){
+            v = p->intersect( r, surface );
+            if (v) return true;
+        }
+        return false;
     }
 
     // @Override
     bool intersect_p( const Ray& r ) const { 
-        for ( const auto p : primitives )
-            p->intersect_p(r);
+        bool v;
+        for ( const auto p : primitives ){
+            v = p->intersect_p( r );
+            if (v) return true;
+        }
+        return false;            
     }
 
 };

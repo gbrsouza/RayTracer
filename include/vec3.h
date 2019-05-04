@@ -24,6 +24,11 @@ public:
     Vec3(){}
 
     /**
+     * @brief Destroy the Vec 3 object
+     */
+    ~Vec3(){}
+
+    /**
      * @brief Construct a new Vec3 object
      * 
      * @param element0 The value of x axis
