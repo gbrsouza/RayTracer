@@ -6,7 +6,7 @@ FlatIntegrator::Li( const Ray& ray,
                     Sampler& sampler )
                     const
 {
-    Color24 L(0,0,0); // The radiance
+   
     // Find closest ray intersection or return background radiance.
     SurfaceInteraction isect;  
     scene.intersect(ray, &isect);
@@ -17,7 +17,6 @@ FlatIntegrator::Li( const Ray& ray,
     FlatMaterial *fm = dynamic_cast< FlatMaterial *>( isect.m );
     
     // assign diffuse color to L.
-     L = fm->get_color(); // Call a method present only in FlatMaterial.
+    return fm->get_color(); // Call a method present only in FlatMaterial.
     
-    return L;
 } 

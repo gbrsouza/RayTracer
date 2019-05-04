@@ -37,16 +37,16 @@ public:
      * Camera
      * @param c a Camera
      */
-    Camera ( Camera *&c )
-        : position{c->position},
-          target{c->target},
-          vUp{c->vUp},
-          film{c->film}{}
+    // Camera ( Camera *&c )
+    //     : position{c->position},
+    //       target{c->target},
+    //       vUp{c->vUp},
+    //       film{c->film}{}
     
     /**
      * @brief Destroy the Camera object
      */
-    ~Camera(){/*empty*/}
+    virtual ~Camera(){/*empty*/}
 
     /**
      * @brief generate a ray based in a coordenates x and y.
@@ -58,16 +58,6 @@ public:
      */
     virtual Ray generate_ray(int x, int y)
     { return Ray(point3(x,y,1), Vec3(x,y,1)); }
-
-    /**
-     * @brief generate a ray based in a coordenates x and y.
-     * Each camera implements the own method
-     * 
-     * @param point the point
-     * @return Ray  the ray in point
-     */
-    Ray generate_ray( Point2i point )
-    { return generate_ray(point.x(), point.y()); }
 
     /**
      * @brief Get the film object

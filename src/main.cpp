@@ -84,7 +84,8 @@ void init_engine( const char* filename )
         std::cerr << e << '\n'; }
 
     // create a integrator
-    g_camera = std::make_unique<Camera>( parser.camera );
+    
+    g_camera = std::unique_ptr<Camera>(parser.camera);
     std::shared_ptr<Sampler> sampler(new Sampler());
     g_integrator = std::make_unique<FlatIntegrator>(parser.camera, sampler);
 
@@ -134,14 +135,6 @@ void SamplerIntegrator::render( const Scene& scene ) {
                         Li ( ray, scene, *sampler ) :
                         scene.background->sample( float(x)/float(img_dim.x()),
                                                   float(y)/float(img_dim.y()) );
-
-            // auto color = parser.background->sample(float(j)/float(w), float(i)/float(h));
-           
-            // for ( auto p : scene ) { // Traverse each object.
-            //     SurfaceInteraction surface;
-            //     bool hit = p->intersect(r, &surface);
-            //     if (hit) color = Color (255,0,0); 
-            // }
 
             g_camera->get_film()->add_sampler( Point2i( x, y, 0 ), L ); // Set color of pixel (x,y) to L.
         }
