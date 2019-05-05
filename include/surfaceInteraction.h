@@ -54,6 +54,9 @@ public:
     Material * m;  //<! the material of surface
     const GeometricPrimitive *primitive = nullptr; //<! pointer to the primitive
 
+    float Zmin; // The min value of contact
+    float Zmax; // The max value of contact
+
 };
 
 #endif

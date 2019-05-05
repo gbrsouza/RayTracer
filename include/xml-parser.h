@@ -18,6 +18,9 @@
 #include "shapes/sphere.h"
 #include "materials/flatMaterial.h"
 
+#include "integrators/depthIntegrator.h"
+#include "integrators/flatIntegrator.h"
+
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
 #define INVALID_BACKGROUND          "Invalid background specification"
@@ -80,12 +83,14 @@ public:
     std::string filename;   //<! The xml file with the description raytracer
     std::string output;     //<! The name of output image
     std::string extension;  //<! The image extension
-    std::string integrator; //<! The integrator type
+    std::string integratorType; //<
     
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera
     
+    // The integrator
+    std::shared_ptr<Integrator> integrator;
 
     //<! list of objects in the scene. Not yet implemented.
     std::vector<std::shared_ptr<Primitive>> primitives;

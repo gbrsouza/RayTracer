@@ -70,6 +70,8 @@ public:
 
         surface->p = r(fmin(r1,r2));
         surface->m = material;
+        surface->Zmin = fmin(r1,r2);
+        surface->Zmax = fmax(r1,r2);
 
         return true;
     }

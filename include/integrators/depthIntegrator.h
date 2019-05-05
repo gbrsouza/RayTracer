@@ -13,6 +13,35 @@
  */
 class DepthIntegrator : public SamplerIntegrator {
 
+public:
+
+    /**
+     * @brief Construct a new Depth Integrator object
+     * 
+     * @param cam      The camera
+     * @param sampler  The sampler   
+     */
+    DepthIntegrator( std::shared_ptr<Camera> cam,
+                     std::shared_ptr<Sampler> sampler,
+                     Color24 near,
+                     Color24 far)
+        : SamplerIntegrator{cam, sampler},
+          near_color{near}, far_color{far} {}
+
+    // @Override
+    void 
+    preprocess( const Scene& scene );
+
+    // @Override
+    Color24 
+    Li( const Ray& ray,
+        const Scene& scene,
+        Sampler& sampler ) const;
+
+private:
+    Color24 near_color;  //<! The near color
+    Color24 far_color;   //<! The far color
+
 };
 
 #endif

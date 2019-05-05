@@ -1,0 +1,55 @@
+<RT3>
+  <camera type="orthographic" name="cam_flat">
+      <!--- The camera frame --->
+      <position x="0" y="0" z="2"/> <!--- located at the origin --->
+      <target x="0" y="0" z="-10"/> <!--- looking down the -Z axis -->
+      <up x="0" y="1" z="1"/>       <!--- the camera's up vector -->
+      <!--- Specific parameters for orthographic projection --->
+      <vpdim l="-8" r="8" b="-6" t="6" /> <!--- View plane dimensions [left right bottom top] -->
+      <!--- Retina/image dimensions --->
+      <width value="800"/>
+      <height value="600"/>
+      <img_file name="depth_spheres_ortho" type="PNG" />
+  </camera>
+   <scene>
+       <background> <!-- This defines an interpolated background -->
+          <color r="153"  g="204"   b="255"/> <!-- bottom left  -->
+          <color r="18"   g="10"    b="143"/> <!-- top left     -->
+          <color r="18"   g="10"    b="143"/> <!-- top right    -->
+          <color r="153"  g="204"   b="255"/> <!-- bottom right -->
+       </background>
+       <object type="sphere" name="sphere1" material="green" >
+          <radius value="0.4"/>
+          <center x="-1.0" y="0.5" z="-5"/>
+       </object>
+       <object type="sphere" name="sphere2" material="green">
+          <radius value="0.4"/>
+          <center x="1.0" y="-0.5" z="-8"/>
+       </object>
+       <object type="sphere" name="sphere3" material="gold">
+          <radius value="0.4"/>
+          <center x="-1.0" y="-1.5" z="-3.5"/>
+       </object>
+       <object type="sphere" name="sphere4" material="pink">
+          <center x="7.0" y="1.5" z="-10"/>
+       </object>
+       <!--- Library of materials --->
+       <material type="flat" name="gold">
+          <diffuse r="236" g="124" b="17"/>
+       </material>
+       <material type="flat" name="green">
+          <diffuse r="42" g="201" b="51"/>
+       </material>
+       <material type="flat" name="pink">
+          <diffuse r="253" g="153" b="253"/>
+       </material>
+       <material type="fslat" name="bink">
+          <diffuse r="253" g="153" b="200"/>
+       </material>
+  </scene>
+  <running> <!--- Running setup --->
+	  <integrator type="depth map">
+		  <spp value="1"/> <!--- Samples per pixel --->
+	  </integrator>
+  </running>
+</RT3>

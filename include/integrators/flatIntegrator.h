@@ -13,8 +13,6 @@
  */
 
 #include "samplerIntegrator.h"
-#include "surfaceInteraction.h"
-#include "../materials/flatMaterial.h"
 
 /**
  * @brief Each time a ray hits an object, regardless 
@@ -32,7 +30,7 @@ public:
      * @param cam      The camera
      * @param sampler  The sampler
      */
-    FlatIntegrator( std::shared_ptr<const Camera> cam,
+    FlatIntegrator( std::shared_ptr<Camera> cam,
                     std::shared_ptr<Sampler> sampler)
         : SamplerIntegrator{cam, sampler} {}
 
@@ -44,6 +42,11 @@ public:
      * @brief Destroy the Flat Integrator object
      */
     ~FlatIntegrator(){/*empty*/}
+
+    // @Override
+    void 
+    preprocess( const Scene& scene )
+    { /*empty*/ }
 
     // @Override
     Color24 
