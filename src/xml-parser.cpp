@@ -492,6 +492,22 @@ ParserXML::read_scene(
 }
 
 void 
+ParserXML::read_integrator( 
+    XMLNode &pRoot )
+{
+    XMLElement * pElement = pRoot.FirstChildElement("running");
+    if (pElement == nullptr) throw INVALID_SCENE;
+
+    pElement = pElement->FirstChildElement("integrator");
+    if (pElement == nullptr) throw INVALID_SCENE;
+
+    this->integrator = read_a_string(*pElement, "type" );
+
+    //@TODO get a sampler
+
+}
+
+void 
 ParserXML::run()
 {
     XMLDocument doc;
@@ -509,5 +525,10 @@ ParserXML::run()
     std::cout << "\n>>> reading scene... \n";
     read_scene(*pRoot);
     std::cout << ">>> scene done! \n"; 
+
+    std::cout << "\n>>> reading integrator... \n";
+    read_integrator(*pRoot);
+    std::cout << ">>> integrator done! \n"; 
+    
 
 }   

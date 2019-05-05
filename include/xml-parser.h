@@ -67,12 +67,21 @@ private:
      */
     void read_scene(XMLNode &pRoot);
 
+    /**
+     * @brief Read the type of integrator
+     * 
+     * @param pRoot The iterator of file
+     */
+    void read_integrator(XMLNode &pRoot);
+
 
 public:
 
     std::string filename;   //<! The xml file with the description raytracer
     std::string output;     //<! The name of output image
     std::string extension;  //<! The image extension
+    std::string integrator; //<! The integrator type
+    
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera

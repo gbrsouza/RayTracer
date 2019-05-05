@@ -37,7 +37,7 @@ public:
         : SamplerIntegrator{cam, sampler} {}
 
     FlatIntegrator( Camera *& cam, 
-                    std::shared_ptr<Sampler> sampler)
+                    std::shared_ptr<Sampler> &sampler)
         : SamplerIntegrator{cam, sampler}{}
 
     /**

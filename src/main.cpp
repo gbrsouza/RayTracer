@@ -83,11 +83,15 @@ void init_engine( const char* filename )
     {   std::cout << e << '\n'; 
         std::cerr << e << '\n'; }
 
-    // create a integrator
-    
+    // create a camera
     g_camera = std::unique_ptr<Camera>(parser.camera);
+   
+    // create a integrator
     std::shared_ptr<Sampler> sampler(new Sampler());
-    g_integrator = std::make_unique<FlatIntegrator>(parser.camera, sampler);
+    if ( parser.integrator.compare("flat") == 0 ){
+        FlatIntegrator *fi = new FlatIntegrator(parser.camera, sampler); 
+        g_integrator = std::unique_ptr<Integrator>(fi);
+    }
 
     // create a aggregate primitive
     AggregatePrimitive *aggregate = new AggregatePrimitive(parser.primitives);
@@ -100,8 +104,8 @@ void init_engine( const char* filename )
     //create a background
     std::shared_ptr<Background> bg(parser.background);
 
+    // create a scene
     Scene scene = Scene(agg, bg, lights);
-
     g_scene = std::make_unique<Scene> (scene);
     
     std::cout << "\n>>> Parsing scene successfuly done! <<<  \n"; 
