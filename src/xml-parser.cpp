@@ -286,17 +286,17 @@ DepthIntegrator *
 read_depth_integrator(
     XMLElement &e,
     Camera * camera,
-    Sampler * sampler )
+     std::shared_ptr<Sampler> sampler )
 {
     XMLElement *i = e.FirstChildElement("near_color");
     if (i == nullptr) throw INVALID_SCENE;
     Color24 *near = read_a_color( *i );
         
-    i = e.NextSiblingElement("far_color");
+    i = e.FirstChildElement("far_color");
     if (i == nullptr) throw INVALID_SCENE;
     Color24 *far = read_a_color( *i );
 
-    Integrator *integrator = new DepthIntegrator( 
+    DepthIntegrator *integrator = new DepthIntegrator( 
             std::shared_ptr<Camera>(camera),
             sampler, *near, *far);
 
