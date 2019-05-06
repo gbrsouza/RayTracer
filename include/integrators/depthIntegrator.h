@@ -2,6 +2,7 @@
 #define _DEPTH_INTEGRATOR_H_
 
 #include "samplerIntegrator.h"
+#include <limits>
 
 /**
  * @brief The color associated with a hit is calculated
@@ -41,6 +42,8 @@ public:
 private:
     Color24 near_color;  //<! The near color
     Color24 far_color;   //<! The far color
+    float zMin = std::numeric_limits<int>::max();
+    float zMax = std::numeric_limits<int>::min();    //<! value to interpolation
 
 };
 

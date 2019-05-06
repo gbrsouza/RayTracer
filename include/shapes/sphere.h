@@ -68,10 +68,10 @@ public:
         float r1 = (-b + sqrt(delta)) / (2 * a);
         float r2 = (-b - sqrt(delta)) / (2 * a);
 
-        surface->p = r(fmin(r1,r2));
+        surface->t = fmin(r1,r2);
+        surface->p = r(surface->t);
         surface->m = material;
-        surface->Zmin = fmin(r1,r2);
-        surface->Zmax = fmax(r1,r2);
+       
 
         return true;
     }
