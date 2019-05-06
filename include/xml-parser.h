@@ -88,9 +88,7 @@ public:
     Background *background; //<! The background
     Buffer *buffer;         //<! The buffer
     Camera *camera;         //<! The Camera
-    
-    // The integrator
-    std::shared_ptr<Integrator> integrator;
+    Integrator *integrator;
 
     //<! list of objects in the scene. Not yet implemented.
     std::vector<std::shared_ptr<Primitive>> primitives;

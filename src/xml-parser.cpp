@@ -277,6 +277,33 @@ read_pespective_camera (
     return pespcCam;
 }
 
+/*
+ +=====================================+
+ |  Readers of specifics integrators type   |
+ +=====================================+
+ */
+DepthIntegrator *
+read_depth_integrator(
+    XMLElement &e,
+    Camera * camera,
+    Sampler * sampler )
+{
+    XMLElement *i = e.FirstChildElement("near_color");
+    if (i == nullptr) throw INVALID_SCENE;
+    Color24 *near = read_a_color( *i );
+        
+    i = e.NextSiblingElement("far_color");
+    if (i == nullptr) throw INVALID_SCENE;
+    Color24 *far = read_a_color( *i );
+
+    Integrator *integrator = new DepthIntegrator( 
+            std::shared_ptr<Camera>(camera),
+            sampler, *near, *far);
+
+    return integrator;
+}
+
+
 
 /*
  +=====================================+
@@ -527,26 +554,16 @@ ParserXML::read_integrator(
     std::string type = read_a_string( *pElement, "type" );
     integratorType = type;
 
-    // std::shared_ptr<Sampler> sampler(new Sampler());
-    // if ( type.compare("flat") == 0 ) {
+    std::shared_ptr<Sampler> sampler(new Sampler());
+    if ( type.compare("flat") == 0 ) {
      
-    //     integrator = std::shared_ptr<Integrator>(new FlatIntegrator(this->camera, sampler));
+        integrator = new FlatIntegrator(this->camera, sampler);
     
-    // } // else if ( type.compare("depth map") == 0){
+    } else if ( type.compare("depth map") == 0){
         
-    //     pElement->FirstChildElement("near_color");
-    //     if (pElement == nullptr) throw INVALID_SCENE;
-    //     Color24 *near = read_a_color( *pElement );
+        integrator = read_depth_integrator(*pElement, this->camera, sampler );
         
-    //     pElement->FirstChildElement("far_color");
-    //     if (pElement == nullptr) throw INVALID_SCENE;
-    //     Color24 *far = read_a_color( *pElement );
-
-    //     DepthIntegrator *di = 
-    //         new DepthIntegrator( std::shared_ptr<Camera>(camera),
-    //                              sampler, *near, *far);
-    //     integrator = std::shared_ptr<Integrator>(di);
-    // }
+    }
 
     //@TODO get a sampler
 

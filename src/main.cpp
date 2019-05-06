@@ -87,16 +87,7 @@ void init_engine( const char* filename )
     g_camera = std::unique_ptr<Camera>(parser.camera);
    
     // create a integrator
-    std::shared_ptr<Sampler> sampler(new Sampler());
-    // if ( parser.integratorType.compare("flat") == 0 ){
-    //     FlatIntegrator *fi = new FlatIntegrator(parser.camera, sampler); 
-    //     g_integrator = std::unique_ptr<Integrator>(fi);
-    // }
-
-    g_integrator = std::unique_ptr<Integrator>(
-        new DepthIntegrator(std::shared_ptr<Camera>(parser.camera),
-                            sampler, Color24(10,10,10),
-                            Color24(240,240,240)));
+    g_integrator = std::unique_ptr<Integrator>(parser.integrator);
 
     // create a aggregate primitive
     AggregatePrimitive *aggregate = new AggregatePrimitive(parser.primitives);
