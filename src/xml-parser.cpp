@@ -82,6 +82,29 @@ read_vector_or_point(
     return pos;
 }
 
+/**
+ * @brief Read a RGB color by a pointer
+ * 
+ * @param e    the iterator 
+ * @return Color*  the color 
+ */
+Color24 *
+read_a_color (
+    XMLElement &e)
+{
+    int r, g, b;
+    XMLError eResult;
+
+    eResult = e.QueryIntAttribute("r", &r);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryIntAttribute("g", &g);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryIntAttribute("b", &b);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    Color24 *color = new Color24(r, g, b);
+    return color;
+}
 
 /*
  +=====================================+
@@ -253,6 +276,33 @@ read_pespective_camera (
         pos, target, vUp, fovy, aspect, fdistance);
     return pespcCam;
 }
+
+/*
+ +=====================================+
+ |  Readers of specifics integrators type   |
+ +=====================================+
+ */
+DepthIntegrator *
+read_depth_integrator(
+    XMLElement &e,
+    Camera * camera,
+     std::shared_ptr<Sampler> sampler )
+{
+    XMLElement *i = e.FirstChildElement("near_color");
+    if (i == nullptr) throw INVALID_SCENE;
+    Color24 *near = read_a_color( *i );
+        
+    i = e.FirstChildElement("far_color");
+    if (i == nullptr) throw INVALID_SCENE;
+    Color24 *far = read_a_color( *i );
+
+    DepthIntegrator *integrator = new DepthIntegrator( 
+            std::shared_ptr<Camera>(camera),
+            sampler, *near, *far);
+
+    return integrator;
+}
+
 
 
 /*
@@ -501,7 +551,19 @@ ParserXML::read_integrator(
     pElement = pElement->FirstChildElement("integrator");
     if (pElement == nullptr) throw INVALID_SCENE;
 
-    this->integrator = read_a_string(*pElement, "type" );
+    std::string type = read_a_string( *pElement, "type" );
+    integratorType = type;
+
+    std::shared_ptr<Sampler> sampler(new Sampler());
+    if ( type.compare("flat") == 0 ) {
+     
+        integrator = new FlatIntegrator(this->camera, sampler);
+    
+    } else if ( type.compare("depth map") == 0){
+        
+        integrator = read_depth_integrator(*pElement, this->camera, sampler );
+        
+    }
 
     //@TODO get a sampler
 

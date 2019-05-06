@@ -63,9 +63,14 @@
     </scene>
 
     <running> <!--- Running setup -->
-        <integrator type="flat">
-            <spp value="1"/> <!--- Samples per pixel -->
+       <!-- <integrator type="flat">
+            <spp value="1"/> 
+        </integrator> -->
+        <integrator type="depth map">
+            <far_color r="255" g="255" b="255"/>
+            <near_color r="0" g="0" b="0"/> 
         </integrator>
+
     </running>
 
 </raytracer>

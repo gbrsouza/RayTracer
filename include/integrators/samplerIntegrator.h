@@ -16,6 +16,8 @@
 #include "../common.h"
 #include "../sampler.h"
 #include "../cameras/camera.h"
+#include "../surfaceInteraction.h"
+#include "../materials/flatMaterial.h"
 
 /**
  * @brief This class represents an entity that 
@@ -38,7 +40,7 @@ public:
      * @param cam      the camera 
      * @param sampler  the sampler
      */
-    SamplerIntegrator( std::shared_ptr<const Camera> cam,
+    SamplerIntegrator( std::shared_ptr<Camera> cam,
                        std::shared_ptr<Sampler> sampler)
             : camera{cam}, sampler{sampler}{};
 
@@ -85,14 +87,12 @@ public:
      * 
      * @param scene 
      */
-    // virtual void preprocess( const Scene& scene );
-
-    virtual void preprocess (){}
+    virtual void preprocess( const Scene& scene ){}
 
 protected:
 
     //<! the smart pointer for a camara
-    std::shared_ptr<const Camera> camera;
+    std::shared_ptr<Camera> camera;
     
 private:
     

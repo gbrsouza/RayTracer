@@ -19,5 +19,10 @@ Ray OrthographicCamera::generate_ray(int x, int y)
     point3 o = position + ( u * uVec) + (v * vVec); //<! ray's origin
     point3 d = -wVec; //<! ray's direction
     
-    return Ray(o, d);
+    Ray ray = Ray(o, d);
+    
+    ray.x = x;
+    ray.y = y;
+
+    return ray;
 }

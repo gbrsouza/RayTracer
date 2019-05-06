@@ -3,36 +3,40 @@
 
  Ray PespectiveCamera::generate_ray(int x, int y)
  {
-    // Find the half-height and half-width
-    auto hh = tan( (fovy*RADIANS) /2.0)*fdistance;
-    auto hw = aspect * hh;
-    
-    float l,r,t,b;
-    l = -hw; r= hw;
-    b = -hh; t = hh;    
+   // Find the half-height and half-width
+   auto hh = tan( (fovy*RADIANS) /2.0)*fdistance;
+   auto hw = aspect * hh;
 
-    // mapping pixels to screen space
-    float u = l + ((r-l)*(x+0.5))/get_width();
-    float v = b + ((t-b)*(y+0.5))/get_height();
+   float l,r,t,b;
+   l = -hw; r= hw;
+   b = -hh; t = hh;    
 
-    // determining the Camera frame
-    vector gaze = this->target - this->position;
-    
-    vector w = -gaze;
-    w.make_unit_vector();
-    
-    vector uVec = cross(vUp, w);
-    uVec.make_unit_vector();
+   // mapping pixels to screen space
+   float u = l + ((r-l)*(x+0.5))/get_width();
+   float v = b + ((t-b)*(y+0.5))/get_height();
 
-    vector vVec = cross(w, uVec);
-    vVec.make_unit_vector();
+   // determining the Camera frame
+   vector gaze = this->target - this->position;
 
-    point3 e = this->position;
+   vector w = -gaze;
+   w.make_unit_vector();
 
-    // Generating the ray
-    point3 o = e; //<! ray's origin
-    point3 d = -(fdistance)*w + u*uVec + v*vVec; //<! ray's direction
-    Ray ray = Ray(o, d);
-    return ray;
+   vector uVec = cross(vUp, w);
+   uVec.make_unit_vector();
+
+   vector vVec = cross(w, uVec);
+   vVec.make_unit_vector();
+
+   point3 e = this->position;
+
+   // Generating the ray
+   point3 o = e; //<! ray's origin
+   point3 d = -(fdistance)*w + u*uVec + v*vVec; //<! ray's direction
+   Ray ray = Ray(o, d);
+
+   ray.x = x;
+   ray.y = y;
+
+   return ray;
 
  }

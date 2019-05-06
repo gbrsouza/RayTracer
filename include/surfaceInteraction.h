@@ -54,6 +54,8 @@ public:
     Material * m;  //<! the material of surface
     const GeometricPrimitive *primitive = nullptr; //<! pointer to the primitive
 
+    float t; //<! the first contact value 
+
 };
 
 #endif
