@@ -557,12 +557,15 @@ ParserXML::read_integrator(
     std::shared_ptr<Sampler> sampler(new Sampler());
     if ( type.compare("flat") == 0 ) {
      
-        integrator = new FlatIntegrator(this->camera, sampler);
+        integrator = new FlatIntegrator(std::shared_ptr<Camera>(camera), sampler);
     
     } else if ( type.compare("depth map") == 0){
         
         integrator = read_depth_integrator(*pElement, this->camera, sampler );
         
+    } else if ( type.compare("normal map") == 0 ){
+        
+        integrator = new NormalMapIntegrator(std::shared_ptr<Camera>(camera), sampler);
     }
 
     //@TODO get a sampler
