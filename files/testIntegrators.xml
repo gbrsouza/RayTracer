@@ -63,16 +63,16 @@
     </scene>
 
     <running> <!--- Running setup -->
-       <!-- <integrator type="flat">
+       <integrator type="flat">
             <spp value="1"/> 
-        </integrator> -->
+        </integrator>
         <!-- <integrator type="depth map">
             <far_color r="255" g="255" b="255"/>
             <near_color r="0" g="0" b="0"/> 
         </integrator> -->
-        <integrator type="normal map">
+        <!-- <integrator type="normal map">
             <spp value="1"/> 
-        </integrator>
+        </integrator> -->
 
     </running>
 
