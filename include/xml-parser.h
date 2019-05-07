@@ -20,6 +20,7 @@
 
 #include "integrators/depthIntegrator.h"
 #include "integrators/flatIntegrator.h"
+#include "integrators/normalMapIntegrator.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
