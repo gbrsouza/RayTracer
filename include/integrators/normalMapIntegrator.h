@@ -11,6 +11,28 @@
  */
 class NormalMapIntegrator : public SamplerIntegrator {
 
+public:
+
+	/**
+	 * @brief Construct a new Normal Map Integrator object
+	 * 
+	 * @param cam 
+	 * @param sampler 
+	 */
+	NormalMapIntegrator( std::shared_ptr<Camera> cam,
+					std::shared_ptr<Sampler> sampler)
+			: SamplerIntegrator{cam, sampler} {}
+
+	// @Override
+    void 
+    preprocess( const Scene& scene );
+
+    // @Override
+    Color24 
+    Li( const Ray& ray,
+        const Scene& scene,
+        Sampler& sampler ) const;
+
 };
 
 #endif
