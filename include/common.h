@@ -32,4 +32,22 @@ typedef Vec3 Point2i; //<! alias to represent a 2D point
 
 typedef unsigned int uint; //<! alias to unsigned int
 
+
+typedef struct Intensity {
+    
+    float r;
+    float g;
+    float b;
+
+    Intensity ( float r, float g, float b )
+        : r{r}, g{g}, b{b} {}
+
+    void operator= ( Intensity &rhs ){
+        this->r = rhs.r;
+        this->g = rhs.g;
+        this->b = rhs.b;
+    }
+
+} Intensity;
+
 #endif
