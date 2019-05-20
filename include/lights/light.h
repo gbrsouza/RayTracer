@@ -13,6 +13,7 @@
  */
 
 #include "common.h"
+#include "visibilityTester.h"
 
 class Light { 
 
@@ -32,14 +33,25 @@ public:
     /**
      * @brief Construct a new Light object
      */
-    Light() : intensity{ 0.1, 0.1, 0.1 }{}
+    Light() : intensity{ Vec3(0.1, 0.1, 0.1)}{}
     
     /**
      * @brief Destroy the Light object
      */
     ~Light(){ /*empty*/ }
 
-   // virtual float Li ();
+    /**
+     * @brief The light's contribution to a point
+     * 
+     * @param isect   The pixel
+     * @param wi      The vector of pixel to light
+     * @param vt      The visitor tester
+     * @return Vec3   The light's contribution
+     */
+    // virtual Vec3 Li(
+    //     const SurfaceInteraction &isect,
+    //     vector *wi,
+    //     VisibilityTester *vt) const = 0;
 
 };
 

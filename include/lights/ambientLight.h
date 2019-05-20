@@ -28,6 +28,16 @@ public:
     AmbientLight ( point3 intensity )
         : Light{intensity} {}
 
+    /**
+     * @brief Destroy the Ambient Light object
+     */
+    ~AmbientLight(){ /*empty*/ }
+
+    Vec3 Li(
+        const SurfaceInteraction &isect,
+        vector *wi,
+        VisibilityTester *vt) const;
+
 };
 
 
