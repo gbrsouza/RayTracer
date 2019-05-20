@@ -18,7 +18,7 @@ class Light {
 
 protected:
 
-    FloatColor intensity; //<! The intensity of light 
+    point3 intensity; //<! The intensity of light 
 
 public:
 
@@ -26,7 +26,7 @@ public:
      * @brief Construct a new Light object
      * @param intensity the instensity
      */
-    Light( FloatColor intensity ) :
+    Light( point3 intensity ) :
         intensity{intensity} {}
     
     /**

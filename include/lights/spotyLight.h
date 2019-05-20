@@ -38,7 +38,7 @@ public:
      * @param falloff 
      */
     SpotyLight ( 
-        FloatColor intensity,
+        point3 intensity,
         point3 position,
         point3 point_at,
         int cutoff,

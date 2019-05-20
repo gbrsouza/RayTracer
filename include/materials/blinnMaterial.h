@@ -23,10 +23,10 @@ class BlinnPhongMaterial : public Material
 { 
 
 private:
-    const FloatColor ka;  //<! Ambient Coefficient 
-    const FloatColor kd;  //<! Diffuse Coefficient
-    const FloatColor ks;  //<! Specular Coefficient
-    const int ge;   //<! Glossiness Expoent
+    const point3 ka;  //<! Ambient Coefficient 
+    const point3 kd;  //<! Diffuse Coefficient
+    const point3 ks;  //<! Specular Coefficient
+    const float ge;   //<! Glossiness Expoent
 
 public:
 
@@ -42,10 +42,10 @@ public:
      */
     BlinnPhongMaterial ( 
         std::string name,
-        FloatColor ka, 
-        FloatColor kd,
-        FloatColor ks,
-        int ge
+        point3 ka, 
+        point3 kd,
+        point3 ks,
+        float ge
     ) : Material {name},
         ka{ka}, kd{kd}, ks{ks}, ge{ge} {}
 
@@ -56,27 +56,27 @@ public:
 
     /**
      * @brief get a ambient coefficient
-     * @return FloatColor  the ambient coefficient (ka)
+     * @return point3  the ambient coefficient (ka)
      */
-    FloatColor ka (){ return this->ka; }
+    point3 ka (){ return this->ka; }
 
     /**
      * @brief get a diffuse coefficient
-     * @return FloatColor  the diffuse coefficiente (kd)
+     * @return point3  the diffuse coefficiente (kd)
      */
-    FloatColor kd (){ return this->kd; }
+    point3 kd (){ return this->kd; }
 
     /**
      * @brief get a specular coefficient
-     * @return FloatColor  the specular coefficient (ks)
+     * @return point3  the specular coefficient (ks)
      */
-    FloatColor ks (){ return this->ks; }
+    point3 ks (){ return this->ks; }
 
     /**
      * @brief get a glossiness coefficient
      * @return float the glossiness coefficient (ge)
      */
-    int ge (){ return this->ge; }
+    float ge (){ return this->ge; }
 
 };
 
