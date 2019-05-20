@@ -25,7 +25,7 @@ public:
      * @brief Construct a new Ambient Light object
      * @param intensity the intensity of light
      */
-    AmbientLight ( Intensity intensity )
+    AmbientLight ( FloatColor intensity )
         : Light{intensity} {}
 
 };

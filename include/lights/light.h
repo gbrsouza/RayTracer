@@ -18,7 +18,7 @@ class Light {
 
 protected:
 
-    Intensity intensity; //<! The intensity of light 
+    FloatColor intensity; //<! The intensity of light 
 
 public:
 
@@ -26,7 +26,7 @@ public:
      * @brief Construct a new Light object
      * @param intensity the instensity
      */
-    Light( Intensity intensity ) :
+    Light( FloatColor intensity ) :
         intensity{intensity} {}
     
     /**
@@ -38,6 +38,8 @@ public:
      * @brief Destroy the Light object
      */
     ~Light(){ /*empty*/ }
+
+   // virtual float Li ();
 
 };
 
