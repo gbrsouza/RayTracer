@@ -1,5 +1,14 @@
 #include "integrators/samplerIntegrator.h"
 
+void clamp (Color24 &L){
+    for (int i=0; i<3; i++){
+        if (L.element[i] < 0 )
+            L.element[i] = 0;
+        else if (L.element[i] > 255)
+            L.element[i] = 255;
+    }
+}
+
 // [3] Enter the ray tracing main loop; this is the default render() method.
 // Notice that the FlatIntegrator does not need to override this method.
 // It relies on the version provided by the base class (SampleIntegrator).
@@ -17,6 +26,7 @@ void SamplerIntegrator::render( const Scene& scene ) {
             
             Ray ray = camera->generate_ray( x, y ); // Generate the ray from (x,y)
             Color24 L = Li( ray, scene, *sampler );
+            clamp(L);
             camera->get_film()->add_sampler( Point2i( x, y, 0 ), L ); // Set color of pixel (x,y) to L.
         }
     }

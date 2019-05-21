@@ -96,8 +96,7 @@ void init_engine( const char* filename )
     std::shared_ptr<Primitive> agg(aggregate);
 
     // create a empty vector of lights 
-    std::shared_ptr<Light>l(new AmbientLight(Vec3(0.1,0.1,0.1))); 
-    std::vector<std::shared_ptr<Light>> lights = {l};
+    std::vector<std::shared_ptr<Light>> lights = parser.lights;
 
     //create a background
     std::shared_ptr<Background> bg(parser.background);

@@ -21,6 +21,7 @@
 #include "integrators/depthIntegrator.h"
 #include "integrators/flatIntegrator.h"
 #include "integrators/normalMapIntegrator.h"
+#include "integrators/blinnPhongIntegrator.h"
 
 #include "lights/ambientLight.h"
 #include "lights/pointLight.h"

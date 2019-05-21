@@ -237,6 +237,42 @@ read_flat_material (
     return fm;
 }
 
+std::shared_ptr<Material>
+read_blinn_material (
+    XMLElement &e,
+    std::string name)
+{
+    XMLElement * amb = e.FirstChildElement("ambient");
+    if (amb == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cAmb(read_a_float_color(*amb));
+
+    XMLElement * dif = e.FirstChildElement("diffuse");
+    if (dif == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cDif(read_a_float_color(*dif));
+
+    XMLElement * spe = e.FirstChildElement("specular");
+    if (spe == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cSpe(read_a_float_color(*spe));
+
+    XMLElement * glo = e.FirstChildElement("glossiness");
+    if (glo == nullptr) throw INVALID_MATERIAL;
+
+    XMLError eResult;
+    int glossiness;
+    eResult = glo->QueryIntAttribute("value", &glossiness);
+    if (eResult != XML_SUCCESS) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Material> m(
+        new BlinnMaterial(name, *cAmb.get(), *cDif.get(), 
+                          *cSpe.get(), glossiness));
+
+    return m;
+
+}
+
 /*
  +=====================================+
  |  Readers of specifics camera type   |
@@ -547,7 +583,6 @@ ParserXML::read_scene(
 
     // Read the background   
     this->read_background(*pElement); 
-
     // Read all materials
     XMLElement * pListMaterials = pElement->FirstChildElement("material");
     int count = 0;
@@ -560,11 +595,12 @@ ParserXML::read_scene(
 
         //Get name of material
         std::string name = read_a_string(*pListMaterials, "name");
-
         //Get specific parameters
         std::shared_ptr<Material> m;
         if (type.compare("flat") == 0)
-            m = read_flat_material(*pListMaterials, name);            
+            m = read_flat_material(*pListMaterials, name);    
+        else if (type.compare("blinn") == 0 )
+            m = read_blinn_material(*pListMaterials, name);        
 
         this->materials.push_back(m);
 
@@ -610,14 +646,13 @@ ParserXML::read_scene(
 
     //read all ligths
     count =0;
-    XMLElement * pListLights = pElement->FirstChildElement("ligth");
+    XMLElement * pListLights = pElement->FirstChildElement("light");
     while (pListLights != nullptr){
         std::string type = read_a_string( *pListLights, "type" );
-
         if ( type.compare("ambient") == 0 )
             this->lights.push_back( read_ambient_light(*pListLights) );
         else if ( type.compare("point") == 0 )
-            this->lights.push_back( read_point_light(*pListElement) );
+            this->lights.push_back( read_point_light(*pListLights) );
 
         count++;
         pListLights = pListLights->NextSiblingElement("light");
@@ -640,18 +675,15 @@ ParserXML::read_integrator(
     integratorType = type;
 
     std::shared_ptr<Sampler> sampler(new Sampler());
-    if ( type.compare("flat") == 0 ) {
-     
+    if ( type.compare("flat") == 0 )      
         integrator = new FlatIntegrator(std::shared_ptr<Camera>(camera), sampler);
-    
-    } else if ( type.compare("depth map") == 0){
-        
+    else if ( type.compare("depth map") == 0)        
         integrator = read_depth_integrator(*pElement, this->camera, sampler );
-        
-    } else if ( type.compare("normal map") == 0 ){
-        
+    else if ( type.compare("normal map") == 0 )    
         integrator = new NormalMapIntegrator(std::shared_ptr<Camera>(camera), sampler);
-    }
+    else if ( type.compare("blinn_phong") == 0)
+        integrator = new BlinnPhongIntegrator(std::shared_ptr<Camera>(camera), sampler); 
+
 
     //@TODO get a sampler
 

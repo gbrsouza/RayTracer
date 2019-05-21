@@ -2,22 +2,37 @@
 #define _BLINNPHONG_INTEGRATOR_
 
 #include "samplerIntegrator.h"
+#include "materials/blinnMaterial.h"
+
+#include <typeinfo> //typeid
+#include <math.h> //fmax
 
 class BlinnPhongIntegrator : public SamplerIntegrator {
 
 public:
 
-// @Override
-void 
-preprocess( const Scene& scene )
-{ /*empty*/ }
+    /**
+     * @brief Construct a new Blinn Phong Integrator object
+     * 
+     */
+    BlinnPhongIntegrator(
+        std::shared_ptr<Camera> cam,
+        std::shared_ptr<Sampler> sampler)
+        : SamplerIntegrator{cam, sampler}{}
 
-// @Override
-Color24 
-Li( const Ray& ray,
-    const Scene& scene,
-    Sampler& sampler ) const;
+    ~BlinnPhongIntegrator(){ /*empty*/ }
 
-};
+    // @Override
+    void 
+    preprocess( const Scene& scene )
+    { /*empty*/ }
+
+    // @Override
+    Color24 
+    Li( const Ray& ray,
+        const Scene& scene,
+        Sampler& sampler ) const;
+
+    };
 
 #endif

@@ -1,4 +1,5 @@
 #include "integrators/blinnPhongIntegrator.h"
+#include "../vec3.cpp"
 
 Color24 
 BlinnPhongIntegrator::Li( const Ray& ray,
@@ -20,8 +21,31 @@ BlinnPhongIntegrator::Li( const Ray& ray,
     }
     else {
         
-        // TODO formula
-    }
+        point3 KaIa = Vec3(0.0, 0.0, 0.0);
+        vector wi;
+        VisibilityTester *vt;
 
-    return L;
+        BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( isect.m );
+        for ( auto l : scene.lights ){
+            std::string type = typeid(l.get()).name(); 
+            if ( type.compare("AmbientLight") == 0 )  
+                KaIa = fm->get_ka() * l->Li(isect, &wi, vt);
+            else {
+
+                auto Ii = l->Li(isect, &wi, vt);
+                auto n = unit_vector(isect.n);
+                auto wo = unit_vector(isect.wo);
+
+                auto h = wo + wi;
+                h.make_unit_vector();
+                        
+                L += fm->get_kd() * Ii * fmax(0.0, dot(n, wo));
+                L += fm->get_ks() * Ii * pow(fmax(0.0, dot(n, h)), fm->get_ge());
+            }
+        }
+
+        L += KaIa;
+    }
+    
+    return L * 255;
 }

@@ -55,7 +55,8 @@ public:
     virtual Vec3 Li(
         const SurfaceInteraction &isect,
         vector *wi,
-        VisibilityTester *vt) const = 0;     
+        VisibilityTester *vt) const
+        { return Vec3(0, 0, 0); }     
 
 };
 

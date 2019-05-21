@@ -28,6 +28,9 @@ public:
     AmbientLight ( point3 intensity )
         : Light{intensity} {}
 
+    AmbientLight ()
+        : Light{ Vec3(0.1, 0.1, 0.1) }{}
+
     /**
      * @brief Destroy the Ambient Light object
      */

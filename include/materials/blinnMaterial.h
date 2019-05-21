@@ -19,14 +19,14 @@
  * @brief A new material that implements the
  * Blinn-Phong Reflection Model
  */
-class BlinnPhongMaterial : public Material 
+class BlinnMaterial : public Material 
 { 
 
 private:
-    const point3 ka;  //<! Ambient Coefficient 
-    const point3 kd;  //<! Diffuse Coefficient
-    const point3 ks;  //<! Specular Coefficient
-    const float ge;   //<! Glossiness Expoent
+    point3 ka;  //<! Ambient Coefficient 
+    point3 kd;  //<! Diffuse Coefficient
+    point3 ks;  //<! Specular Coefficient
+    int ge;   //<! Glossiness Expoent
 
 public:
 
@@ -40,43 +40,43 @@ public:
      * @param ks     the specular coefficient
      * @param ge     the glossiness expoent 
      */
-    BlinnPhongMaterial ( 
+    BlinnMaterial ( 
         std::string name,
         point3 ka, 
         point3 kd,
         point3 ks,
-        float ge
+        int ge
     ) : Material {name},
         ka{ka}, kd{kd}, ks{ks}, ge{ge} {}
 
     /**
      * @brief Destroy the Blinn Phong Material object
      */
-    ~BlinnPhongMaterial(){ /*empty*/ }
+    ~BlinnMaterial(){ /*empty*/ }
 
     /**
      * @brief get a ambient coefficient
      * @return point3  the ambient coefficient (ka)
      */
-    point3 ka (){ return this->ka; }
+    point3 get_ka (){ return this->ka; }
 
     /**
      * @brief get a diffuse coefficient
      * @return point3  the diffuse coefficiente (kd)
      */
-    point3 kd (){ return this->kd; }
+    point3 get_kd (){ return this->kd; }
 
     /**
      * @brief get a specular coefficient
      * @return point3  the specular coefficient (ks)
      */
-    point3 ks (){ return this->ks; }
+    point3 get_ks (){ return this->ks; }
 
     /**
      * @brief get a glossiness coefficient
      * @return float the glossiness coefficient (ge)
      */
-    float ge (){ return this->ge; }
+    int get_ge (){ return this->ge; }
 
 };
 
