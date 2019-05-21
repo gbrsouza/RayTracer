@@ -22,6 +22,9 @@
 #include "integrators/flatIntegrator.h"
 #include "integrators/normalMapIntegrator.h"
 
+#include "lights/ambientLight.h"
+#include "lights/pointLight.h"
+
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"
 #define INVALID_BACKGROUND          "Invalid background specification"
@@ -96,6 +99,9 @@ public:
 
     //<! list of materials in the scene.
     std::vector<std::shared_ptr<Material>> materials;
+
+    //<! lis of lights in the scene
+    std::vector<std::shared_ptr<Light>> lights;
     
     /**
      * @brief Construct a new ParserXML object

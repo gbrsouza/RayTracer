@@ -13,7 +13,11 @@
  */
 
 #include "common.h"
+#include "surfaceInteraction.h"
 #include "visibilityTester.h"
+
+class VisibilityTester;
+class SurfaceInteraction;
 
 class Light { 
 
@@ -48,10 +52,10 @@ public:
      * @param vt      The visitor tester
      * @return Vec3   The light's contribution
      */
-    // virtual Vec3 Li(
-    //     const SurfaceInteraction &isect,
-    //     vector *wi,
-    //     VisibilityTester *vt) const = 0;
+    virtual Vec3 Li(
+        const SurfaceInteraction &isect,
+        vector *wi,
+        VisibilityTester *vt) const = 0;     
 
 };
 

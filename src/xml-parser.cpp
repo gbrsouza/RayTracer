@@ -82,6 +82,24 @@ read_vector_or_point(
     return pos;
 }
 
+Vec3* 
+read_float_vector(
+    XMLElement &element)
+{
+    float x, y, z;
+    XMLError eResult;
+
+    eResult = element.QueryFloatAttribute("x", &x);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryFloatAttribute("y", &y);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryFloatAttribute("z", &z);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    Vec3 *pos = new Vec3(x,y,z);
+
+    return pos;
+}
+
 /**
  * @brief Read a RGB color by a pointer
  * 
@@ -103,6 +121,24 @@ read_a_color (
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     Color24 *color = new Color24(r, g, b);
+    return color;
+}
+
+point3 *
+read_a_float_color (
+    XMLElement &e)
+{
+    float r, g, b;
+    XMLError eResult;
+
+    eResult = e.QueryFloatAttribute("r", &r);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryFloatAttribute("g", &g);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryFloatAttribute("b", &b);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    point3 *color = new point3(r, g, b);
     return color;
 }
 
@@ -278,9 +314,9 @@ read_pespective_camera (
 }
 
 /*
- +=====================================+
+ +==========================================+
  |  Readers of specifics integrators type   |
- +=====================================+
+ +==========================================+
  */
 DepthIntegrator *
 read_depth_integrator(
@@ -303,6 +339,38 @@ read_depth_integrator(
     return integrator;
 }
 
+/*
+ +=====================================+
+ |  Readers of specifics lights type   |
+ +=====================================+
+ */
+std::shared_ptr<AmbientLight>
+read_ambient_light(
+    XMLElement &e)
+{
+    XMLElement *i = e.FirstChildElement("intensity");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    std::shared_ptr<AmbientLight> m (new AmbientLight(*intensity) );
+    return m;
+}
+
+std::shared_ptr<PointLight>
+read_point_light(
+    XMLElement &e)
+{
+    XMLElement *i = e.FirstChildElement("intensity");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    XMLElement *p = e.FirstChildElement("position");
+    if (p == nullptr) throw INVALID_SCENE;
+    point3 *position = read_float_vector( *p );
+
+    std::shared_ptr<PointLight> m ( new PointLight(*intensity, *position) );
+    return m;
+}
 
 
 /*
@@ -496,7 +564,7 @@ ParserXML::read_scene(
         //Get specific parameters
         std::shared_ptr<Material> m;
         if (type.compare("flat") == 0)
-            m = read_flat_material(*pListMaterials, name);
+            m = read_flat_material(*pListMaterials, name);            
 
         this->materials.push_back(m);
 
@@ -539,6 +607,23 @@ ParserXML::read_scene(
 
     }
     std::cout << "      >>> " << count << " objects found\n";
+
+    //read all ligths
+    count =0;
+    XMLElement * pListLights = pElement->FirstChildElement("ligth");
+    while (pListLights != nullptr){
+        std::string type = read_a_string( *pListLights, "type" );
+
+        if ( type.compare("ambient") == 0 )
+            this->lights.push_back( read_ambient_light(*pListLights) );
+        else if ( type.compare("point") == 0 )
+            this->lights.push_back( read_point_light(*pListElement) );
+
+        count++;
+        pListLights = pListLights->NextSiblingElement("light");
+    }
+
+    std::cout << "      >>> " << count << " lights found\n";
 }
 
 void 
@@ -571,6 +656,7 @@ ParserXML::read_integrator(
     //@TODO get a sampler
 
 }
+
 
 void 
 ParserXML::run()
