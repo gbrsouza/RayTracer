@@ -5,7 +5,7 @@ Vec3 AmbientLight::Li(
     vector *wi,
     VisibilityTester *vt) const
 {
-    // TODO 
+    // TODO
     // vt = new VisibilityTester(isect, )
 
     return intensity;
