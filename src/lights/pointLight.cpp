@@ -14,5 +14,5 @@ Vec3 PointLight::Li(
     vt = new VisibilityTester(isect, lIsect);
     // wi = vt->shoot_ray();
 
-    return intensity;
+    return this->intensity;
 }

@@ -41,6 +41,8 @@ public:
         vector *wi,
         VisibilityTester *vt) const;
 
+    bool is_ambient(){ return true;} 
+
 };
 
 

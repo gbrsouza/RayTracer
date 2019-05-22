@@ -68,12 +68,16 @@ public:
         float r1 = (-b + sqrt(delta)) / (2 * a);
         float r2 = (-b - sqrt(delta)) / (2 * a);
 
+        auto tHit = fmin(r1,r2);
+        if (tHit > r.tMax || tHit < 0)
+            return false; 
+
         if (surface != nullptr){
-            surface->t = fmin(r1,r2);
+            surface->t = tHit;
             surface->p = r(surface->t);
             surface->m = material;
-            auto n = unit_vector(surface->p - center); // a interval between -1 and 1
-            surface->n = 0.5*Vec3(n.x()+1, n.y()+1, n.z()+1); // normalize between 0 and 1
+            auto n = surface->p - center; // a interval between -1 and 1
+            surface->n = unit_vector(0.5*Vec3(n.x()+1, n.y()+1, n.z()+1)); // normalize between 0 and 1
             surface->wo = -1.0 * (direction - origin);
         }
         

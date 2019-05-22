@@ -2,6 +2,7 @@
 
 void clamp (Color24 &L){
     for (int i=0; i<3; i++){
+        L.element[i] = abs(L.element[i]);
         if (L.element[i] < 0 )
             L.element[i] = 0;
         else if (L.element[i] > 255)

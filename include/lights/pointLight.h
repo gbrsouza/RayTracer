@@ -18,8 +18,8 @@ public:
      * @param intensity  the light's instensity
      */
     PointLight (
-        point3 position,
-        point3 intensity
+        point3 intensity,
+        point3 position
     )
     : position{position}, intensity{intensity} {}
 

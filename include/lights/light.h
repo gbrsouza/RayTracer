@@ -58,6 +58,10 @@ public:
         VisibilityTester *vt) const
         { return Vec3(0, 0, 0); }     
 
+    virtual bool is_ambient(){ return false;} 
+
+    point3 get_intensity(){ return this->intensity; }
+
 };
 
 #endif
