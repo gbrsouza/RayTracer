@@ -42,6 +42,11 @@ public:
         : p0{p0}, p1{p1} {}
 
     /**
+     * @brief Construct a new Visibility Tester object
+     */
+    VisibilityTester(){ /*empty*/ }
+
+    /**
      * @brief Destroy the Visibility Tester object
      */
     ~VisibilityTester(){}
@@ -60,7 +65,7 @@ public:
      * @brief shoot a ray of p0 to p1
      * @return Ray 
      */
-    Ray shoot_ray() const;
+    std::shared_ptr<Ray> shoot_ray() const;
 
 };
 

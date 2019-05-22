@@ -4,14 +4,15 @@
 bool VisibilityTester::unoccluded(
     const Scene &scene)
 {
-    Ray r = shoot_ray();
-    // TODO
+    return !scene.intersect(*shoot_ray().get(), &this->p1);
 }
 
-Ray VisibilityTester::shoot_ray() const 
+std::shared_ptr<Ray> VisibilityTester::shoot_ray() const 
 {
     vector origin = p0.p;
     vector destiny = p1.p;
     vector v = destiny - origin;
-    return Ray(origin, v);
+
+    std::shared_ptr<Ray> r (new Ray(origin, v));
+    return  r;
 }

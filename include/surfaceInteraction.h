@@ -46,6 +46,8 @@ public:
 
     SurfaceInteraction (){}
 
+    SurfaceInteraction (point3 p) : p{p}{}
+
     point3 p;    //<! contact point
     vector n;    //<! the surface normal
     vector wo;   //<! outgoing direction of light, which is -ray
