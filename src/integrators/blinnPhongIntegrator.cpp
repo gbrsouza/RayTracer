@@ -22,7 +22,7 @@ BlinnPhongIntegrator::Li( const Ray& ray,
 
         point3 KaIa = Vec3(0.0, 0.0, 0.0);
         vector wi;
-        VisibilityTester *vt;
+        VisibilityTester vt;
 
         BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( isect.m );
         auto ka = fm->get_ka();
@@ -36,16 +36,19 @@ BlinnPhongIntegrator::Li( const Ray& ray,
                 KaIa = ka * l->get_intensity();
             }else {
 
-                auto Ii = l->Li(isect, &wi, vt);
+                auto Ii = l->Li(isect, &wi, &vt);
                 auto n = isect.n;
+
                 auto wo = unit_vector(isect.wo);
- 
                 auto h = wo + wi;
                 h.make_unit_vector();
 
-                L += kd * Ii * fmax(0.0, dot(n, wi));
+                if (vt.unoccluded(scene)){
+                    L += kd * Ii * fmax(0.0, dot(n, wi));
+                }
+                
+                // L += kd * Ii * fmax(0.0, dot(n, wi));
                 L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
-
             }
         }
 

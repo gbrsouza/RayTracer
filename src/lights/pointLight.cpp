@@ -8,11 +8,7 @@ Vec3 PointLight::Li(
 {
     *wi = unit_vector(this->position - isect.p);
 
-    SurfaceInteraction lIsect;
-    lIsect.p = this->position;
-
-    vt = new VisibilityTester(isect, lIsect);
-    // wi = vt->shoot_ray();
+    *vt = VisibilityTester(isect, SurfaceInteraction {this->position});
 
     return this->intensity;
 }
