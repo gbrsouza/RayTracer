@@ -82,6 +82,24 @@ read_vector_or_point(
     return pos;
 }
 
+Vec3* 
+read_float_vector(
+    XMLElement &element)
+{
+    float x, y, z;
+    XMLError eResult;
+
+    eResult = element.QueryFloatAttribute("x", &x);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryFloatAttribute("y", &y);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    eResult = element.QueryFloatAttribute("z", &z);
+    if (eResult != XML_SUCCESS) throw INVALID_ATT_VECTOR_OR_POINT;
+    Vec3 *pos = new Vec3(x,y,z);
+
+    return pos;
+}
+
 /**
  * @brief Read a RGB color by a pointer
  * 
@@ -103,6 +121,24 @@ read_a_color (
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     Color24 *color = new Color24(r, g, b);
+    return color;
+}
+
+point3 *
+read_a_float_color (
+    XMLElement &e)
+{
+    float r, g, b;
+    XMLError eResult;
+
+    eResult = e.QueryFloatAttribute("r", &r);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryFloatAttribute("g", &g);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+    eResult = e.QueryFloatAttribute("b", &b);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    point3 *color = new point3(r, g, b);
     return color;
 }
 
@@ -201,6 +237,42 @@ read_flat_material (
     return fm;
 }
 
+std::shared_ptr<Material>
+read_blinn_material (
+    XMLElement &e,
+    std::string name)
+{
+    XMLElement * amb = e.FirstChildElement("ambient");
+    if (amb == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cAmb(read_a_float_color(*amb));
+
+    XMLElement * dif = e.FirstChildElement("diffuse");
+    if (dif == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cDif(read_a_float_color(*dif));
+
+    XMLElement * spe = e.FirstChildElement("specular");
+    if (spe == nullptr) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Color> cSpe(read_a_float_color(*spe));
+
+    XMLElement * glo = e.FirstChildElement("glossiness");
+    if (glo == nullptr) throw INVALID_MATERIAL;
+
+    XMLError eResult;
+    int glossiness;
+    eResult = glo->QueryIntAttribute("value", &glossiness);
+    if (eResult != XML_SUCCESS) throw INVALID_MATERIAL;
+
+    std::shared_ptr<Material> m(
+        new BlinnMaterial(name, *cAmb.get(), *cDif.get(), 
+                          *cSpe.get(), glossiness));
+
+    return m;
+
+}
+
 /*
  +=====================================+
  |  Readers of specifics camera type   |
@@ -278,9 +350,9 @@ read_pespective_camera (
 }
 
 /*
- +=====================================+
+ +==========================================+
  |  Readers of specifics integrators type   |
- +=====================================+
+ +==========================================+
  */
 DepthIntegrator *
 read_depth_integrator(
@@ -303,6 +375,38 @@ read_depth_integrator(
     return integrator;
 }
 
+/*
+ +=====================================+
+ |  Readers of specifics lights type   |
+ +=====================================+
+ */
+std::shared_ptr<AmbientLight>
+read_ambient_light(
+    XMLElement &e)
+{
+    XMLElement *i = e.FirstChildElement("intensity");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    std::shared_ptr<AmbientLight> m (new AmbientLight(*intensity) );
+    return m;
+}
+
+std::shared_ptr<PointLight>
+read_point_light(
+    XMLElement &e)
+{
+    XMLElement *i = e.FirstChildElement("intensity");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    XMLElement *p = e.FirstChildElement("position");
+    if (p == nullptr) throw INVALID_SCENE;
+    point3 *position = read_float_vector( *p );
+
+    std::shared_ptr<PointLight> m ( new PointLight(*intensity, *position) );
+    return m;
+}
 
 
 /*
@@ -479,7 +583,6 @@ ParserXML::read_scene(
 
     // Read the background   
     this->read_background(*pElement); 
-
     // Read all materials
     XMLElement * pListMaterials = pElement->FirstChildElement("material");
     int count = 0;
@@ -492,11 +595,12 @@ ParserXML::read_scene(
 
         //Get name of material
         std::string name = read_a_string(*pListMaterials, "name");
-
         //Get specific parameters
         std::shared_ptr<Material> m;
         if (type.compare("flat") == 0)
-            m = read_flat_material(*pListMaterials, name);
+            m = read_flat_material(*pListMaterials, name);    
+        else if (type.compare("blinn") == 0 )
+            m = read_blinn_material(*pListMaterials, name);        
 
         this->materials.push_back(m);
 
@@ -539,6 +643,22 @@ ParserXML::read_scene(
 
     }
     std::cout << "      >>> " << count << " objects found\n";
+
+    //read all ligths
+    count =0;
+    XMLElement * pListLights = pElement->FirstChildElement("light");
+    while (pListLights != nullptr){
+        std::string type = read_a_string( *pListLights, "type" );
+        if ( type.compare("ambient") == 0 )
+            this->lights.push_back( read_ambient_light(*pListLights) );
+        else if ( type.compare("point") == 0 )
+            this->lights.push_back( read_point_light(*pListLights) );
+
+        count++;
+        pListLights = pListLights->NextSiblingElement("light");
+    }
+
+    std::cout << "      >>> " << count << " lights found\n";
 }
 
 void 
@@ -555,22 +675,20 @@ ParserXML::read_integrator(
     integratorType = type;
 
     std::shared_ptr<Sampler> sampler(new Sampler());
-    if ( type.compare("flat") == 0 ) {
-     
+    if ( type.compare("flat") == 0 )      
         integrator = new FlatIntegrator(std::shared_ptr<Camera>(camera), sampler);
-    
-    } else if ( type.compare("depth map") == 0){
-        
+    else if ( type.compare("depth map") == 0)        
         integrator = read_depth_integrator(*pElement, this->camera, sampler );
-        
-    } else if ( type.compare("normal map") == 0 ){
-        
+    else if ( type.compare("normal map") == 0 )    
         integrator = new NormalMapIntegrator(std::shared_ptr<Camera>(camera), sampler);
-    }
+    else if ( type.compare("blinn_phong") == 0)
+        integrator = new BlinnPhongIntegrator(std::shared_ptr<Camera>(camera), sampler); 
+
 
     //@TODO get a sampler
 
 }
+
 
 void 
 ParserXML::run()

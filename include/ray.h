@@ -2,7 +2,7 @@
 #define _RAY_H_
 
 #include "common.h"
-
+#include <limits>
 
 class Ray {
 
@@ -11,6 +11,8 @@ private:
     Vec3 d;    //<! direction
 
 public:
+
+    float tMax {std::numeric_limits<float>::max()};
 
     /**
      * @brief Construct a new Ray object

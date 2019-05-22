@@ -1,0 +1,92 @@
+<raytracer>
+    <camera type="perspective" name="3_blinn_spheres_900_450"> 
+        <!--- The camera frame -->
+        <position x="7" y="2" z="5"/> <!--- located at the origin -->         
+        <target x="0" y="0" z="-1"/>  <!--- looking down the -Z axis -->        
+        <up x="0" y="1" z="0"/>       <!--- the camera's up vector -->         
+        
+        <!--- Specific parameters for perspective projection -->         
+        <fovy value="40.0" />   <!--- The vertical field of view -->         
+        <aspect value="2"/>  <!--- Optional parameter, aspect ration W/H -->         
+        <fdistance value="1" /> <!--- The focal distance  -->        
+        
+         <!--- Retina/image dimensions -->         
+        <width value="900"/>
+        <height value="450"/>        
+        <img_file name="3_blinn_spheres_900_450" type="PNG" />    
+    </camera>
+
+    <scene>
+        <background type="interpolation"> <!-- This defines an interpolated background -->
+            <color r="153"  g="204"   b="255"/> <!-- bottom left  -->
+            <color r="18"   g="10"    b="143"/> <!-- top left     -->
+            <color r="18"   g="10"    b="143"/> <!-- top right    -->
+            <color r="153"  g="204"   b="255"/> <!-- bottom right -->
+        </background>       
+        
+        <object type="sphere" name="sphere1" material="greenish" >            
+            <radius value="0.5"/>             
+            <center x="0" y="0" z="0"/>         
+        </object>         
+        
+        <object type="sphere" name="sphere2" material="redish">             
+            <radius value="0.5"/>             
+            <center x="-0.86" y="0" z="-1.5"/>         
+        </object>         
+        
+        <object type="sphere" name="sphere3" material="blueish">             
+            <radius value="0.5"/>             
+            <center x="0.86" y="0" z="-1.5"/>         
+        </object>         
+        
+        <object type="sphere" name="sphere4" material="grey">            
+            <radius value="5000"/>             
+            <center x="0" y="-5000.5" z="-1"/>         
+        </object>
+
+
+        <!--- Library of materials -->
+        <material type="blinn" name="redish">
+            <ambient r="0.1" g="0.1" b="0.1"/>
+            <diffuse r="0.9" g="0.2" b="0.1"/>
+            <specular r="0.8" g="0.8" b="0.8"/>
+            <glossiness value="64"/>
+        </material>
+        <material type="blinn" name="greenish">
+            <ambient r="0.1" g="0.1" b="0.1"/>
+            <diffuse r="0.2" g="0.9" b="0.2"/>
+            <specular r="0.8" g="0.8" b="0.8"/>
+            <glossiness value="256"/>
+        </material>
+        <material type="blinn" name="blueish">
+            <ambient r="0.1" g="0.1" b="0.1"/>
+            <diffuse r="0.1" g="0.2" b="0.9"/>
+            <specular r="0.8" g="0.8" b="0.8"/>
+            <glossiness value="20"/>
+        </material>
+        <material type="blinn" name="grey">
+            <ambient r="0.1" g="0.1" b="0.1"/>
+            <diffuse r="0.8" g="0.8" b="0.8"/>
+            <specular r="0" g="0" b="0"/>
+            <glossiness value="8"/>
+        </material>
+
+        <!-- Lights -->
+        <light type="ambient" name="ambient_light">
+            <intensity r="0.1" g="0.1" b="0.1"/>
+        </light>
+        <light type="point" name="point_light">
+            <intensity r="0.7" g="0.7" b="0.7"/>
+            <position x="0" y="1.1" z="-1"/>
+        </light>
+    </scene>
+
+     <!--- Running setup -->
+    <running>
+        <integrator type="blinn_phong">
+            <spp value="1"/> <!--- Samples per pixel -->
+            <depth value="1"/>
+        </integrator>
+    </running>
+
+</raytracer>

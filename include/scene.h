@@ -8,6 +8,8 @@
 
 #include <vector>
 
+class Light;
+
 /**
  * @brief This is the class that maintains the data structures 
  * that hold primitives, lights, and the background 

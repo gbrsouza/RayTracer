@@ -17,6 +17,8 @@
 #include "primitives/aggregatePrimitive.h"
 #include "surfaceInteraction.h"
 
+#include "lights/ambientLight.h"
+
 // === The 3 global objects.
 std::unique_ptr<Camera> g_camera;         // The single camera object.
 std::unique_ptr<Scene> g_scene;           // The scene.
@@ -94,8 +96,7 @@ void init_engine( const char* filename )
     std::shared_ptr<Primitive> agg(aggregate);
 
     // create a empty vector of lights 
-    std::shared_ptr<Light>l(new Light()); 
-    std::vector<std::shared_ptr<Light>> lights = {l};
+    std::vector<std::shared_ptr<Light>> lights = parser.lights;
 
     //create a background
     std::shared_ptr<Background> bg(parser.background);
