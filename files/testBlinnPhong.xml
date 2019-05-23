@@ -1,4 +1,5 @@
 <raytracer>
+
     <camera type="perspective" name="3_blinn_spheres_900_450"> 
         <!--- The camera frame -->
         <position x="7" y="2" z="5"/> <!--- located at the origin -->         
@@ -37,7 +38,7 @@
         <object type="sphere" name="sphere3" material="blueish">             
             <radius value="0.5"/>             
             <center x="0.86" y="0" z="-1.5"/>         
-        </object>         
+        </object>          
         
         <object type="sphere" name="sphere4" material="grey">            
             <radius value="5000"/>             
@@ -76,8 +77,8 @@
             <intensity r="0.1" g="0.1" b="0.1"/>
         </light>
         <light type="point" name="point_light">
-            <intensity r="0.7" g="0.7" b="0.7"/>
-            <position x="0" y="1.1" z="-1"/>
+            <intensity r="0.8" g="0.8" b="0.8"/>
+            <position x="0" y="1.1" z="-1.5"/>
         </light>
     </scene>
 

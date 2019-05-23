@@ -6,10 +6,11 @@
 class PointLight : public Light { 
 
 private:
-    point3 position; // the light's position
-    point3 intensity; // the light intensity
+    
+    
 
 public:
+    point3 position; // the light's position
     
     /**
      * @brief Construct a new Point Light object
@@ -21,7 +22,7 @@ public:
         point3 intensity,
         point3 position
     )
-    : position{position}, intensity{intensity} {}
+    : Light{intensity}, position{position} {}
 
     /**
      * @brief Destroy the Point Light object
@@ -33,6 +34,8 @@ public:
         const SurfaceInteraction &isect,
         vector *wi,
         VisibilityTester *vt) const;
+
+
 
 };
 

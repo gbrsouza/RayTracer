@@ -42,7 +42,7 @@ public:
     /**
      * @brief Destroy the Light object
      */
-    ~Light(){ /*empty*/ }
+    virtual ~Light(){ /*empty*/ }
 
     /**
      * @brief The light's contribution to a point
