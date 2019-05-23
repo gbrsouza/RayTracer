@@ -1,5 +1,6 @@
 #include "integrators/blinnPhongIntegrator.h"
 #include "../vec3.cpp"
+#include "lights/pointLight.h"
 
 Color24 
 BlinnPhongIntegrator::Li( const Ray& ray,
@@ -36,10 +37,15 @@ BlinnPhongIntegrator::Li( const Ray& ray,
                 KaIa = ka * l->get_intensity();
             }else {
 
+                // std::cout << "intensity: " << l->get_intensity(); 
+                // if (auto a = dynamic_cast< PointLight *>( l.get() )){
+                //     std::cout << "position: " << a->position << std::endl;
+                // }
+
                 auto Ii = l->Li(isect, &wi, &vt);
                 auto n = isect.n;
 
-                auto wo = unit_vector(isect.wo);
+                auto wo = isect.wo;
                 auto h = wo + wi;
                 h.make_unit_vector();
 
@@ -53,7 +59,8 @@ BlinnPhongIntegrator::Li( const Ray& ray,
         }
 
         L += KaIa;
-        L*=255;
+       // std::cout << "L: " << L << std::endl;
+        L *= 255;
         return {fmin(255.0, L.r()), fmin(255.0, L.g()), fmin(255.0, L.b())};
     }
 }

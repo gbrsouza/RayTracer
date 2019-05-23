@@ -76,9 +76,10 @@ public:
             surface->t = tHit;
             surface->p = r(surface->t);
             surface->m = material;
-            auto n = surface->p - center; // a interval between -1 and 1
-            surface->n = unit_vector(0.5*Vec3(n.x()+1, n.y()+1, n.z()+1)); // normalize between 0 and 1
-            surface->wo = -1.0 * (direction - origin);
+            // auto n = surface->p - center; // a interval between -1 and 1
+            // surface->n = 0.5*Vec3(n.x()+1, n.y()+1, n.z()+1); // normalize between 0 and 1
+            surface->n = unit_vector(2.0 * ( surface->p - center));
+            surface->wo = unit_vector( -1.0 * (direction - origin));
 
             //displacement
             surface->p = surface->p + (eps * surface->n);
