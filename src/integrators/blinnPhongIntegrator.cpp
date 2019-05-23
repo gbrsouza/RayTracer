@@ -51,10 +51,11 @@ BlinnPhongIntegrator::Li( const Ray& ray,
 
                 if (vt.unoccluded(scene)){
                     L += kd * Ii * fmax(0.0, dot(n, wi));
+                    L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
                 }
                 
                 // L += kd * Ii * fmax(0.0, dot(n, wi));
-                L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
+                
             }
         }
 
