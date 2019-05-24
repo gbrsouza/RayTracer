@@ -25,6 +25,8 @@
 
 #include "lights/ambientLight.h"
 #include "lights/pointLight.h"
+#include "lights/spotyLight.h"
+#include "lights/directionalLight.h"
 
 #define INVALID_XML                 "Invalid XML specification"
 #define INVALID_SETTINGS            "Invalid settings specification"

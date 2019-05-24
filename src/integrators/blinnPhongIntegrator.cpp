@@ -37,7 +37,7 @@ BlinnPhongIntegrator::Li( const Ray& ray,
                 KaIa = ka * l->get_intensity();
             }else {
 
-                // std::cout << "intensity: " << l->get_intensity(); 
+                //std::cout << "intensity: " << l->get_intensity(); 
                 // if (auto a = dynamic_cast< PointLight *>( l.get() )){
                 //     std::cout << "position: " << a->position << std::endl;
                 // }

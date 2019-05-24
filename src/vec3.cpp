@@ -12,6 +12,12 @@ inline void Vec3::make_unit_vector(){
     element[z_axis] *= k;
 }
 
+inline float norm( Vec3 &v ) {
+    return sqrt(pow(v.x(),2) + 
+                pow(v.y(),2) + 
+                pow(v.z(),2));
+}
+
 /**
  * @brief Define operator + (plus) between two vectors
  * 
