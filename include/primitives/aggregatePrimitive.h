@@ -68,6 +68,15 @@ public:
         return false;            
     }
 
+    Bounds3 bounding_box () const {
+        Bounds3 world_bound;
+        for ( const auto p : primitives ){
+            world_bound = world_bound.get_union( world_bound, p->bounding_box() );
+        }
+        return world_bound;
+
+    }
+
 };
 
 #endif

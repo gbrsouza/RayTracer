@@ -21,7 +21,7 @@
  * Humphreys - Physically Based Rendering, Third Edition_ 
  * From Theory to Implementation (2016, Morgan Kaufmann)
  */
-template <typename T> class Bounds3 {
+class Bounds3 {
 
 public:
 
@@ -31,8 +31,8 @@ public:
      * @brief Construct a new Bounds 3 object
      */
     Bounds3(){
-        T minNum = std::numeric_limits<T>::lowest();
-        T maxNum = std::numeric_limits<T>::max();
+        float minNum = std::numeric_limits<float>::lowest();
+        float maxNum = std::numeric_limits<float>::max();
         pMin = point3(maxNum, maxNum, maxNum);
         pMax = point3(minNum, minNum, minNum);
     }
@@ -52,10 +52,10 @@ public:
      * @param p2 the second point
      */
     Bounds3 ( const point3 &p1, const point3 &p2 )
-        : pMin( fmin(p1.x(), p2.x()), fmin(p1.y(), p2.y()), 
-                fmin(p1.z(), p2.z()) ),
-          pMax( fmax(p1.x(), p2.x()), fmax(p1.y(), p2.y())),
-                fmax(p1.z(), p2.z() ) 
+        : pMin{ point3 {fmin(p1.x(), p2.x()), fmin(p1.y(), p2.y()), 
+                        fmin(p1.z(), p2.z())} },
+          pMax{ point3 {fmax(p1.x(), p2.x()), fmax(p1.y(), p2.y()),
+                        fmax(p1.z(), p2.z())} } 
         { /*empty*/ }
 
     /**
@@ -76,7 +76,7 @@ public:
      * @param i  the value 
      * @return point3& the point 
      */
-    point3 &operator[](int i)
+    point3 &operator[](int i);
 
     /**
      * @brief returns the coordinates of one of 
@@ -105,15 +105,19 @@ public:
      * that encompasses that point as well as 
      * the original box
      */
-    template <typename T> Bounds3 <T>
-    union( const Bounds3<T> &b, const point3 &p){
-        return Bounds3<T>(
-            point3 (fmin(b.pMin.x(), p.x()),
+    Bounds3 
+    get_union( const Bounds3 &b, const point3 &p){
+       
+        return Bounds3(
+
+            point3 {fmin(b.pMin.x(), p.x()),
                     fmin(b.pMin.y(), p.y()),
-                    fmin(b.pMin.z(), p.z())),
-            point3 (fmax(b.pMax.x(), p.x()),
-                    fmax(b.pMax.y(), py()),
-                    fmax(b.pMax.z(), p.z())));
+                    fmin(b.pMin.z(), p.z())},
+
+            point3 {fmax(b.pMax.x(), p.x()),
+                    fmax(b.pMax.y(), p.y()),
+                    fmax(b.pMax.z(), p.z())}
+            );
     }
 
     /**
@@ -127,9 +131,9 @@ public:
      * the space encompassed by two other 
      * bounding boxes.
      */
-    template <typename T> Bounds3 <T>
-    union( const Bounds3<T> &b1, const Bounds3<T> &b2 ){
-        return Bounds3<T>(
+    Bounds3
+    get_union( const Bounds3 &b1, const Bounds3 &b2 ){
+        return Bounds3(
             point3 (fmin(b1.pMin.x(), b2.pMin.x()),
                     fmin(b1.pMin.y(), b2.pMin.y()),
                     fmin(b1.pMin.z(), b2.pMin.z())),
@@ -150,9 +154,9 @@ public:
      *  
      * @return Bounds3<T> a new box
      */
-    template <typename T> Bounds3<T>
-    intersect( const Bounds3<T> &b1, const Bounds3<T> &b2 ){
-        return Bounds3<T>(
+    Bounds3
+    intersect( const Bounds3 &b1, const Bounds3 &b2 ){
+        return Bounds3(
             point3 (fmax(b1.pMin.x(), b2.pMin.x()),
                     fmax(b1.pMin.y(), b2.pMin.y()),
                     fmax(b1.pMin.z(), b2.pMin.z())),
@@ -171,8 +175,7 @@ public:
      * @return true   if is overlap 
      * @return false  otherwise
      */
-    template <typename T>
-    bool overlaps(const Bounds3<T> &b1, const Bounds3<T> &b2) {
+    bool overlaps(const Bounds3 &b1, const Bounds3 &b2) {
         
         bool x = ( b1.pMax.x() >= b2.pMin.x() ) && ( b1.pMin.x() <= b2.pMax.x() );
         bool y = ( b1.pMax.y() >= b2.pMin.y() ) && ( b1.pMin.y() <= b2.pMax.y() );
@@ -193,8 +196,7 @@ public:
      * @return true   if inside
      * @return false  otherwise
      */
-    template <typename T>
-    bool inside(const point3 &p, const Bounds3<T> &b) {
+    bool inside(const point3 &p, const Bounds3 &b) {
         return (p.x() >= b.pMin.x() && p.x() <= b.pMax.x() &&
                 p.y() >= b.pMin.y() && p.y() <= b.pMax.y() &&
                 p.z() >= b.pMin.z() && p.z() <= b.pMax.z());
@@ -214,8 +216,7 @@ public:
      * @return true  if inside exclusie
      * @return false otherwise
      */
-    template <typename T>
-    bool inside_exclusive(const point3 &p, const Bounds3<T> &b) {
+    bool inside_exclusive(const point3 &p, const Bounds3 &b) {
         return (p.x() >= b.pMin.x() && p.x() < b.pMax.x() &&
                 p.y() >= b.pMin.y() && p.y() < b.pMax.y() &&
                 p.z() >= b.pMin.z() && p.z() < b.pMax.z());
@@ -231,11 +232,8 @@ public:
      * 
      * @return Bounds3<T> a new box with the pad   
      */
-    template <typename T> inline Bounds3<T>
-    expand(const Bounds3<T> &b, float delta) {
-        return Bounds3<T>(b.pMin - vector(delta, delta, delta),
-                          b.pMax + vector(delta, delta, delta));
-    }
+    Bounds3
+    expand(const Bounds3 &b, float delta);
 
     /**
      * @brief  get the bounding box diagonal
@@ -244,8 +242,7 @@ public:
      * diagonal from the minimum point to the
      * maximum point. 
      */
-    vector diagonal() const 
-    { return pMax - pMin; }
+    vector diagonal() const;
 
     /**
      * @brief computing the surface area 
@@ -253,10 +250,7 @@ public:
      * 
      * @return float the surface area
      */
-    float surface_area() const {
-        vector d  = diagonal();
-        return 2 * (d.x() * d.y() + d.x() * d.z() + d.y() * d.z());
-    }
+    float surface_area() const;
 
     /**
      * @brief the volume inside of it are 
@@ -264,10 +258,7 @@ public:
      * 
      * @return float the volume
      */
-    float volume () const {
-        vector d = diagonal();
-        return d.x() * d.y() * d.z(); 
-    }
+    float volume () const;
 
     /**
      * @brief get the maximum extent
@@ -275,14 +266,7 @@ public:
      * @return int  the index of which 
      * of the three axes is longest
      */
-    int maximum_extent() const {
-        vector3 d = diagonal();
-        if (d.x() > d.y() && d.x() > d.z())
-            return 0;
-        else if (d.y() > d.z())
-            return 1;
-        else return 2;
-    }
+    int maximum_extent() const;
 
     /**
      * @brief The bounding box offset 
@@ -295,13 +279,7 @@ public:
      * offset (0, 0, 0), a point at the maximum corner
      * has offset (1, 1, 1), and so forth.
      */
-    vector offset( const point3 &p ) const {
-        vector o = p - pMin;
-        if (pMax.x() > pMin.x()) o.x() /= pMax.x() - pMin.x();
-        if (pMax.y() > pMin.y()) o.y() /= pMax.y() - pMin.y();
-        if (pMax.z() > pMin.z()) o.z() /= pMax.z() - pMin.z();
-        return o;
-    }
+    vector offset( const point3 &p ) const;
 
     // void bounding_sphere(Point3 *center, Float *radius) const {
     //     *center = (pMin + pMax) / 2;
@@ -309,9 +287,5 @@ public:
     // }
 
 };
-
-typedef Bounds3<float> Bounds3f;
-typedef Bounds3<int> Bounds3i;
-
 
 #endif

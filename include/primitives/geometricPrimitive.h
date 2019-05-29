@@ -55,6 +55,10 @@ public:
     bool intersect_p( const Ray& r ) const 
     { return shape->intersect_p(r); }
 
+    // @Override
+    Bounds3 bounding_box () const 
+    { return shape->bounding_box(); }
+
     /**
      * @brief Get the material object
      * @return std::shared_ptr<Material> the material 
