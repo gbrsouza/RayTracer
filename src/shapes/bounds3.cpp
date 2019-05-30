@@ -43,3 +43,19 @@ Bounds3::offset( const point3 &p ) const {
     if (pMax.z() > pMin.z()) o[2] /= pMax.z() - pMin.z();
     return o;
 }
+
+/**
+ * ---------------------------------
+ * specific bounding box to shapes +
+ * ---------------------------------
+ */
+
+void 
+Bounds3::bounding_to_sphere ( 
+    point3 *center, float *radius )
+{
+    *center = (pMin + pMax) / 2;
+    if ( inside(*center, *this) ) *radius = distance(pMax, *center);
+    else * radius = 0;
+
+}

@@ -1,12 +1,13 @@
 #include "integrators/blinnPhongIntegrator.h"
 #include "../vec3.cpp"
-#include "lights/pointLight.h"
+#include "lights/directionalLight.h"
 
 Color24 
 BlinnPhongIntegrator::Li( const Ray& ray,
     const Scene& scene,
     Sampler& sampler ) const
 {
+
     Color24 L(0,0,0); // The radiance
     auto img_dim = camera->get_film()->get_dimension();
     // Find closest ray intersection or return background radiance.
@@ -33,14 +34,11 @@ BlinnPhongIntegrator::Li( const Ray& ray,
 
         for ( auto l : scene.lights ){
 
+            l->set_bounding_box( this->bounding_box_world );
+        
             if ( l->is_ambient() ) {
                 KaIa = ka * l->get_intensity();
             }else {
-
-                //std::cout << "intensity: " << l->get_intensity(); 
-                // if (auto a = dynamic_cast< PointLight *>( l.get() )){
-                //     std::cout << "position: " << a->position << std::endl;
-                // }
 
                 auto Ii = l->Li(isect, &wi, &vt);
                 auto n = isect.n;
@@ -49,15 +47,13 @@ BlinnPhongIntegrator::Li( const Ray& ray,
                 auto h = wo + wi;
                 h.make_unit_vector();
 
-                // if (vt.unoccluded(scene)){
-                //     L += kd * Ii * fmax(0.0, dot(n, wi));
-                //     L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
-                // }
+                if (vt.unoccluded(scene)){
+                    L += kd * Ii * fmax(0.0, dot(n, wi));
+                    L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
+                }
 
-                L += kd * Ii * fmax(0.0, dot(n, wi));
-                L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
-                
                 // L += kd * Ii * fmax(0.0, dot(n, wi));
+                // L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
                 
             }
         }

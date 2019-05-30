@@ -286,8 +286,15 @@ public:
     //     *radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
     // }
 
-    // specific bounding box to shapes 
- 
+
+    /**
+     * ---------------------------------
+     * specific bounding box to shapes +
+     * ---------------------------------
+     */
+
+    void bounding_to_sphere ( point3 *center, float *radius );
+    
 };
 
 #endif

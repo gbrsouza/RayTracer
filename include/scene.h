@@ -58,7 +58,10 @@ public:
     bool intersect( const Ray& r, 
                     SurfaceInteraction *surface ) 
                     const
-        { return aggregate->intersect(r, surface); }
+    { 
+        
+        return aggregate->intersect(r, surface);
+    }
     
     /**
      * @brief  A faster version that only determines whether 

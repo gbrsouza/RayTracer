@@ -18,6 +18,12 @@ inline float norm( Vec3 &v ) {
                 pow(v.z(),2));
 }
 
+inline float distance (Vec3 &p1, Vec3 &p2) {
+    return sqrt( pow((p1.x() - p2.x()),2) +
+                 pow((p1.y() - p2.y()),2) +
+                 pow((p1.z() - p2.z()),2) );
+} 
+
 /**
  * @brief Define operator + (plus) between two vectors
  * 

@@ -15,6 +15,7 @@
 #include "common.h"
 #include "primitive.h"
 #include <vector>
+#include <limits>
 
 /**
  * @brief implements the Primitive interface but stores 
@@ -50,12 +51,22 @@ public:
                      SurfaceInteraction * surface)
                      const
     {
-        bool v;
+        bool v = false;
+        float t_min = std::numeric_limits<float>::max();
+        SurfaceInteraction *surface_min; 
+        
+        // get the min point isect;
         for ( const auto p : primitives ){
             v = p->intersect( r, surface );
-            if (v) return true;
+            if ( surface->t < t_min ) {
+                t_min = surface->t;
+                surface_min = surface;
+            }
         }
-        return false;
+
+        surface = surface_min;
+    
+        return v;
     }
 
     // @Override
@@ -68,11 +79,14 @@ public:
         return false;            
     }
 
-    Bounds3 bounding_box () const {
-        Bounds3 world_bound;
+
+
+    inline Bounds3 bounding_box () const override{
+        Bounds3 world_bound = primitives[0]->bounding_box();
         for ( const auto p : primitives ){
             world_bound = world_bound.get_union( world_bound, p->bounding_box() );
         }
+        std::cout << " word_bound: \n pMin" << world_bound.pMin << " \npMax " << world_bound.pMax << std::endl;  
         return world_bound;
 
     }
