@@ -23,6 +23,8 @@ public:
     // the background object
     std::shared_ptr<Background> background; 
 
+    Bounds3 world_bound;
+
 private:
     // the scene graph of object, acceleration structure
     std::shared_ptr<Primitive> aggregate; 
@@ -40,7 +42,10 @@ public:
            std::shared_ptr<Background> bg,
            const std::vector<std::shared_ptr<Light>>& ls)
         :  lights{ls}, background{bg}, aggregate{ag}
-        {/* empty */}
+        {
+            // get the bounding box for all primitives
+            world_bound = aggregate->bounding_box();
+        }
 
     /**
      * @brief Determines the intersection info

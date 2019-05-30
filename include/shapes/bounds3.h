@@ -286,6 +286,8 @@ public:
     //     *radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
     // }
 
+    // specific bounding box to shapes 
+ 
 };
 
 #endif
