@@ -408,6 +408,56 @@ read_point_light(
     return m;
 }
 
+std::shared_ptr<DirectionalLight>
+read_directional_light(
+    XMLElement &e)
+{
+    XMLElement *i = e.FirstChildElement("intensity");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    i = e.FirstChildElement("direction");
+    if (i == nullptr) throw INVALID_SCENE;
+    point3 *direction = read_float_vector( *i );
+
+    std::shared_ptr<DirectionalLight> m ( new DirectionalLight(*intensity, *direction) );
+    return m;
+}
+
+std::shared_ptr<SpotyLight>
+read_spoty_light(
+    XMLElement &e)
+{
+    XMLError eResult;
+
+    XMLElement *i = e.FirstChildElement("intensity");
+    if ( i == nullptr ) throw INVALID_SCENE;
+    point3 *intensity = read_a_float_color( *i );
+
+    i = e.FirstChildElement("position");
+    if ( i == nullptr ) throw INVALID_SCENE;
+    point3 *position = read_vector_or_point( *i );
+
+    i = e.FirstChildElement("point_at");
+    if ( i == nullptr ) throw INVALID_SCENE;
+    point3 *point_at = read_vector_or_point( *i );
+
+    int cutoff, falloff;
+    i = e.FirstChildElement("cutoff");
+    eResult = i->QueryIntAttribute("value", &cutoff);
+    if (eResult != XML_SUCCESS) throw INVALID_SCENE;
+
+    i = e.FirstChildElement("falloff");
+    eResult = i->QueryIntAttribute("value", &falloff);
+    if (eResult != XML_SUCCESS) throw INVALID_SCENE;
+    
+    std::shared_ptr<SpotyLight> spoty ( 
+        new SpotyLight(*intensity, *position, *point_at, cutoff, falloff));
+    
+    return spoty;
+
+}
+
 
 /*
  +=====================================+
@@ -653,6 +703,10 @@ ParserXML::read_scene(
             this->lights.push_back( read_ambient_light(*pListLights) );
         else if ( type.compare("point") == 0 )
             this->lights.push_back( read_point_light(*pListLights) );
+        else if (type.compare("spot") == 0)
+            this->lights.push_back( read_spoty_light(*pListLights) );
+        else if (type.compare("directional") == 0)
+            this->lights.push_back( read_directional_light(*pListLights) );
 
         count++;
         pListLights = pListLights->NextSiblingElement("light");

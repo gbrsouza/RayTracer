@@ -48,6 +48,19 @@ public:
 
     SurfaceInteraction (point3 p) : p{p}{}
 
+     SurfaceInteraction& operator= ( const SurfaceInteraction &s ){
+        this->p = s.p;
+        this->n = s.n;
+        this->wo = s.wo;
+        this->time = s.time;
+        this->uv = s.uv;
+        this->m = s.m;
+        this->primitive = primitive;
+        this->t = t;
+
+        return *this;
+    }
+
     point3 p;    //<! contact point
     vector n;    //<! the surface normal
     vector wo;   //<! outgoing direction of light, which is -ray

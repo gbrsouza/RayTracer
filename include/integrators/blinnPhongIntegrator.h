@@ -11,6 +11,8 @@ class BlinnPhongIntegrator : public SamplerIntegrator {
 
 public:
 
+    Bounds3 bounding_box_world;
+
     /**
      * @brief Construct a new Blinn Phong Integrator object
      * 
@@ -25,7 +27,7 @@ public:
     // @Override
     void 
     preprocess( const Scene& scene )
-    { /*empty*/ }
+    { bounding_box_world = scene.world_bound; }
 
     // @Override
     Color24 

@@ -24,6 +24,7 @@ class Light {
 protected:
 
     point3 intensity; //<! The intensity of light 
+    Bounds3 bounding_box_world;
 
 public:
 
@@ -61,6 +62,9 @@ public:
     virtual bool is_ambient(){ return false;} 
 
     point3 get_intensity(){ return this->intensity; }
+
+    void set_bounding_box( const Bounds3 & b )
+    { this->bounding_box_world = b; }
 
 };
 

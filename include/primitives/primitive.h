@@ -4,6 +4,7 @@
 #include "../common.h"
 #include "../ray.h"
 #include "../materials/material.h"
+#include "../shapes/bounds3.h"
 
 class SurfaceInteraction;
 
@@ -45,6 +46,12 @@ public:
      * @return false   if the ray not intersect the sphere
      */
     virtual bool intersect_p( const Ray& r ) const = 0;
+
+    /**
+     * @brief get a bounding box of shape
+     * @return Bounds3f the bounding box
+     */
+    virtual Bounds3 bounding_box () const = 0;
 
 };
 

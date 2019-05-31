@@ -105,6 +105,16 @@ public:
        
         return (delta >= 0.0);
     }
+    
+    Bounds3 bounding_box () const {
+        
+        vector r { radius, radius, radius };
+        
+        auto upper_bound = center + r;
+        auto lower_bound = center - r;
+
+        return Bounds3 {lower_bound, upper_bound};
+    }
 
 };
 

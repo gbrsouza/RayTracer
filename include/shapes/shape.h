@@ -13,6 +13,7 @@
  */
 
 #include "common.h"
+#include "bounds3.h"
 
 /**
  * @brief It is the base class for all geometric shapes,
@@ -57,6 +58,12 @@ public:
     virtual bool intersect_p( const Ray& r ) const = 0;
 
     /**
+     * @brief get a bounding box of shape
+     * @return Bounds3f the bounding box
+     */
+    virtual Bounds3 bounding_box () const = 0;
+
+    /**
      * @brief Set the id object
      * @param id the new id
      */
@@ -65,8 +72,7 @@ public:
 protected:
 
     int id; //<! The shape id
-    Material * material;
-
+    Material * material; 
 };
 
 #endif
