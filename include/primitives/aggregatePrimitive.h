@@ -51,22 +51,31 @@ public:
                      SurfaceInteraction * surface)
                      const
     {
-        bool v = false;
-        float t_min = std::numeric_limits<float>::max();
-        SurfaceInteraction *surface_min; 
-        
-        // get the min point isect;
+        bool v;
         for ( const auto p : primitives ){
             v = p->intersect( r, surface );
-            if ( surface->t < t_min ) {
-                t_min = surface->t;
-                surface_min = surface;
-            }
+            if ( v ) return true; 
         }
 
-        surface = surface_min;
+        return false;
+
+        // bool v = false;
+        // float t_min = std::numeric_limits<float>::max();
+        // SurfaceInteraction *surface_min; 
+        
+        // // get the min point isect;
+        // for ( const auto p : primitives ){
+        //     // std::cout << "oi\n";
+        //     v = p->intersect( r, surface );
+        //     if ( surface->t < t_min ) {
+        //         t_min = surface->t;
+        //         surface_min = surface;
+        //     }
+        // }
+
+        // surface = surface_min;
     
-        return v;
+        // return v;
     }
 
     // @Override
@@ -86,7 +95,7 @@ public:
         for ( const auto p : primitives ){
             world_bound = world_bound.get_union( world_bound, p->bounding_box() );
         }
-        std::cout << " word_bound: \n pMin" << world_bound.pMin << " \npMax " << world_bound.pMax << std::endl;  
+        // std::cout << " word_bound: \n pMin" << world_bound.pMin << " \npMax " << world_bound.pMax << std::endl;  
         return world_bound;
 
     }
