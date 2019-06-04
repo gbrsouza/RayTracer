@@ -12,7 +12,7 @@ private:
 
 public:
 
-    float tMax {std::numeric_limits<float>::max()};
+    mutable float tMax {std::numeric_limits<float>::max()};
 
     /**
      * @brief Construct a new Ray object
