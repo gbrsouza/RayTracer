@@ -51,31 +51,39 @@ public:
                      SurfaceInteraction * surface)
                      const
     {
-        bool v;
-        for ( const auto p : primitives ){
-            v = p->intersect( r, surface );
-            if ( v ) return true; 
-        }
-
-        return false;
-
-        // bool v = false;
-        // float t_min = std::numeric_limits<float>::max();
-        // SurfaceInteraction *surface_min; 
-        
-        // // get the min point isect;
+        // bool v;
         // for ( const auto p : primitives ){
-        //     // std::cout << "oi\n";
         //     v = p->intersect( r, surface );
-        //     if ( surface->t < t_min ) {
-        //         t_min = surface->t;
-        //         surface_min = surface;
-        //     }
+        //     if ( v ) return true; 
         // }
 
-        // surface = surface_min;
+        // return false;
+
+        bool test = false;
+        
+        float t_max = std::numeric_limits<float>::max();
+        float t_min = 0;
+
+        SurfaceInteraction *surface_min; 
+        
+        // get the min point isect;
+        for ( const auto p : primitives ){
     
-        // return v;
+            bool v = p->intersect( r, surface );
+            if ( v && (surface->t < t_max) && (surface->t > t_min) ) {
+
+                // std::cout << "t: " << surface->t << std::endl;
+                // std::cout << "p: " << surface->p << std::endl;
+                r.tMax = surface->t;
+                t_max = surface->t;
+                test = true;
+                surface_min = surface;
+            }
+        }
+
+        surface = surface_min;
+    
+        return test;
     }
 
     // @Override

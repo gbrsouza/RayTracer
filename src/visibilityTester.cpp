@@ -14,5 +14,6 @@ std::shared_ptr<Ray> VisibilityTester::shoot_ray() const
     vector v = destiny - origin;
 
     std::shared_ptr<Ray> r (new Ray(origin, v));
+    r->tMax = 1;
     return  r;
 }

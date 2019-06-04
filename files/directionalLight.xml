@@ -238,7 +238,7 @@
         </material>
 
         <!-- Lights -->
-        <light type="ambient" name="ambient_light">
+        <!-- <light type="ambient" name="ambient_light">
             <intensity r="0.1" g="0.1" b="0.1"/>
         </light>
         <light type="directional" name="point_light">
@@ -248,6 +248,15 @@
         <light type="directional" name="point_light2">
             <intensity r="0.4" g="0.4" b="0.4"/>
             <direction x="-0.3" y="0.3" z="1"/>
+        </light> -->
+
+        <!-- Lights -->
+        <light type="ambient" name="ambient_light">
+            <intensity r="0.1" g="0.1" b="0.1"/>
+        </light>
+        <light type="point" name="point_light_left">
+            <intensity r="0.9" g="0.9" b="0.9"/>
+            <position x="2" y="1" z="5"/>
         </light>
     </scene>
 
