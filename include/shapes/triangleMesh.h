@@ -22,6 +22,7 @@ struct TriangleMesh {
                   const point3 *p,
                   const normal3f *n, 
                   const point2f *uv ); 
+
 };
 
 #endif

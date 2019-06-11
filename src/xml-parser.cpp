@@ -380,6 +380,7 @@ read_depth_integrator(
  |  Readers of specifics lights type   |
  +=====================================+
  */
+
 std::shared_ptr<AmbientLight>
 read_ambient_light(
     XMLElement &e)
@@ -457,7 +458,6 @@ read_spoty_light(
     return spoty;
 
 }
-
 
 /*
  +=====================================+
