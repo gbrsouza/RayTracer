@@ -192,6 +192,22 @@ read_sphere(
     return ptr;
 }
 
+std::shared_ptr<Shape>
+read_triangle(
+    XMLElement &e,
+    Material * m)
+{
+    XMLElement * p = e.FirstChildElement("ntriangles");
+    if (p == nullptr) throw INVALID_SPHERE;
+
+    int n_tiangles;
+    XMLError eResult;
+
+    // Get value of radius
+    eResult = p->QueryIntAttribute("value", &n_tiangles);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+}
+
 
 /*
  +=====================================+
@@ -677,6 +693,8 @@ ParserXML::read_scene(
         std::shared_ptr<Shape> shape;
         if (type.compare("sphere") == 0)
             shape = read_sphere(*pListElement, m);
+        if (type.compare("triangle") == 0)
+            shape = read_triangle(*pListElement, m);
         // add here new shapes
 
         //Set shape's id

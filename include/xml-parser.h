@@ -38,6 +38,7 @@
 #define INVALID_ATT_VECTOR_OR_POINT "Invalid attribute defined for vector or point"
 #define INVALID_SCENE               "Invalid scene specification"
 #define INVALID_SPHERE              "Invalid sphere specification"
+#define INVALID_TRIANGLE            "Invalid triangle specification"
 #define INVALID_MATERIAL            "Invalid Material specification"
 
 using namespace tinyxml2;
