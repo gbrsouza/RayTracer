@@ -142,6 +142,32 @@ read_a_float_color (
     return color;
 }
 
+std::vector<int> 
+read_int_vector_from_string(
+    std::string str )
+{
+    std::istringstream is( str );
+    std::vector<int> vector;
+    int n;
+
+    while( is >> n ) vector.push_back(n);
+    
+    return vector; 
+}
+
+std::vector<float> 
+read_float_vector_from_string(
+    std::string str )
+{
+    std::istringstream is( str );
+    std::vector<float> vector;
+    float n;
+
+    while( is >> n ) vector.push_back(n);
+    
+    return vector; 
+}
+
 /*
  +=====================================+
  |  Readers of specifics shapes type   |
@@ -206,6 +232,50 @@ read_triangle(
     // Get value of radius
     eResult = p->QueryIntAttribute("value", &n_tiangles);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    p = e.FirstChildElement("indices");
+    std::string indices = read_a_string(*p, "value");
+    std::vector<int> ind = read_int_vector_from_string(indices);
+    
+    // save the 3D points
+    point3 ind_[ind.size()/3];
+    for ( int i = 0; i < ind.size(); i+=3)
+        ind_[i/3] = point3{ind[i], ind[i+1], ind[i+2]};
+    
+    p = e.FirstChildElement("vertices");
+    std::string vertices = read_a_string(*p, "value");
+    std::vector<float> vert = read_float_vector_from_string(vertices);
+    
+    // save the 3D vertices
+    int n_vertices = 0;
+    point3 vert_[vert.size()/3];
+    for ( int i = 0; i < vert.size(); i+=3){
+        vert_[i/3] = point3{vert[i], vert[i+1], vert[i+2]}; 
+        n_vertices++;
+    }
+    p = e.FirstChildElement("normals");
+    std::string normal = read_a_string(*p, "value");
+    std::vector<float> normals = read_float_vector_from_string(normal);
+
+    // save the 3D normals
+    vector norm_[normals.size()/3];
+    for ( int i = 0; i < normals.size(); i+=3 )
+        norm_[i/3] = vector{normals[i], normals[i+1], normals[i+2]};
+
+    p = e.FirstChildElement("uv");
+    std::string uv = read_a_string(*p, "value");
+    std::vector<float> uvs = read_float_vector_from_string(uv);
+    
+    // save the 3D uvs
+    point2f uvs_[uvs.size()/2];
+    for ( int i = 0; i < uvs.size(); i+=2)
+        uvs_[i/2] = point2f{uvs[i], uvs[i+1], 1};
+
+    TriangleMesh mesh = 
+            TriangleMesh( n_tiangles, ind, n_vertices,
+                          vert_, norm_, uvs_);
+
+
 }
 
 

@@ -1,12 +1,11 @@
 #ifndef _XML_PARSERXML_H_
 #define _XML_PARSERXML_H_
 
-
-
 #include <string>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "background.h"
 #include "tinyxml2.h"
@@ -15,7 +14,10 @@
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
 #include "primitives/geometricPrimitive.h"
+
 #include "shapes/sphere.h"
+#include "shapes/triangle.h"
+
 #include "materials/flatMaterial.h"
 
 #include "integrators/depthIntegrator.h"
