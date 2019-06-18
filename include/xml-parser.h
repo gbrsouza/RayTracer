@@ -16,7 +16,7 @@
 #include "primitives/geometricPrimitive.h"
 
 #include "shapes/sphere.h"
-#include "shapes/triangle.h"
+// #include "shapes/triangle.h"
 
 #include "materials/flatMaterial.h"
 

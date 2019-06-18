@@ -1,5 +1,4 @@
 #include "shapes/triangle.h"
-#include "ray.h"
 #include "../vec3.cpp"
 
 bool Triangle::intersect(
@@ -7,9 +6,11 @@ bool Triangle::intersect(
             SurfaceInteraction *surface 
         ) const
 {
-    const float EPSILON = 0.000001;
-    point3 &v1, &v2, &v3;
-    vertices(v1, v2, v3);
+    float EPSILON = 0.000001;
+    auto vs = vertices();
+    point3 &v1 = std::get<0>(vs);
+    point3 &v2 = std::get<1>(vs);
+    point3 &v3 = std::get<2>(vs);
 
     vector edge1, edge2, h, s, q;
     float a,f,u,v;
@@ -26,7 +27,7 @@ bool Triangle::intersect(
     point2f uv;
     float * tHit;
 
-    if (bfc){
+    if (backface_cull){
         if (a < EPSILON)
             return false;
         
@@ -51,7 +52,7 @@ bool Triangle::intersect(
         *tHit *= f;
         uv *= f;
 
-        if ( tHit < EPSILON )
+        if ( *tHit < EPSILON )
             return false;
 
     }else {
@@ -76,23 +77,26 @@ bool Triangle::intersect(
 
         uv.element[1] = v;
 
-        *tHit = f * dot(edge2, q)
+        *tHit = f * dot(edge2, q);
 
         if ( *tHit < EPSILON ){
             return false;
     }
 
-    if (*tHit > ray.tMax)
+    if ( *tHit > r.tMax )
         return false;
     
     if ( surface != nullptr ){
-        surface->p = ray(*tHit);
+        surface->p = r(*tHit);
         surface->uv = uv;
         surface->wo = -1.0 * r.get_direction();
         surface->t = *tHit;
 
-        vector &n1, &n2, &n3;
-        normals(n1, n2, n3);
+        auto ns = normals();
+        vector &n1 = std::get<0>(ns);
+        vector &n2 = std::get<1>(ns);
+        vector &n3 = std::get<2>(ns);
+
 
         surface->n = unit_vector(
             (1 - uv.element[0] - uv.element[1] * n1 
@@ -110,9 +114,8 @@ bool Triangle::intersect_p( const Ray &ray ) const
 
 // Return the triangle's bounding box.
 Bounds3 Triangle::bounding_box () const {
-    point3 &p1, &p2, &p3;
-    vertices( p1, p2, p3);
-    auto bounds = Bounds3{p1, p2};
+    auto p = vertices();
+    auto bounds = Bounds3{std::get<0>(p), std::get<1>(p)};
 
-    return bounds.get_union(bounds, p3);
+    return bounds.get_union(bounds, std::get<2>(p));
 } 
