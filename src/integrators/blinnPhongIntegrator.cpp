@@ -7,7 +7,7 @@ BlinnPhongIntegrator::Li( const Ray& ray,
     const Scene& scene,
     Sampler& sampler ) const
 {
-
+    UNUSED(sampler);
     Color24 L(0,0,0); // The radiance
     auto img_dim = camera->get_film()->get_dimension();
     // Find closest ray intersection or return background radiance.

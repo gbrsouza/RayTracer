@@ -23,6 +23,8 @@
 #define PI 3.141592              //<! Pi value
 #define RADIANS 0.01745329252    //<! value of a degree in radians
 
+#define UNUSED(x) (void)(x)
+
 typedef Vec3 Color;   //<! alias to color
 typedef Vec3 point3;  //<! alias to point 3D
 typedef Vec3 vector;  //<! alias to vector

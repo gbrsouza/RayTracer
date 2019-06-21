@@ -235,11 +235,11 @@ read_triangle(
 
     p = e.FirstChildElement("indices");
     std::string indices = read_a_string(*p, "value");
-    std::vector<int> ind = read_int_vector_from_string(indices);
+    std::vector<float> ind = read_float_vector_from_string(indices);
     
     // save the 3D points
     point3 ind_[ind.size()/3];
-    for ( int i = 0; i < ind.size(); i+=3)
+    for ( uint i = 0; i < ind.size(); i+=3)
         ind_[i/3] = point3{ind[i], ind[i+1], ind[i+2]};
     
     p = e.FirstChildElement("vertices");
@@ -249,7 +249,7 @@ read_triangle(
     // save the 3D vertices
     int n_vertices = 0;
     point3 vert_[vert.size()/3];
-    for ( int i = 0; i < vert.size(); i+=3){
+    for ( uint i = 0; i < vert.size(); i+=3){
         vert_[i/3] = point3{vert[i], vert[i+1], vert[i+2]}; 
         n_vertices++;
     }
@@ -259,7 +259,7 @@ read_triangle(
 
     // save the 3D normals
     vector norm_[normals.size()/3];
-    for ( int i = 0; i < normals.size(); i+=3 )
+    for ( uint i = 0; i < normals.size(); i+=3 )
         norm_[i/3] = vector{normals[i], normals[i+1], normals[i+2]};
 
     p = e.FirstChildElement("uv");
@@ -268,13 +268,14 @@ read_triangle(
     
     // save the 3D uvs
     point2f uvs_[uvs.size()/2];
-    for ( int i = 0; i < uvs.size(); i+=2)
+    for ( uint i = 0; i < uvs.size(); i+=2)
         uvs_[i/2] = point2f{uvs[i], uvs[i+1], 1};
 
-    TriangleMesh mesh = 
-            TriangleMesh( n_tiangles, ind, n_vertices,
-                          vert_, norm_, uvs_);
-
+    UNUSED(m);
+    // TriangleMesh mesh = 
+    //         TriangleMesh( n_tiangles, ind, n_vertices,
+    //                       vert_, norm_, uvs_);
+    return nullptr;
 
 }
 

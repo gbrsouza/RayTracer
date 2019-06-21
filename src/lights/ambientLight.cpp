@@ -7,7 +7,9 @@ Vec3 AmbientLight::Li(
 {
     // TODO
     // vt = new VisibilityTester(isect, )
-
+    UNUSED(isect);
+    UNUSED(wi);
+    UNUSED(vt);
     return intensity;
 }
     

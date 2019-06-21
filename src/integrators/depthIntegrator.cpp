@@ -25,7 +25,7 @@ DepthIntegrator::Li( const Ray& ray,
                      Sampler& sampler ) 
                      const
 {
-
+    UNUSED(sampler);
     Color24 L(0,0,0); // The radiance
     
     // Find closest ray intersection or return background radiance.
