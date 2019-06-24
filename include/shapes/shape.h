@@ -14,6 +14,7 @@
 
 #include "common.h"
 #include "bounds3.h"
+#include "../src/vec3.cpp"
 
 /**
  * @brief It is the base class for all geometric shapes,

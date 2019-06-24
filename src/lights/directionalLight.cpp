@@ -1,6 +1,4 @@
 #include "lights/directionalLight.h"
-#include "../vec3.cpp"
-
 Vec3 DirectionalLight::Li(
         const SurfaceInteraction &isect,
         vector *wi,

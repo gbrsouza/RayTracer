@@ -1,5 +1,4 @@
 #include "integrators/blinnPhongIntegrator.h"
-#include "../vec3.cpp"
 #include "lights/directionalLight.h"
 
 Color24 
@@ -27,11 +26,12 @@ BlinnPhongIntegrator::Li( const Ray& ray,
         VisibilityTester vt;
 
         BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( isect.m );
+
         auto ka = fm->get_ka();
         auto kd = fm->get_kd();
         auto ks = fm->get_ks();
         auto gloss = fm->get_ge();
-
+    
         for ( auto l : scene.lights ){
 
             l->set_bounding_box( this->bounding_box_world );
@@ -39,7 +39,6 @@ BlinnPhongIntegrator::Li( const Ray& ray,
             if ( l->is_ambient() ) {
                 KaIa = ka * l->get_intensity();
             }else {
-
                 auto Ii = l->Li(isect, &wi, &vt);
                 auto n = isect.n;
 
@@ -51,15 +50,10 @@ BlinnPhongIntegrator::Li( const Ray& ray,
                     L += kd * Ii * fmax(0.0, dot(n, wi));
                     L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
                 }
-
-                // L += kd * Ii * fmax(0.0, dot(n, wi));
-                // L += ks * Ii * pow(fmax(0.0, dot(n, h)), gloss);
-                
             }
         }
 
         L += KaIa;
-       // std::cout << "L: " << L << std::endl;
         L *= 255;
         return {fmin(255.0, L.r()), fmin(255.0, L.g()), fmin(255.0, L.b())};
     }

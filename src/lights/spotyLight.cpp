@@ -1,5 +1,5 @@
 #include "lights/spotyLight.h"
-#include "../vec3.cpp"
+
 
 Vec3 SpotyLight::Li(
         const SurfaceInteraction &isect,

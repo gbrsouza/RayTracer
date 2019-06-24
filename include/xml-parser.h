@@ -16,7 +16,7 @@
 #include "primitives/geometricPrimitive.h"
 
 #include "shapes/sphere.h"
-// #include "shapes/triangle.h"
+#include "shapes/triangle.h"
 
 #include "materials/flatMaterial.h"
 
@@ -86,6 +86,16 @@ private:
      * @param pRoot The iterator of file
      */
     void read_integrator(XMLNode &pRoot);
+
+    /**
+     * @brief Set the shape object
+     * 
+     * @param shape the shape
+     * @param id     the id of shape
+     * @param materialName  the material name
+     */
+    void set_shape (std::shared_ptr<Shape> shape,
+        int id, std::string materialName );
 
 
 public:

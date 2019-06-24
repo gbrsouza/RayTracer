@@ -6,12 +6,12 @@
 #include <cstring>
 #include <memory>
 
+#include "xml-parser.h"
 #include "common.h"
 #include "raster.h"
 #include "scene.h"
 #include "integrators/flatIntegrator.h"
 #include "integrators/samplerIntegrator.h"
-#include "xml-parser.h"
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
 #include "primitives/aggregatePrimitive.h"

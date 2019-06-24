@@ -1,5 +1,4 @@
 #include "integrators/depthIntegrator.h"
-#include "../vec3.cpp"
 
 void 
 DepthIntegrator::preprocess( const Scene& scene )

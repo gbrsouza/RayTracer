@@ -1,5 +1,4 @@
 #include "visibilityTester.h"
-#include "vec3.cpp"
 
 bool VisibilityTester::unoccluded(
     const Scene &scene)

@@ -1,5 +1,4 @@
 #include "lights/pointLight.h"
-#include "../vec3.cpp"
 
 Vec3 PointLight::Li(
     const SurfaceInteraction &isect,

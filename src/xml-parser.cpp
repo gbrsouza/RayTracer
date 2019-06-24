@@ -168,6 +168,20 @@ read_float_vector_from_string(
     return vector; 
 }
 
+void 
+ParserXML::set_shape (std::shared_ptr<Shape> shape,
+    int id, std::string materialName )
+{
+    //Set shape's id
+    shape->set_id( id );
+
+    //Create a new primitive      
+    std::shared_ptr<Primitive> primitive ( new 
+        GeometricPrimitive( shape, get_material(materialName) ));
+    
+    this->primitives.push_back(primitive);
+}
+
 /*
  +=====================================+
  |  Readers of specifics shapes type   |
@@ -212,13 +226,12 @@ read_sphere(
 
     // make a sphere
     const point3 *center = new point3(x,y,z);
-    Shape *sphere = new Sphere(*center, radius, m);
-    std::shared_ptr<Shape> ptr(sphere);
+    std::shared_ptr<Shape> ptr(new Sphere(*center, radius, m));
 
     return ptr;
 }
 
-std::shared_ptr<Shape>
+std::vector<std::shared_ptr<Shape>>
 read_triangle(
     XMLElement &e,
     Material * m)
@@ -226,29 +239,29 @@ read_triangle(
     XMLElement * p = e.FirstChildElement("ntriangles");
     if (p == nullptr) throw INVALID_SPHERE;
 
-    int n_tiangles;
+    int n_triangles;
     XMLError eResult;
 
     // Get value of radius
-    eResult = p->QueryIntAttribute("value", &n_tiangles);
+    eResult = p->QueryIntAttribute("value", &n_triangles);
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     p = e.FirstChildElement("indices");
     std::string indices = read_a_string(*p, "value");
     std::vector<float> ind = read_float_vector_from_string(indices);
-    
+
     // save the 3D points
-    point3 ind_[ind.size()/3];
-    for ( uint i = 0; i < ind.size(); i+=3)
-        ind_[i/3] = point3{ind[i], ind[i+1], ind[i+2]};
+    int *ind_ = new int[ind.size()];
+    for ( uint i = 0; i < ind.size(); i++)
+        ind_[i] = ind[i];
     
     p = e.FirstChildElement("vertices");
     std::string vertices = read_a_string(*p, "value");
     std::vector<float> vert = read_float_vector_from_string(vertices);
-    
+
     // save the 3D vertices
     int n_vertices = 0;
-    point3 vert_[vert.size()/3];
+    point3 *vert_ = new point3[vert.size()];
     for ( uint i = 0; i < vert.size(); i+=3){
         vert_[i/3] = point3{vert[i], vert[i+1], vert[i+2]}; 
         n_vertices++;
@@ -258,24 +271,31 @@ read_triangle(
     std::vector<float> normals = read_float_vector_from_string(normal);
 
     // save the 3D normals
-    vector norm_[normals.size()/3];
+    vector *norm_ = new vector[normals.size()];
     for ( uint i = 0; i < normals.size(); i+=3 )
         norm_[i/3] = vector{normals[i], normals[i+1], normals[i+2]};
 
     p = e.FirstChildElement("uv");
     std::string uv = read_a_string(*p, "value");
     std::vector<float> uvs = read_float_vector_from_string(uv);
-    
+
     // save the 3D uvs
-    point2f uvs_[uvs.size()/2];
+    point2f *uvs_ = new point2f[uvs.size()];
     for ( uint i = 0; i < uvs.size(); i+=2)
         uvs_[i/2] = point2f{uvs[i], uvs[i+1], 1};
 
-    UNUSED(m);
-    // TriangleMesh mesh = 
-    //         TriangleMesh( n_tiangles, ind, n_vertices,
-    //                       vert_, norm_, uvs_);
-    return nullptr;
+    std::shared_ptr<TriangleMesh> mesh ( new
+        TriangleMesh( n_triangles, ind_, n_vertices,
+                      vert_, norm_, uvs_));
+
+    std::vector<std::shared_ptr<Shape>> triangles;
+    for (int i =0; i < n_triangles; i++){
+        std::shared_ptr<Shape> temp (new Triangle(m, mesh, i, false ));
+        triangles.push_back(temp);
+    }
+
+    delete [] ind_, vert_, norm_, uvs_;
+    return triangles;
 
 }
 
@@ -720,6 +740,7 @@ ParserXML::read_scene(
 
     // Read the background   
     this->read_background(*pElement); 
+
     // Read all materials
     XMLElement * pListMaterials = pElement->FirstChildElement("material");
     int count = 0;
@@ -753,29 +774,24 @@ ParserXML::read_scene(
 
         // increments id
         count++;
-       
         //Get type of object
         std::string type = read_a_string(*pListElement, "type");
     
         //Get material's name of object
         std::string materialName = read_a_string(*pListElement, "material");
         Material * m = get_material(materialName).get();
-        //Get the shape
-        std::shared_ptr<Shape> shape;
-        if (type.compare("sphere") == 0)
-            shape = read_sphere(*pListElement, m);
-        if (type.compare("triangle") == 0)
-            shape = read_triangle(*pListElement, m);
+
+        if (type.compare("sphere") == 0){
+            std::shared_ptr<Shape> shape = read_sphere(*pListElement, m);
+            this->set_shape(shape, count, materialName);
+        }
+        if (type.compare("trianglemesh") == 0){
+            std::cout << "vou adicionar\n";
+            std::vector<std::shared_ptr<Shape>> shapes = read_triangle(*pListElement, m);
+            for (auto shape : shapes )
+                this->set_shape(shape, count++, materialName );
+        }
         // add here new shapes
-
-        //Set shape's id
-        shape->set_id( count );
-
-        //Create a new primitive
-        Primitive *p = new GeometricPrimitive( shape, get_material(materialName) );
-        
-        std::shared_ptr<Primitive> primitive(p);
-        this->primitives.push_back(primitive);
 
         //Next element
         pListElement = pListElement->NextSiblingElement("object");

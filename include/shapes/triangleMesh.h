@@ -35,6 +35,7 @@ struct TriangleMesh {
             for (int i = 0; i < nVertices; i++)
                 normals[i] = n[i];
             
+            UNUSED(uv);
             //uv.reset( new point2f[])
 
         }
