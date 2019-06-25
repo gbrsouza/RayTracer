@@ -20,6 +20,7 @@ private:
         std::shared_ptr<TriangleMesh> mesh;
         
         bool backface_cull; // Set it `true` to turn backface culling.
+        float EPSILON = 0.001;
 
 public:
     Triangle( Material * material,
@@ -36,7 +37,7 @@ public:
     ) const
     {
       
-        float EPSILON = 0.000001;
+        
         auto vs = vertices();
         point3 &v1 = std::get<0>(vs);
         point3 &v2 = std::get<1>(vs);
@@ -47,15 +48,12 @@ public:
 
         edge1 = v2 - v1;
         edge2 = v3 - v2; 
-
         
         const auto &origin_ray = r.get_origin();
-        const auto &direction_ray = unit_vector(r.get_direction());
+        const auto &direction_ray = r.get_direction();
 
         h = cross(direction_ray, edge2);
         a = dot(edge1, h);
-
-        point2f uv;
         
         float tHit;
         if (backface_cull){
@@ -65,10 +63,8 @@ public:
             s = origin_ray - v1;
             u = ( dot(s,h) );
         
-            if ( u < 0.0 || u > 1.0)
+            if ( u < 0.0 || u > a)
                 return false;
-
-            uv.element[0] = u;
 
             q = cross(s, edge1);
             v = dot(direction_ray, q);
@@ -76,12 +72,12 @@ public:
             if ( v < 0.0 || (u + v) > a )
                 return false;
             
-            uv.element[1] = v;
-
+           
             tHit = dot(edge2, q);
             f = 1.0/a;
             tHit *= f;
-            uv *= f;
+            u *= f;
+            v *= f;
 
             if ( tHit < EPSILON )
                 return false;
@@ -94,20 +90,18 @@ public:
             
             f = 1.0/a;
             s = origin_ray - v1;
+
             u = f * ( dot(s,h) );
 
             if ( u < 0.0 || u > 1.0)
                 return false;
             
-            uv.element[0] = u;
-
             q = cross(s, edge1);
             v = f * dot(direction_ray, q);
             
             if ( v < 0.0 || (u + v) > 1.0 )
                 return false;
-           
-            uv.element[1] = v;            
+                     
             tHit = f * dot(edge2, q);
             
             if ( tHit < EPSILON )
@@ -115,13 +109,13 @@ public:
         }
 
         
-        if ( tHit > r.tMax )
+        if ( tHit > r.tMax || tHit < 0.0 )
             return false;
        
         if ( surface != nullptr ){
             surface->m = material;
             surface->p = r(tHit);
-            surface->uv = uv;
+            surface->uv = point2f{u,v,0};
             surface->wo = -1.0 * r.get_direction();
             surface->t = tHit;
             
@@ -130,9 +124,10 @@ public:
             vector &n2 = std::get<1>(ns);
             vector &n3 = std::get<2>(ns);
 
+            // std::swap(n1, n2);
+
             surface->n = unit_vector(
-                (1 - uv.element[0] - uv.element[1]) * n1 
-                 + uv.element[0] * n2 + uv.element[1] * n3);
+                (1 -u - v) * n1 + (u * n2) + (v * n3) );
          
         }
 

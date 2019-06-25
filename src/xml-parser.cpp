@@ -225,8 +225,7 @@ read_sphere(
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     // make a sphere
-    const point3 *center = new point3(x,y,z);
-    std::shared_ptr<Shape> ptr(new Sphere(*center, radius, m));
+    std::shared_ptr<Shape> ptr(new Sphere(point3(x,y,z), radius, m));
 
     return ptr;
 }
@@ -252,8 +251,9 @@ read_triangle(
 
     // save the 3D points
     int *ind_ = new int[ind.size()];
-    for ( uint i = 0; i < ind.size(); i++)
+    for ( uint i = 0; i < ind.size(); i++){
         ind_[i] = ind[i];
+    }
     
     p = e.FirstChildElement("vertices");
     std::string vertices = read_a_string(*p, "value");
@@ -266,6 +266,7 @@ read_triangle(
         vert_[i/3] = point3{vert[i], vert[i+1], vert[i+2]}; 
         n_vertices++;
     }
+    
     p = e.FirstChildElement("normals");
     std::string normal = read_a_string(*p, "value");
     std::vector<float> normals = read_float_vector_from_string(normal);
@@ -294,7 +295,10 @@ read_triangle(
         triangles.push_back(temp);
     }
 
-    delete [] ind_, vert_, norm_, uvs_;
+    delete [] ind_;
+    delete [] vert_;
+    delete [] norm_;
+    delete [] uvs_;
     return triangles;
 
 }
@@ -337,9 +341,7 @@ read_flat_material (
     eResult = diffuse->QueryIntAttribute("b", &b);
     if (eResult != XML_SUCCESS) throw INVALID_COLOR;
 
-    Color * c = new Color( r, g, b );
-    Material * m = new FlatMaterial( *c, name );
-    std::shared_ptr<Material> fm(m);
+    std::shared_ptr<Material> fm(new FlatMaterial( Color( r, g, b ), name ));
 
     return fm;
 }
@@ -786,7 +788,6 @@ ParserXML::read_scene(
             this->set_shape(shape, count, materialName);
         }
         if (type.compare("trianglemesh") == 0){
-            std::cout << "vou adicionar\n";
             std::vector<std::shared_ptr<Shape>> shapes = read_triangle(*pListElement, m);
             for (auto shape : shapes )
                 this->set_shape(shape, count++, materialName );

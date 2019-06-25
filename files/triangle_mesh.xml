@@ -2,7 +2,7 @@
 
     <camera type="perspective" name="two_triangles_plane"> 
         <!--- The camera frame -->
-        <position x="-2" y="4.5" z="-10"/> <!--- located at the origin -->         
+        <position x="-2" y="-4.5" z="-10"/> <!--- located at the origin -->         
         <target x="0" y="0" z="0"/>  <!--- looking down the -Z axis -->        
         <up x="0" y="1" z="0"/>       <!--- the camera's up vector -->         
         
@@ -84,8 +84,8 @@
 
         <object type="trianglemesh" name="mesh1" material="grey" >
             <ntriangles value="2" />
-            <indices value="0 1 2 0 2 3"/>
-            <vertices value="-3 -0.5 -3  3 -0.5 -3  3 -0.5 3  -3 -0.5 3"/>
+            <indices value="0 1 2 2 1 0"/>
+            <vertices value="-3 -0.7 -3  -3 -0.7 3  3 -0.7 3  3 -0.7 -3"/>
             <normals value="0 1 0  0 1 0  0 1 0  0 1 0"/>
             <uv value="0 0   1 0   0 1   1 1"/>
         </object>
