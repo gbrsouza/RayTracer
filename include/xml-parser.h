@@ -1,12 +1,11 @@
 #ifndef _XML_PARSERXML_H_
 #define _XML_PARSERXML_H_
 
-
-
 #include <string>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "background.h"
 #include "tinyxml2.h"
@@ -15,7 +14,10 @@
 #include "cameras/orthographic_camera.h"
 #include "cameras/pespective_camera.h"
 #include "primitives/geometricPrimitive.h"
+
 #include "shapes/sphere.h"
+#include "shapes/triangle.h"
+
 #include "materials/flatMaterial.h"
 
 #include "integrators/depthIntegrator.h"
@@ -38,6 +40,7 @@
 #define INVALID_ATT_VECTOR_OR_POINT "Invalid attribute defined for vector or point"
 #define INVALID_SCENE               "Invalid scene specification"
 #define INVALID_SPHERE              "Invalid sphere specification"
+#define INVALID_TRIANGLE            "Invalid triangle specification"
 #define INVALID_MATERIAL            "Invalid Material specification"
 
 using namespace tinyxml2;
@@ -83,6 +86,16 @@ private:
      * @param pRoot The iterator of file
      */
     void read_integrator(XMLNode &pRoot);
+
+    /**
+     * @brief Set the shape object
+     * 
+     * @param shape the shape
+     * @param id     the id of shape
+     * @param materialName  the material name
+     */
+    void set_shape (std::shared_ptr<Shape> shape,
+        int id, std::string materialName );
 
 
 public:

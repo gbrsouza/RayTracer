@@ -13,6 +13,7 @@
  */
 
 #include <limits>
+#include <algorithm>
 #include "../common.h"
 
 /**
@@ -52,10 +53,12 @@ public:
      * @param p2 the second point
      */
     Bounds3 ( const point3 &p1, const point3 &p2 )
-        : pMin{ point3 {fmin(p1.x(), p2.x()), fmin(p1.y(), p2.y()), 
-                        fmin(p1.z(), p2.z())} },
-          pMax{ point3 {fmax(p1.x(), p2.x()), fmax(p1.y(), p2.y()),
-                        fmax(p1.z(), p2.z())} } 
+        : pMin{ point3 {std::min(p1.x(), p2.x()), 
+                        std::min(p1.y(), p2.y()), 
+                        std::min(p1.z(), p2.z())} },
+          pMax{ point3 {std::max(p1.x(), p2.x()), 
+                        std::max(p1.y(), p2.y()),
+                        std::max(p1.z(), p2.z())} } 
         { /*empty*/ }
 
     /**
@@ -110,13 +113,13 @@ public:
        
         return Bounds3(
 
-            point3 {fmin(b.pMin.x(), p.x()),
-                    fmin(b.pMin.y(), p.y()),
-                    fmin(b.pMin.z(), p.z())},
+            point3 {std::min(b.pMin.x(), p.x()),
+                    std::min(b.pMin.y(), p.y()),
+                    std::min(b.pMin.z(), p.z())},
 
-            point3 {fmax(b.pMax.x(), p.x()),
-                    fmax(b.pMax.y(), p.y()),
-                    fmax(b.pMax.z(), p.z())}
+            point3 {std::max(b.pMax.x(), p.x()),
+                    std::max(b.pMax.y(), p.y()),
+                    std::max(b.pMax.z(), p.z())}
             );
     }
 
@@ -134,12 +137,12 @@ public:
     Bounds3
     get_union( const Bounds3 &b1, const Bounds3 &b2 ){
         return Bounds3(
-            point3 (fmin(b1.pMin.x(), b2.pMin.x()),
-                    fmin(b1.pMin.y(), b2.pMin.y()),
-                    fmin(b1.pMin.z(), b2.pMin.z())),
-            point3 (fmax(b1.pMax.x(), b2.pMax.x()),
-                    fmax(b1.pMax.y(), b2.pMax.y()),
-                    fmax(b1.pMax.z(), b2.pMax.z())));
+            point3 (std::min(b1.pMin.x(), b2.pMin.x()),
+                    std::min(b1.pMin.y(), b2.pMin.y()),
+                    std::min(b1.pMin.z(), b2.pMin.z())),
+            point3 (std::max(b1.pMax.x(), b2.pMax.x()),
+                    std::max(b1.pMax.y(), b2.pMax.y()),
+                    std::max(b1.pMax.z(), b2.pMax.z())));
     }
 
     /**
@@ -157,12 +160,12 @@ public:
     Bounds3
     intersect( const Bounds3 &b1, const Bounds3 &b2 ){
         return Bounds3(
-            point3 (fmax(b1.pMin.x(), b2.pMin.x()),
-                    fmax(b1.pMin.y(), b2.pMin.y()),
-                    fmax(b1.pMin.z(), b2.pMin.z())),
-            point3 (fmin(b1.pMax.x(), b2.pMax.x()),
-                    fmin(b1.pMax.y(), b2.pMax.y()),
-                    fmin(b1.pMax.z(), b2.pMax.z())));        
+            point3 (std::max(b1.pMin.x(), b2.pMin.x()),
+                    std::max(b1.pMin.y(), b2.pMin.y()),
+                    std::max(b1.pMin.z(), b2.pMin.z())),
+            point3 (std::min(b1.pMax.x(), b2.pMax.x()),
+                    std::min(b1.pMax.y(), b2.pMax.y()),
+                    std::min(b1.pMax.z(), b2.pMax.z())));        
     }
 
     /**

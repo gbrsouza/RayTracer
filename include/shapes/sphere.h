@@ -14,7 +14,6 @@
 
 #include "shape.h"
 #include "../surfaceInteraction.h"
-#include "../src/vec3.cpp"
 
 #include <cmath>
 

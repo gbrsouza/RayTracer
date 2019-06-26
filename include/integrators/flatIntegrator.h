@@ -46,7 +46,7 @@ public:
     // @Override
     void 
     preprocess( const Scene& scene )
-    { /*empty*/ }
+    { UNUSED(scene); }
 
     // @Override
     Color24 

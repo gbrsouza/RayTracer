@@ -87,7 +87,7 @@ public:
      * 
      * @param scene 
      */
-    virtual void preprocess( const Scene& scene ){}
+    virtual void preprocess( const Scene& scene ){UNUSED(scene);}
 
 protected:
 

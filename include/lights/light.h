@@ -57,7 +57,7 @@ public:
         const SurfaceInteraction &isect,
         vector *wi,
         VisibilityTester *vt) const
-        { return Vec3(0, 0, 0); }     
+        { UNUSED(isect); UNUSED(wi); UNUSED(vt); return Vec3(0, 0, 0); }     
 
     virtual bool is_ambient(){ return false;} 
 

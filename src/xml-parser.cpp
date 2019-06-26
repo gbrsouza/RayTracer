@@ -142,6 +142,46 @@ read_a_float_color (
     return color;
 }
 
+std::vector<int> 
+read_int_vector_from_string(
+    std::string str )
+{
+    std::istringstream is( str );
+    std::vector<int> vector;
+    int n;
+
+    while( is >> n ) vector.push_back(n);
+    
+    return vector; 
+}
+
+std::vector<float> 
+read_float_vector_from_string(
+    std::string str )
+{
+    std::istringstream is( str );
+    std::vector<float> vector;
+    float n;
+
+    while( is >> n ) vector.push_back(n);
+    
+    return vector; 
+}
+
+void 
+ParserXML::set_shape (std::shared_ptr<Shape> shape,
+    int id, std::string materialName )
+{
+    //Set shape's id
+    shape->set_id( id );
+
+    //Create a new primitive      
+    std::shared_ptr<Primitive> primitive ( new 
+        GeometricPrimitive( shape, get_material(materialName) ));
+    
+    this->primitives.push_back(primitive);
+}
+
 /*
  +=====================================+
  |  Readers of specifics shapes type   |
@@ -185,11 +225,82 @@ read_sphere(
     if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
 
     // make a sphere
-    const point3 *center = new point3(x,y,z);
-    Shape *sphere = new Sphere(*center, radius, m);
-    std::shared_ptr<Shape> ptr(sphere);
+    std::shared_ptr<Shape> ptr(new Sphere(point3(x,y,z), radius, m));
 
     return ptr;
+}
+
+std::vector<std::shared_ptr<Shape>>
+read_triangle(
+    XMLElement &e,
+    Material * m)
+{
+    XMLElement * p = e.FirstChildElement("ntriangles");
+    if (p == nullptr) throw INVALID_SPHERE;
+
+    int n_triangles;
+    XMLError eResult;
+
+    // Get value of radius
+    eResult = p->QueryIntAttribute("value", &n_triangles);
+    if (eResult != XML_SUCCESS) throw XML_ERROR_PARSING_ATTRIBUTE;
+
+    p = e.FirstChildElement("indices");
+    std::string indices = read_a_string(*p, "value");
+    std::vector<float> ind = read_float_vector_from_string(indices);
+
+    // save the 3D points
+    int *ind_ = new int[ind.size()];
+    for ( uint i = 0; i < ind.size(); i++){
+        ind_[i] = ind[i];
+    }
+    
+    p = e.FirstChildElement("vertices");
+    std::string vertices = read_a_string(*p, "value");
+    std::vector<float> vert = read_float_vector_from_string(vertices);
+
+    // save the 3D vertices
+    int n_vertices = 0;
+    point3 *vert_ = new point3[vert.size()];
+    for ( uint i = 0; i < vert.size(); i+=3){
+        vert_[i/3] = point3{vert[i], vert[i+1], vert[i+2]}; 
+        n_vertices++;
+    }
+    
+    p = e.FirstChildElement("normals");
+    std::string normal = read_a_string(*p, "value");
+    std::vector<float> normals = read_float_vector_from_string(normal);
+
+    // save the 3D normals
+    vector *norm_ = new vector[normals.size()];
+    for ( uint i = 0; i < normals.size(); i+=3 )
+        norm_[i/3] = vector{normals[i], normals[i+1], normals[i+2]};
+
+    p = e.FirstChildElement("uv");
+    std::string uv = read_a_string(*p, "value");
+    std::vector<float> uvs = read_float_vector_from_string(uv);
+
+    // save the 3D uvs
+    point2f *uvs_ = new point2f[uvs.size()];
+    for ( uint i = 0; i < uvs.size(); i+=2)
+        uvs_[i/2] = point2f{uvs[i], uvs[i+1], 1};
+
+    std::shared_ptr<TriangleMesh> mesh ( new
+        TriangleMesh( n_triangles, ind_, n_vertices,
+                      vert_, norm_, uvs_));
+
+    std::vector<std::shared_ptr<Shape>> triangles;
+    for (int i =0; i < n_triangles; i++){
+        std::shared_ptr<Shape> temp (new Triangle(m, mesh, i, false ));
+        triangles.push_back(temp);
+    }
+
+    delete [] ind_;
+    delete [] vert_;
+    delete [] norm_;
+    delete [] uvs_;
+    return triangles;
+
 }
 
 
@@ -230,9 +341,7 @@ read_flat_material (
     eResult = diffuse->QueryIntAttribute("b", &b);
     if (eResult != XML_SUCCESS) throw INVALID_COLOR;
 
-    Color * c = new Color( r, g, b );
-    Material * m = new FlatMaterial( *c, name );
-    std::shared_ptr<Material> fm(m);
+    std::shared_ptr<Material> fm(new FlatMaterial( Color( r, g, b ), name ));
 
     return fm;
 }
@@ -380,6 +489,7 @@ read_depth_integrator(
  |  Readers of specifics lights type   |
  +=====================================+
  */
+
 std::shared_ptr<AmbientLight>
 read_ambient_light(
     XMLElement &e)
@@ -457,7 +567,6 @@ read_spoty_light(
     return spoty;
 
 }
-
 
 /*
  +=====================================+
@@ -633,6 +742,7 @@ ParserXML::read_scene(
 
     // Read the background   
     this->read_background(*pElement); 
+
     // Read all materials
     XMLElement * pListMaterials = pElement->FirstChildElement("material");
     int count = 0;
@@ -666,27 +776,23 @@ ParserXML::read_scene(
 
         // increments id
         count++;
-       
         //Get type of object
         std::string type = read_a_string(*pListElement, "type");
     
         //Get material's name of object
         std::string materialName = read_a_string(*pListElement, "material");
         Material * m = get_material(materialName).get();
-        //Get the shape
-        std::shared_ptr<Shape> shape;
-        if (type.compare("sphere") == 0)
-            shape = read_sphere(*pListElement, m);
+
+        if (type.compare("sphere") == 0){
+            std::shared_ptr<Shape> shape = read_sphere(*pListElement, m);
+            this->set_shape(shape, count, materialName);
+        }
+        if (type.compare("trianglemesh") == 0){
+            std::vector<std::shared_ptr<Shape>> shapes = read_triangle(*pListElement, m);
+            for (auto shape : shapes )
+                this->set_shape(shape, count++, materialName );
+        }
         // add here new shapes
-
-        //Set shape's id
-        shape->set_id( count );
-
-        //Create a new primitive
-        Primitive *p = new GeometricPrimitive( shape, get_material(materialName) );
-        
-        std::shared_ptr<Primitive> primitive(p);
-        this->primitives.push_back(primitive);
 
         //Next element
         pListElement = pListElement->NextSiblingElement("object");
